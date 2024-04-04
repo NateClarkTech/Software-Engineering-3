@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-8">
+      <h2>{{ thread.title }}</h2>
+      <ul class="list-group">
+        {% for comment in comments %}
+        <li class="list-group-item">{{ comment.content }}</li>
+        {% endfor %}
+      </ul>
+      <!-- Form to add new comment -->
+      <form method="post" class="mt-4">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Add comment</button>
+      </form>
+    </div>
+    <div class="col-md-4">
+      <!-- User Profile (Placeholder) -->
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">User Profile</h5>
+          <!-- Add user profile information here -->
+          <p class="card-text">Username: {{ user.username }}</p>
+          <!-- Add more profile information as needed -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

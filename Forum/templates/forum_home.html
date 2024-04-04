@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    {% for page in pages %}
+    <div class="col-md-6">
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title">{{ page.title }}</h5>
+          <a href="{% url 'thread_list' page.id %}" class="btn btn-primary">View Page</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% if user.is_superuser %}
+  <!-- Admin Options -->
+  <div class="mt-4">
+    <h4>Admin Options</h4>
+    <a href="{% url 'create_page' %}" class="btn btn-success">Add Page</a>
+    <!-- Optionally, add links to modify existing pages -->
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

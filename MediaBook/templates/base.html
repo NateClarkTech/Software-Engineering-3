@@ -1,20 +1,26 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>{% block title %}{% endblock %}</title>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{% block title %}Your App{% endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Add custom stylesheets here -->
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+    <!-- Navbar -->
+    {% include 'navbar.html' %}
 
-        {% block stylesheets %}{% endblock %}
+    <!-- Main content -->
+    <div class="container mt-4">
+        {% block content %}{% endblock %}
+    </div>
 
-        {% block javascripts %}{% endblock %}
-    </head>
-    <body>
-        <div id="body-cont" class="body-cont">
-            {% include 'navbar.html' %}
-            <div>
-                {% block content %}{% endblock %}
-            </div>
-        </div>
-    </body>
-    {% block scripts %}
-    {% endblock %}
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Add custom scripts here -->
+    {% block scripts %}{% endblock %}
+</body>
 </html>
