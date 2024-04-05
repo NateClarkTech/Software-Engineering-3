@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+<!-- Our main login page, placeholder for now-->
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Login</h2>
+                <form method="POST">
+                    {{ form.as_p }}
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </form>
+                <!-- If they do not have a profile, let them make one-->
+                <p>Don't have an account? <a href="{% url 'register' %}">Register</a></p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+```
+    
