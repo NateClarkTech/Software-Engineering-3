@@ -25,8 +25,9 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('register/', views.register, name='register'),
     path('forum/', include('Forum.urls')),
-    path('boards/', include('IdeaBoards.urls')),
     path('' , views.home, name='home'),
+    path('', include('IdeaBoards.urls')),
     ]
+
 
 

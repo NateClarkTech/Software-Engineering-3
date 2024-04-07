@@ -7,7 +7,7 @@ from django.contrib.auth import login, logout
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.shortcuts import redirect
-from django.urls import reverse_lazy
+
 
 
 
@@ -28,9 +28,7 @@ def logout_view(request):
 
 
 def home(request):
-    # If the user is authenticated, redirect to the boards page
     if request.user.is_authenticated:
-        return redirect('boards/')
-    # Else display the landing page that has link to FAQ, Login, and Registration links
+        return redirect('IdeaBoards:')
     else:
         return render(request, 'home.html')
