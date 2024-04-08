@@ -26,7 +26,7 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('forum/', include('Forum.urls')),
     path('' , views.home, name='home'),
-    
+    path('visual' , views.visual, name='visual'),
     ]
 
 
