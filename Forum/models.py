@@ -10,6 +10,9 @@ class Thread(models.Model):
     page = models.ForeignKey(Page, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     # Add other fields
+    @property
+    def comment_count(self):
+        return self.comment.count()
 
 class Comment(models.Model):
     thread = models.ForeignKey(Thread, on_delete=models.CASCADE, related_name='comment')
