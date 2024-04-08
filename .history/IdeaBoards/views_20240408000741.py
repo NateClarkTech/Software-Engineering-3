@@ -33,7 +33,7 @@ def IdeaBoards_Create(request):
         return redirect('/')
     
 @login_required
-def IdeaBoard_Detail(request, id):
+class IdeaBoard_Detail(request, id):
     board = IdeaBoard.objects.get(id=id)
     items = IdeaBoardItem.objects.filter(ideaboard=board)
     return render(request, 'boarddetail.html', {'board': board, 'items': items})

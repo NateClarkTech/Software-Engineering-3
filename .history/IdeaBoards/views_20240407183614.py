@@ -1,15 +1,11 @@
 from django.shortcuts import render, redirect
 from .forms import *;
-from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def IdeaBoards_Home(request):
     #If the user is logged in render the boards page
     if request.user.is_authenticated:
-        boards = IdeaBoard.objects.filter(user=request.user)
-        print(boards)
-
-        return render(request, 'ideaboard.html', {'boards': boards})
+        return render(request, 'ideaboard.html')
     #If the user is not logged in redirect to landing page
     else:
         return redirect('/')
@@ -31,9 +27,3 @@ def IdeaBoards_Create(request):
     #If the user is not logged in redirect to landing page
     else:
         return redirect('/')
-    
-@login_required
-def IdeaBoard_Detail(request, id):
-    board = IdeaBoard.objects.get(id=id)
-    items = IdeaBoardItem.objects.filter(ideaboard=board)
-    return render(request, 'boarddetail.html', {'board': board, 'items': items})

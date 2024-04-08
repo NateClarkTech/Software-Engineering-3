@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}Boards - MedaBook{% endblock %}
+
+{% block content %}
+    <h1>Meda Book Idea Board works</h1>
+    {% if boards %}
+        <p>You have boards</p>
+    {% else %}
+        <p><a href="{% urls 'IdeaBoard:IdeaBoards_Create' %}">Create a board</a></p>
+    {% endif %}
+
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Boards - MedaBook{% endblock %}
+
+{% block content %}
+    <h1>Meda Book Idea Board works</h1>
+    {% if boards != null %}
+        <p>You have boards</p>
+        <ul>
+            {% for board in boards %}
+                <li><a href="{{ urlFor('board', {'id': board.id}) }}">{{ board.name }}</a></li>
+            {% endfor %}
+    {% else %}
+        <p><a href="#">Create a board</a></p>
+    {% endif %}
+
+{% endblock %}

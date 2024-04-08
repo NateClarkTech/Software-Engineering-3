@@ -7,7 +7,7 @@
     <div class="row">
         {% if boards %}
             {% for board in boards %}
-            <a class='btn' href='{{ board.id }}/' role='button'>
+            <a class='btn' href='board/{{ board.id }}/' role='button'>
                 <div class="card">
                     <div class="card-body">
                         <h2 class="card-title">{{ board.title }}</h2>

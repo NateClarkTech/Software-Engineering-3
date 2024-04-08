@@ -9,4 +9,3 @@ class NewIdeaBoardForm(forms.ModelForm):
             'title', 
             'description'
             ]
-        
