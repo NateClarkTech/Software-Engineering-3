@@ -10,6 +10,8 @@ urlpatterns = [
     path('thread/<int:thread_id>/comment/', views.create_comment, name='create_comment'),
     path('thread/<int:comment_id>/edit_comment/', views.edit_comment, name='edit_comment'),
     path('thread/<int:comment_id>/delete_comment/', views.delete_comment, name='delete_comment'),
+    path('thread/<int:comment_id>/like_comment/', views.like_comment, name='like_comment'),
+    path('notifications/', views.notifications_page, name='notifications'),
 
     # Add other URLs
 ]

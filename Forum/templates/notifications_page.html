@@ -1,0 +1,21 @@
+<!-- notifications_page.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Notifications</h2>
+    {% if notifications.exists %}
+        <ul class="list-group">
+            {% for notification in notifications %}
+                <li class="list-group-item">
+                    <!-- Customize based on your Notification model fields -->
+                    {{ notification.get_notification_type_display }} - {{ notification.date }}
+                    <!-- Add link to the related content if applicable -->
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>You have no notifications.</p>
+    {% endif %}
+</div>
+{% endblock %}

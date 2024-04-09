@@ -18,6 +18,24 @@
               <span class="text-muted"> last edited on {{ comment.last_edited }} </span>
             {% endif %}
           </div>
+          <!-- Display the likes -->
+
+          <div class="comment-likes">
+            {% if comment.likes.count %}
+
+            <span class="text-muted">Likes: {{ comment.likes.count }}</span>
+            {% endif %}
+            <!-- If the user has already liked the comment, show the unlike button, otherwise show the like button And the comment is not the users-->
+            {% if comment.user != user %}
+              {% if user in comment.likes.all %}
+              <a href="{% url 'like_comment' comment.id %}" class="btn btn-sm btn-danger">Unlike</a>
+              {% else %}
+              <a href="{% url 'like_comment' comment.id %}" class="btn btn-sm btn-primary">Like</a>
+              {% endif %}
+            {% endif %}
+          </div>
+        
+
           <p class="card-text">{{ comment.content }}</p>
           <!-- If the user of the comment, matches the user that is logged in we can allow them to delete OR edit a comment, OR the user is a superuser-->
           {% if comment.user == user or user.is_superuser %}
@@ -28,25 +46,33 @@
         </div>
       </div>
       {% endfor %}
-      <!-- Form to add new comment -->
-      <form method="post" action="{% url 'create_comment' thread.id %}" class="mt-4">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Add comment</button>
-      </form>
+      <!-- Form to add new comment IF the user is authenticated-->
+      {% if user.is_authenticated %}
+
+        <form method="post" action="{% url 'create_comment' thread.id %}" class="mt-4">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit" class="btn btn-primary">Add comment</button>
+        </form>
+      {% else %}
+      <!-- If they are not logged in, tell them that they need to be logged in to post -->
+        <p class="mt-4">You need to be logged in to post a comment</p>
+      {% endif %}
 
     </div>
-    <div class="col-md-4">
-      <!-- User Profile -->
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">User Profile</h5>
-          <!-- Placeholder for Profile Information -->
-          <p class="card-text">Username: {{ user.username }}</p>
-          <!-- Additional user information here -->
+    {% if user.is_authenticated %}
+      <div class="col-md-4">
+        <!-- User Profile -->
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">User Profile</h5>
+            <!-- Placeholder for Profile Information -->
+            <p class="card-text">Username: {{ user.username }}</p>
+            <!-- Additional user information here -->
+          </div>
         </div>
       </div>
-    </div>
+    {% endif %}
   </div>
 </div>
 {% endblock %}

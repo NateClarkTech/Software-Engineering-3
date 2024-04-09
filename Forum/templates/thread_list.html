@@ -3,7 +3,16 @@
 
 {% block content %}
 <div class="container">
-  <h2>Threads in {{ page.title }}</h2>
+  <div class="row">
+    <div class="col-md-8">
+      <h2>Threads in {{ page.title }}</h2>
+    </div>
+    {% if user.is_authenticated %}
+    <div class="col-md-4 text-right mb-4">
+      <a href="{% url 'create_thread' page.id %}" class="btn btn-primary">Add a new thread</a>
+    </div>
+    {% endif %}
+  </div>
   <div class="row">
     <div class="col-md-12">
       <ul class="list-group">
@@ -22,10 +31,6 @@
       </ul>
     </div>
   </div>
-  {% if user.is_authenticated %}
-  <div class="mt-4">
-    <a href="{% url 'create_thread' page.id %}" class="btn btn-primary">Add a new thread</a>
-  </div>
-  {% endif %}
+
 </div>
 {% endblock %}

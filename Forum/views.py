@@ -2,7 +2,7 @@
 from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
-from .models import Thread, Page, Comment
+from .models import Notification, Thread, Page, Comment
 from .forms import ThreadForm, PageForm, CommentForm
 from django.db.models import Count
 from django.db.models import Max, F
@@ -64,10 +64,10 @@ def forum_home(request):
             thread.latest_comment_username = "No comments"
 
     # Now order threads by the latest_comment_time in descending order
-    latest_threads = sorted(threads, key=lambda x: (x.latest_comment_time is not None, x.latest_comment_time), reverse=True)[:10]
+    latest_threads = sorted(threads, key=lambda x: (x.latest_comment_time is not None, x.latest_comment_time), reverse=True)[:5]
 
     # Get top threads based on comment count
-    top_threads = Thread.objects.annotate(num_comments=Count('comment')).order_by('-num_comments')[:10]
+    top_threads = Thread.objects.annotate(num_comments=Count('comment')).order_by('-num_comments')[:5]
     
     return render(request, 'forum_home.html', {
         'pages': pages,
@@ -101,8 +101,7 @@ def create_thread(request, page_id):
         'page': page
     })
     
-    
-@login_required
+
 def create_comment(request, thread_id):
     thread = get_object_or_404(Thread, id=thread_id)
     if request.method == 'POST':
@@ -112,12 +111,39 @@ def create_comment(request, thread_id):
             comment.thread = thread
             comment.user = request.user
             comment.save()
+
+            # Notification for a top-level comment
+            if not comment.parent:
+                for subscriber in thread.subscribers.all():
+                    if subscriber != request.user:  # Don't notify the user who made the comment
+                        Notification.objects.create(
+                            notification_type=Notification.COMMENT,
+                            to_user=subscriber,
+                            from_user=request.user,
+                            thread=thread,
+                            comment=comment,
+                            is_read=False
+                        )
+
+            # Notification for a reply
+            else:
+                if comment.parent.user != request.user:  # Don't notify if replying to their own comment
+                    Notification.objects.create(
+                        notification_type=Notification.REPLY,
+                        to_user=comment.parent.user,
+                        from_user=request.user,
+                        thread=thread,
+                        comment=comment,
+                        is_read=False
+                    )
+
             return HttpResponseRedirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
     else:
         form = CommentForm()
-
-    # If this view is called with a GET request, just redirect to the thread detail page
     return redirect('thread_detail', thread_id=thread_id)
+
+
+
 
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
@@ -175,3 +201,35 @@ def delete_comment(request, comment_id):
         return HttpResponseForbidden("You are not authorized to delete this comment.")
     comment.delete()
     return redirect('thread_detail', thread_id=comment.thread.id)
+
+
+def like_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    if request.user in comment.likes.all():
+        comment.likes.remove(request.user)
+        # No notification on unlike
+    else:
+        comment.likes.add(request.user)
+        # Create notification for like
+        if comment.user != request.user:  # Don't notify if liking their own comment
+            Notification.objects.create(
+                notification_type=Notification.LIKE,
+                to_user=comment.user,
+                from_user=request.user,
+                thread=comment.thread,
+                comment=comment,
+                is_read=False
+            )
+    return redirect('thread_detail', thread_id=comment.thread.id)
+
+
+
+@login_required
+def notifications_page(request):
+    user_notifications = request.user.notifications.all().order_by('-date')
+    
+    # Optional: Mark notifications as read when the user views them
+    user_notifications.update(is_read=True)
+    
+    
+    return render(request, 'notifications_page.html', {'notifications': user_notifications})
