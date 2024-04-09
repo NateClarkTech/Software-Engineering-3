@@ -8,7 +8,6 @@ def IdeaBoards_Home(request):
     if request.user.is_authenticated:
 
         if request.method == 'POST':
-            print(request.POST, request.method)
             form = NewIdeaBoardForm(request.POST)
             if form.is_valid():
                 new_board = form.save(commit=False)

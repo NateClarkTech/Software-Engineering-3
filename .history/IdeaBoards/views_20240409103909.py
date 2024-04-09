@@ -6,18 +6,9 @@ from django.contrib.auth.decorators import login_required
 def IdeaBoards_Home(request):
     #If the user is logged in render the boards page
     if request.user.is_authenticated:
-
-        if request.method == 'POST':
-            print(request.POST, request.method)
-            form = NewIdeaBoardForm(request.POST)
-            if form.is_valid():
-                new_board = form.save(commit=False)
-                new_board.user = request.user
-                new_board.save()
-        
-        form = NewIdeaBoardForm(instance=request.user)
         boards = IdeaBoard.objects.filter(user=request.user)
-        return render(request, 'ideaboard.html', {'boards': boards, 'form': form})
+
+        return render(request, 'ideaboard.html', {'boards': boards})
     #If the user is not logged in redirect to landing page
     else:
         return redirect('/')
