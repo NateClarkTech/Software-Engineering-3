@@ -1,11 +1,12 @@
 # forum/views.py
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .models import Thread, Page, Comment
 from .forms import ThreadForm, PageForm, CommentForm
 from django.db.models import Count
 from django.db.models import Max, F
+from django.utils import timezone
 
 
 def thread_list(request, page_id):
@@ -52,7 +53,7 @@ def forum_home(request):
     # Get all threads without distinct, as we want to manually add latest comment information
     threads = Thread.objects.all()
 
-    # Enrich each thread with the latest comment info
+    # Get the time and username of the latest comment for each thread
     for thread in threads:
         latest_comment = Comment.objects.filter(thread=thread).order_by('-created_at').first()
         if latest_comment:
@@ -63,7 +64,6 @@ def forum_home(request):
             thread.latest_comment_username = "No comments"
 
     # Now order threads by the latest_comment_time in descending order
-    # Threads without comments will be at the end of the list
     latest_threads = sorted(threads, key=lambda x: (x.latest_comment_time is not None, x.latest_comment_time), reverse=True)[:10]
 
     # Get top threads based on comment count
@@ -143,3 +143,35 @@ def modify_page(request, page_id):
     else:
         form = PageForm(instance=page)
     return render(request, 'modify_page.html', {'form': form, 'page': page})
+
+
+
+# Here we want to be able to edit a comment, either by deleating it, or by changing the content, and the user HAS to be the one logged in, or a superuser
+@login_required
+def edit_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    # Check if the user is the author of the comment or a superuser
+    if request.user != comment.user and not request.user.is_superuser:
+        # Throw an error, they are not authorized to do this
+        return HttpResponseForbidden("You are not authorized to edit this comment.")
+    if request.method == 'POST':
+        form = CommentForm(request.POST, instance=comment)
+        if form.is_valid():
+            #update the last edited time
+            comment.last_edited = timezone.now()
+            form.save()
+            return redirect('thread_detail', thread_id=comment.thread.id)
+    else:
+        form = CommentForm(instance=comment)
+    return render(request, 'edit_comment.html', {'form': form, 'comment': comment})
+
+# To make it easier on myself, I have a seperate view for deleting a comment
+@login_required
+def delete_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    # Check if the user is the author of the comment or a superuser
+    if request.user != comment.user and not request.user.is_superuser:
+        # Throw an error, they are not authorized to do this
+        return HttpResponseForbidden("You are not authorized to delete this comment.")
+    comment.delete()
+    return redirect('thread_detail', thread_id=comment.thread.id)

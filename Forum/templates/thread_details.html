@@ -4,26 +4,27 @@
 <div class="container">
   <div class="row">
     <div class="col-md-8">
-      <div class="card mb-3">
-        <div class="card-body">
-          <h2 class="card-title">{{ thread.title }}</h2>
-          <!-- Assuming the first comment is the initial message -->
-          <p class="initial-message">{{ comments.0.content }}</p>
-          <small>Posted by {{ comments.0.user.username }} on {{ comments.0.created_at }}</small>
-        </div>
-      </div>
       <!-- Comments Section -->
-      <h3>Comments:</h3>
+      <h3>{{thread.title}}:</h3>
       {% for comment in comments %}
       <div class="card mb-2">
         <div class="card-body">
           <!-- Placeholder for Profile Picture -->
-          <img src="path/to/default/profile/pic.jpg" alt="Profile Picture" class="profile-picture">
+          <img src="pic.jpg" alt="Profile Picture" class="profile-picture">
           <div class="comment-info">
             <strong>{{ comment.user.username }}</strong>
             <span class="text-muted"> commented on {{ comment.created_at }}</span>
+            {% if comment.last_edited %}
+              <span class="text-muted"> last edited on {{ comment.last_edited }} </span>
+            {% endif %}
           </div>
           <p class="card-text">{{ comment.content }}</p>
+          <!-- If the user of the comment, matches the user that is logged in we can allow them to delete OR edit a comment, OR the user is a superuser-->
+          {% if comment.user == user or user.is_superuser %}
+            <a href="{% url 'edit_comment' comment.id %}" class="btn btn-sm btn-primary">Edit</a>
+            <a href="{% url 'delete_comment' comment.id %}" class="btn btn-sm btn-danger">Delete</a>
+          {% endif %}
+
         </div>
       </div>
       {% endfor %}

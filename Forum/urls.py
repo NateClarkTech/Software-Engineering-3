@@ -8,6 +8,8 @@ urlpatterns = [
     path('thread/<int:thread_id>/', views.thread_detail, name='thread_detail'),
     path('thread_list/<int:page_id>/', views.thread_list, name='thread_list'),
     path('thread/<int:thread_id>/comment/', views.create_comment, name='create_comment'),
+    path('thread/<int:comment_id>/edit_comment/', views.edit_comment, name='edit_comment'),
+    path('thread/<int:comment_id>/delete_comment/', views.delete_comment, name='delete_comment'),
 
     # Add other URLs
 ]

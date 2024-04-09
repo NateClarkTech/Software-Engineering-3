@@ -20,3 +20,5 @@ class Comment(models.Model):
     content = models.TextField()
     testtext = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
+    # Optional "last eddited" field
+    last_edited = models.DateTimeField(null=True, blank=True)

@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+    <!-- Form to edit the content of a post -->
+    <form method="POST">
+        {{ form.as_p }}
+        {% csrf_token %}
+        <button type="submit">Submit</button>
+    </form>
+{% endblock %}
