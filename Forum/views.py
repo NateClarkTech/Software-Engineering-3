@@ -101,46 +101,25 @@ def create_thread(request, page_id):
         'page': page
     })
     
-
-def create_comment(request, thread_id):
+def create_comment(request, thread_id, parent_comment_id=None):
     thread = get_object_or_404(Thread, id=thread_id)
+    parent_comment = None
+    if parent_comment_id:
+        parent_comment = get_object_or_404(Comment, id=parent_comment_id, thread=thread)
     if request.method == 'POST':
         form = CommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
             comment.thread = thread
             comment.user = request.user
+            comment.parent = parent_comment  # Set the parent comment
             comment.save()
+            
+            return redirect('thread_detail', thread_id=thread_id)
+            # Redirect or handle as needed
+    # Form rendering and other view logic
+    return render(request, 'create_comment.html', {'form': form, 'thread': thread, 'parent_comment': parent_comment})
 
-            # Notification for a top-level comment
-            if not comment.parent:
-                for subscriber in thread.subscribers.all():
-                    if subscriber != request.user:  # Don't notify the user who made the comment
-                        Notification.objects.create(
-                            notification_type=Notification.COMMENT,
-                            to_user=subscriber,
-                            from_user=request.user,
-                            thread=thread,
-                            comment=comment,
-                            is_read=False
-                        )
-
-            # Notification for a reply
-            else:
-                if comment.parent.user != request.user:  # Don't notify if replying to their own comment
-                    Notification.objects.create(
-                        notification_type=Notification.REPLY,
-                        to_user=comment.parent.user,
-                        from_user=request.user,
-                        thread=thread,
-                        comment=comment,
-                        is_read=False
-                    )
-
-            return HttpResponseRedirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
-    else:
-        form = CommentForm()
-    return redirect('thread_detail', thread_id=thread_id)
 
 
 
@@ -228,8 +207,26 @@ def like_comment(request, comment_id):
 def notifications_page(request):
     user_notifications = request.user.notifications.all().order_by('-date')
     
-    # Optional: Mark notifications as read when the user views them
+    # Mark all notifications as read
     user_notifications.update(is_read=True)
     
-    
     return render(request, 'notifications_page.html', {'notifications': user_notifications})
+
+
+# Making it easier on myself by making a seperate view for replies to comments
+def reply_to_comment(request, thread_id, parent_comment_id):
+    thread = get_object_or_404(Thread, id=thread_id)
+    parent_comment = get_object_or_404(Comment, id=parent_comment_id, thread=thread)
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.thread = thread
+            comment.user = request.user
+            comment.parent = parent_comment  # Set the parent comment
+            comment.save()
+            
+            return redirect('thread_detail', thread_id=thread_id)
+            # Redirect or handle as needed
+    # Form rendering and other view logic
+    return render(request, 'reply_to_comment.html', {'form': form, 'thread': thread, 'parent_comment': parent_comment})

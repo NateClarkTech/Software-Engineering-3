@@ -1,78 +1,222 @@
 {% extends 'base.html' %}
+{% block stylesheets %}
+<style>
+  .container {
+    margin-top: 20px;
+  }
+  .profile-picture {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
+    object-fit: cover;
+  }
+  .comment-info {
+    margin-bottom: 10px;
+  }
+  .comment-info strong {
+    margin-right: 10px;
+  }
+  .comment-likes {
+    font-size: 0.9em;
+    margin-bottom: 10px;
+  }
+  .card-body {
+    position: relative;
+  }
+
+  .reply-info {
+    background-color: #f7f7f7;
+    border-left: 3px solid #007bff;
+    padding: 5px 10px;
+    margin-bottom: 10px;
+  }
+  .reply-content {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-left: 20px;
+    border-left: 2px solid #ddd;
+    color: #666;
+  }
+  .comment-section h3 {
+    border-bottom: 2px solid #eee;
+    padding-bottom: 5px;
+    margin-bottom: 20px;
+  }
+  .user-profile-card {
+    border: 1px solid #ddd
+
+  }
+  .comment-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Adjust gap between buttons */
+}
+
+.comment-actions > a,
+.comment-actions > button {
+  white-space: nowrap; /* Prevent text from wrapping */
+  text-align: center; /* Center text inside buttons */
+}
+
+/* Override default Bootstrap styles if necessary */
+.comment-actions > a.btn,
+.comment-actions > button.btn {
+  padding: .375rem .75rem; /* Bootstrap's default padding for small buttons */
+}
+
+.likes-info {
+  margin-right: 10px; /* Adjust space between likes info and buttons */
+}
+
+</style>
+{% endblock %}
 
 {% block content %}
 <div class="container">
   <div class="row">
-    <div class="col-md-8">
-      <!-- Comments Section -->
-      <h3>{{thread.title}}:</h3>
+    <div class="col-md-8 comment-section">
+      <h3>{{ thread.title }}:</h3>
       {% for comment in comments %}
-      <div class="card mb-2">
+      <div class="card mb-4">
         <div class="card-body">
-          <!-- Placeholder for Profile Picture -->
           <img src="pic.jpg" alt="Profile Picture" class="profile-picture">
+          
+          {% if comment.parent %}
+            <div class="reply-info">
+              <strong>{{ comment.parent.user.username }}</strong>
+              <span class="text-muted">wrote on {{ comment.parent.created_at|date:"F j, Y, g:i a" }}</span>
+              <div class="reply-content">
+                <p>{{ comment.parent.content|truncatewords:20 }}</p>
+              </div>
+            </div>
+          {% endif %}
+          
           <div class="comment-info">
             <strong>{{ comment.user.username }}</strong>
+            {% if comment.parent %}
+              <span class="text-muted"> replied on {{ comment.created_at }}</span>
+            {% else %}
             <span class="text-muted"> commented on {{ comment.created_at }}</span>
-            {% if comment.last_edited %}
-              <span class="text-muted"> last edited on {{ comment.last_edited }} </span>
+            {% endif %}            {% if comment.last_edited %}
+              <span class="text-muted"> (edited)</span>
             {% endif %}
-          </div>
-          <!-- Display the likes -->
 
-          <div class="comment-likes">
-            {% if comment.likes.count %}
+            <!-- Dropdown Menu -->
+            <div class="comment-actions float-right">
+              <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+                      <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
+                    </svg>                  
+                  </button>
+                  <div class="dropdown-menu dropdown-menu-right">
+                      <!-- Reply action -->
+                      {% if user.is_authenticated %}
+                      <button class="dropdown-item reply-btn" data-commentid="{{ comment.id }}">Reply</button>
+                      {% endif %}
+                      <!-- Edit and Delete actions -->
+                      {% if comment.user == user or user.is_superuser %}
+                      <a class="dropdown-item" href="{% url 'edit_comment' comment.id %}">Edit</a>
+                      <a class="dropdown-item text-danger" href="{% url 'delete_comment' comment.id %}">Delete</a>
+                      {% endif %}
+                  </div>
+              </div>
+            </div>
 
-            <span class="text-muted">Likes: {{ comment.likes.count }}</span>
-            {% endif %}
-            <!-- If the user has already liked the comment, show the unlike button, otherwise show the like button And the comment is not the users-->
-            {% if comment.user != user %}
-              {% if user in comment.likes.all %}
-              <a href="{% url 'like_comment' comment.id %}" class="btn btn-sm btn-danger">Unlike</a>
-              {% else %}
-              <a href="{% url 'like_comment' comment.id %}" class="btn btn-sm btn-primary">Like</a>
+            <div>
+              <span class="text-muted likes">Likes: {{ comment.likes.count }}</span>
+              {% if user.is_authenticated and comment.user != user %}
+                {% if user in comment.likes.all %}
+                <a href="{% url 'like_comment' comment.id %}" class="btn btn-sm  btn-outline-danger">Unlike</a>
+                {% else %}
+                <a href="{% url 'like_comment' comment.id %}" class="btn btn-sm btn-outline-primary">Like</a>
+                {% endif %}
               {% endif %}
-            {% endif %}
+            </div>
           </div>
-        
+          
 
-          <p class="card-text">{{ comment.content }}</p>
-          <!-- If the user of the comment, matches the user that is logged in we can allow them to delete OR edit a comment, OR the user is a superuser-->
-          {% if comment.user == user or user.is_superuser %}
-            <a href="{% url 'edit_comment' comment.id %}" class="btn btn-sm btn-primary">Edit</a>
-            <a href="{% url 'delete_comment' comment.id %}" class="btn btn-sm btn-danger">Delete</a>
-          {% endif %}
+          <p class="card-text mt-2">{{ comment.content }}</p>
+          
+
 
         </div>
       </div>
       {% endfor %}
-      <!-- Form to add new comment IF the user is authenticated-->
+      
       {% if user.is_authenticated %}
-
         <form method="post" action="{% url 'create_comment' thread.id %}" class="mt-4">
           {% csrf_token %}
+          <h5>Add a new comment:</h5>
           {{ form.as_p }}
-          <button type="submit" class="btn btn-primary">Add comment</button>
+          <button type="submit" class="btn btn-primary">Post Comment</button>
         </form>
       {% else %}
-      <!-- If they are not logged in, tell them that they need to be logged in to post -->
-        <p class="mt-4">You need to be logged in to post a comment</p>
+        <p class="mt-4">Please <a href="{% url 'login' %}">log in</a> to post a comment.</p>
       {% endif %}
 
     </div>
+    
     {% if user.is_authenticated %}
       <div class="col-md-4">
-        <!-- User Profile -->
-        <div class="card">
+        <div class="card user-profile-card">
           <div class="card-body">
             <h5 class="card-title">User Profile</h5>
-            <!-- Placeholder for Profile Information -->
             <p class="card-text">Username: {{ user.username }}</p>
-            <!-- Additional user information here -->
+            <!-- Additional user information -->
           </div>
         </div>
       </div>
     {% endif %}
   </div>
 </div>
+
+<!-- Reply Modal -->
+<div class="modal fade" id="replyModal" tabindex="-1" role="dialog" aria-labelledby="replyModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="replyModalLabel">Reply to Comment</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form method="post" action="" id="replyForm">
+        <div class="modal-body">
+          {% csrf_token %}
+          <input type="hidden" name="parent" id="parentCommentId" value="">
+          <div class="form-group">
+            <textarea name="content" class="form-control" id="replyContent" rows="3" placeholder="Write your reply here..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Post Reply</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 {% endblock %}
+
+{% block scripts %}
+<script>
+  $(document).ready(function() {
+    $('.reply-btn').click(function() {
+      var parentCommentId = $(this).data('commentid');
+      var replyFormAction = "{% url 'reply_to_comment' thread.id 0 %}".replace('/0/', '/' + parentCommentId + '/');
+      $('#replyForm').attr('action', replyFormAction);
+      $('#parentCommentId').val(parentCommentId);
+      $('#replyModal').modal('show');
+    });
+  
+    $('#replyModal').on('hidden.bs.modal', function (e) {
+      $('#replyForm')[0].reset();
+      $('#replyForm').attr('action', '');
+      $('#parentCommentId').val('');
+    });
+  });
+</script>
+{% endblock %}
+

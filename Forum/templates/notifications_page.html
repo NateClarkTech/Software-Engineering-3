@@ -7,11 +7,14 @@
     {% if notifications.exists %}
         <ul class="list-group">
             {% for notification in notifications %}
-                <li class="list-group-item">
+                <!-- Making the section a clickable link -->
+                <a href="{% url 'thread_detail' notification.thread.id %}" class="list-group item list-group-item-action">
                     <!-- Customize based on your Notification model fields -->
-                    {{ notification.get_notification_type_display }} - {{ notification.date }}
-                    <!-- Add link to the related content if applicable -->
-                </li>
+                    <li class="list-group-item">
+                        {{ notification.get_notification_type_display }} - {{ notification.date }}
+                        <!-- Add link to the related content if applicable -->
+                    </li>
+                </a>
             {% endfor %}
         </ul>
     {% else %}
