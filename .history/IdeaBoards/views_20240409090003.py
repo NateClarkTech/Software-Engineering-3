@@ -34,8 +34,6 @@ def IdeaBoards_Create(request):
 @login_required
 def IdeaBoard_Detail(request, id):
     board = IdeaBoard.objects.get(id=id)
-    items = IdeaBoardItem.objects.filter(ideaboard=board)
+    items = IdeaBoardItem.objects.filter(instance=request.user, ideaboard=board)
     form = NewIdeaBoardItemForm(request.POST)
-
-    if request.user == board.user:
-        return render(request, 'boarddetail.html', {'board': board, 'items': items, 'form': form})
+    return render(request, 'boarddetail.html', {'board': board, 'items': items, 'form': form})

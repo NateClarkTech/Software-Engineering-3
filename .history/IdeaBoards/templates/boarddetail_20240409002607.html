@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+    <div>
+        <h1>{{ board.name }}</h1>
+        <p>{{ board.description }}</p>
+    </div>
+
+    <div>
+        {% if items %}
+            {% for item in items %}
+                <div>
+                    <h2>{{ item.name }}</h2>
+                    <p>{{ item.description }}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No items found</p>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Launch demo modal
+            </button>
+        {% endif %}
+    </div>
+
+    <!-- Source: https://getbootstrap.com/docs/5.3/components/modal/ -->
+    <div class="modal fade" id="createBoardItem" tabindex="-1" aria-labelledby="createBoardItemLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="createBoardItemLabel">Create Board Item</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              ...
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+{% endblock %}
