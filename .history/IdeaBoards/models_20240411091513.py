@@ -22,4 +22,4 @@ class IdeaBoardItem(models.Model):
     ideaboard = models.ForeignKey(IdeaBoard, related_name='ideaboarditems', on_delete=models.CASCADE)
     
     def __str__(self):
-        return 'Title: ' + self.ideaboard.title + ' Item: ' + self.title
+        return 'Title' + self.ideaboard.title + ' Item: ' + self.title
