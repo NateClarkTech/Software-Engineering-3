@@ -1,7 +1,5 @@
 console.log('script loaded');
 
-
-// Function to add a new item to the board
 function addFormItem() {
     // Example: Get the title and description values from the form
     let title = document.getElementById("title").value;
@@ -34,7 +32,6 @@ function addFormItem() {
     }
 }
 
-// Add an event listener to the form so items can be added to the board
 document.getElementById("addItemForm").addEventListener("submit", function(event) {
     event.preventDefault(); // Prevent the default form submission
 
@@ -42,8 +39,5 @@ document.getElementById("addItemForm").addEventListener("submit", function(event
     addFormItem();
 
     // Close the modal
-    $('#createBoardItem').modal('hide');
-
-    // Reset the form
-    document.getElementById("addItemForm").reset();
+    $('#CreateItemModal').modal('hide');
 });

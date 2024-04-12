@@ -1,11 +1,11 @@
 console.log('script loaded');
 
-
-// Function to add a new item to the board
 function addFormItem() {
     // Example: Get the title and description values from the form
     let title = document.getElementById("title").value;
     let description = document.getElementById("description").value;
+    console.log("Title:", title);
+    console.log("Description:", description);
 
     if (title !== "" && description !== "") {
         // Create new elements
@@ -30,20 +30,12 @@ function addFormItem() {
 
         // Add the new card to the "row" div
         document.getElementById("boardItems").appendChild(card);
-
     }
 }
 
-// Add an event listener to the form so items can be added to the board
 document.getElementById("addItemForm").addEventListener("submit", function(event) {
     event.preventDefault(); // Prevent the default form submission
 
     // Call the addFormItem function
     addFormItem();
-
-    // Close the modal
-    $('#createBoardItem').modal('hide');
-
-    // Reset the form
-    document.getElementById("addItemForm").reset();
 });
