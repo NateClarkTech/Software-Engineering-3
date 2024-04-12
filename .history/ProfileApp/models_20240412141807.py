@@ -13,11 +13,7 @@ class Profile(models.Model):
     # Contact info
     firstName = models.TextField(max_length=25, blank=True)
     lastName = models.TextField(max_length=25, blank=True)
-    displayName = models.BooleanField(default=False)
     email = models.EmailField(max_length=100, blank=True)
     displayEmail = models.BooleanField(default=False)
     phoneNumber = models.CharField(max_length=10, blank=True)
     displayNumber = models.BooleanField(default=False)
-
-    def __str__(self):
-        return "Profile: " + self.user.username

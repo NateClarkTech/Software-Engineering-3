@@ -17,7 +17,7 @@ def profile(request):
         if form.is_valid():
             form.save()
             # Redirect or show success message
-            return redirect('ProfileApp:profile')
+            return redirect('Profile:profile')
     else:
         form = ProfileUpdateForm(instance=profile)
     
@@ -62,7 +62,7 @@ def edit_profile(request):
         if form.is_valid():
             form.save()
             # Redirect or show success message
-            return redirect('ProfileApp:profile')
+            return redirect('Profile:profile')
     else:
         form = ProfileUpdateForm(instance=profile)
     

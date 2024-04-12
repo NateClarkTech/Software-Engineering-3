@@ -17,7 +17,7 @@ def profile(request):
         if form.is_valid():
             form.save()
             # Redirect or show success message
-            return redirect('ProfileApp:profile')
+            return redirect('Profile:profile')
     else:
         form = ProfileUpdateForm(instance=profile)
     
@@ -53,6 +53,27 @@ def search_profiles(request):
         'query': query,
         'results': results
     })
+    
+    
+    
+
+
+# Using Djangos registration form, and letting us registering the new user
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            Profile.objects.create(user=user)  # Create profile for the new user
+            login(request, user)  # Automatically log in the user after registration
+            return redirect('calendar')  # Redirect to the desired URL after successful registration
+    else:
+        form = UserCreationForm()
+    return render(request, 'registration/register.html', {'form': form})
+
+def logout_view(request):
+    logout(request)
+    return redirect('calendar')
 
 # A view to allow the user to edit the profile
 def edit_profile(request):
@@ -62,7 +83,7 @@ def edit_profile(request):
         if form.is_valid():
             form.save()
             # Redirect or show success message
-            return redirect('ProfileApp:profile')
+            return redirect('Profile:profile')
     else:
         form = ProfileUpdateForm(instance=profile)
     
