@@ -30,6 +30,7 @@ urlpatterns = [
     path('forum/', include('Forum.urls')),
     path('' , views.home, name='home'),
     path('visual/' , include('Visual.urls')),
+    path('sound/' , include('Sound.urls')),
     ]
 
 

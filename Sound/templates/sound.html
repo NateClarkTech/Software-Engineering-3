@@ -5,7 +5,7 @@
 
 {% block content %}
     <style>
-        visual {
+        sound {
             display: flex;
         }
         .sidebar {
@@ -78,14 +78,14 @@
         }
 
     </style>
-    <visual>
+    <sound>
         <div class="sidebar">
-            <a href=""><img src="{% static 'icons/camera-visual.png' %}" alt="Visual Notes">Visual Notes</a>
+            <a href=""><img src="{% static 'icons/music-sound.png' %}" alt="Visual Notes">Visual Notes</a>
             {% if not labels %}
-            <a href=""><img src="{% static 'icons/edit-label-visual.png' %}" alt="Labels">Create Label</a>
+            <a href=""><img src="{% static 'icons/edit-label-sound.png' %}" alt="Labels">Create Label</a>
             {% else %}
             {% for label in labels %}
-            <a href=""><img src="{% static 'icons/label-visual.png' %}" alt="Labels">{{label.label_name}}</a>
+            <a href=""><img src="{% static 'icons/label-sound.png' %}" alt="Labels">{{label.label_name}}</a>
             {% endfor %}
             {% endif %}
         </div>
@@ -93,16 +93,15 @@
             <!-- To add Note to Visual Database -->
             <form class="note-form" method="POST" action="">
                 {% csrf_token %} <!-- CSRF verification, security satisfaction -->
-                <input type="text" name="title" placeholder="Title"><p></p>
+                <input type="text" name="title" placeholder="Song Title"><p></p>
                 <input type="text" name="description" placeholder="Take Note">
-                <input type="image" name="image" src="{% static 'icons/img-add-visual.png' %}" width="40" height="40">
-                <button type="note-button" name="visualNoteSubmit" >Note</button>
+                <button type="note-button" name="soundNoteSubmit" >Note</button>
             </form>
             <div class="note-pad">
-                {% for note in notes %}
+                {% for sound in notes %}
                 <div class="note-box">
-                    <h2 name="title">{{note.note_title}}</h2>
-                    <h3 name="description">{{note.note_description}}</h3>
+                    <h2 name="title">{{sound.note_title}}</h2>
+                    <h3 name="description">{{sound.note_description}}</h3>
                 </div>
                 {% endfor %}
             </div>
