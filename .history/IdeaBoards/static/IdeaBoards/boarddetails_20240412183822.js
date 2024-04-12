@@ -16,7 +16,6 @@ function addFormItem() {
                 description: description
             }
         );
-        console.log(changesToBoard);
 
         // Create new elements
         let card = document.createElement("div");
@@ -59,20 +58,4 @@ document.getElementById("addItemForm").addEventListener("submit", function(event
 
     // Reset the form
     document.getElementById("addItemForm").reset();
-});
-
-document.getElementById("saveChanges").addEventListener("click", function() {
-    // Send the changes to the server
-    fetch("/api/boards", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(changesToBoard)
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-        changesToBoard = [];
-    });
 });

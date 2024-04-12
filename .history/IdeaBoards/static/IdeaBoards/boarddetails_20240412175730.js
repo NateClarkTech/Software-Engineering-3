@@ -9,15 +9,6 @@ function addFormItem() {
     let description = document.getElementById("description").value;
 
     if (title !== "" && description !== "") {
-        changesToBoard.push(
-            {   
-                type: "add",
-                title: title,
-                description: description
-            }
-        );
-        console.log(changesToBoard);
-
         // Create new elements
         let card = document.createElement("div");
         card.classList.add("card");
@@ -54,25 +45,11 @@ function addFormItem() {
 document.getElementById("addItemForm").addEventListener("submit", function(event) {
     event.preventDefault(); // Prevent the default form submission
 
+    
+
     // Call the addFormItem function
     addFormItem();
 
     // Reset the form
     document.getElementById("addItemForm").reset();
-});
-
-document.getElementById("saveChanges").addEventListener("click", function() {
-    // Send the changes to the server
-    fetch("/api/boards", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(changesToBoard)
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-        changesToBoard = [];
-    });
 });

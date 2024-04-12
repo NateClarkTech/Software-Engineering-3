@@ -1,6 +1,5 @@
 console.log('script loaded');
 
-let changesToBoard = [];
 
 // Function to add a new item to the board
 function addFormItem() {
@@ -9,15 +8,6 @@ function addFormItem() {
     let description = document.getElementById("description").value;
 
     if (title !== "" && description !== "") {
-        changesToBoard.push(
-            {   
-                type: "add",
-                title: title,
-                description: description
-            }
-        );
-        console.log(changesToBoard);
-
         // Create new elements
         let card = document.createElement("div");
         card.classList.add("card");
@@ -41,12 +31,6 @@ function addFormItem() {
         // Add the new card to the "row" div
         document.getElementById("boardItems").appendChild(card);
 
-        // Close the modal
-        $('#createBoardItem').modal('hide');
-
-        if (document.getElementById("no-items-found")) {
-            document.getElementById("no-items-found").remove();
-        }
     }
 }
 
@@ -54,25 +38,17 @@ function addFormItem() {
 document.getElementById("addItemForm").addEventListener("submit", function(event) {
     event.preventDefault(); // Prevent the default form submission
 
+    if (document.getElementById("no-items-found")) {
+        document.getElementById("no-items-found").remove();
+    
+    }
+
     // Call the addFormItem function
     addFormItem();
 
+    // Close the modal
+    $('#createBoardItem').modal('hide');
+
     // Reset the form
     document.getElementById("addItemForm").reset();
-});
-
-document.getElementById("saveChanges").addEventListener("click", function() {
-    // Send the changes to the server
-    fetch("/api/boards", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(changesToBoard)
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-        changesToBoard = [];
-    });
 });

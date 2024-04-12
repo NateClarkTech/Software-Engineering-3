@@ -75,4 +75,4 @@ document.getElementById("saveChanges").addEventListener("click", function() {
         console.log(data);
         changesToBoard = [];
     });
-});
+}
