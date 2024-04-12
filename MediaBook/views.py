@@ -28,8 +28,3 @@ def logout_view(request):
 
 def home(request):
     return render(request, 'home.html')
-
-#Bilge
-@login_required
-def visual(request):
-    return render(request, "visual.html")
