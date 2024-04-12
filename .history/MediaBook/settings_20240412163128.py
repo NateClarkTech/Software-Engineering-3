@@ -129,3 +129,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
+
+#  CORS
+CORS_ORIGIN_ALLOW_ALL = True
