@@ -1,11 +1,22 @@
 {% extends 'base.html' %}
 
-{% block title %}MediaBook{% endblock %}
-
 {% block content %}
-    <h1>Landing Page</h1>
-    <h1>Welcome to Media Book</h1>
-    <p><a href='/whatismediabook'>What is Media Book?</a></p>
-    <p><a href='/register'>Register</a></p>
-    <p><a href='/login'>Login</a></p>
+    <style>
+        .button{
+            display:inline-block;
+            padding: 2px;
+            border: 2px;
+            border-color:black;
+            border-style: solid;
+            border-radius:5px;
+        }
+    </style>
+    <h1 style="text-align:center">Create Your Next Masterpiece</header>
+    <a href="mediabook/"><h3 style="text-align:center">What is Media Book?</h3></a>
+    <div class="button">
+        <a href="login/"><h3 style="text-align:center">Login</h3></a>
+    </div>
+    <div class="button">
+        <a href="register/"><h3 style="text-align:center">Register</h3></a>
+    </div>
 {% endblock %}

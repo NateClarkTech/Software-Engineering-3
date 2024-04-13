@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %} 
+
+<!-- Bilge: HTML for the visual page view with a display of notes -->
+
+{% block content %}
+    <style>
+        sound {
+            display: flex;
+        }
+        .sidebar {
+            flex: 0.5;
+            color: #333;
+            width: 80px;
+            padding: 20px 0;
+            
+        }
+        .sidebar a {
+            display: block;
+            text-align: left;
+            margin-bottom: 20px;
+            color: #333;
+            text-decoration: none;
+            font-size: 20px;
+        }
+        .sidebar img {
+            width: 40px;
+            height: 30px;
+            margin-right: 7px;
+        }
+        .note {
+            flex: 2.5;
+            display: -webkit-box;
+            display: -webkit-flex;
+            color: #fff;
+            width: 80px;
+            padding: 20px 0;
+            -webkit-flex-direction: row;
+            flex-direction: row;
+            flex-direction: column;
+            height: 100%;
+        }
+        .note-box {
+            -webkit-flex-direction: column;
+            -webkit-flex-direction: column;
+            display: -webkit-box;
+            text-align: center;
+            -webkit-box-sizing:border-box;
+            color: #333;
+            -webkit-border-radius: 8px;
+            border: 2px solid #333;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            min-height: 245px;
+            position: relative;
+            -webkit-align-items: center;
+        }
+        .note-form input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            font-size: 16px;
+            resize: vertical; /* to have the input box grow vertically as typed in */
+            min-height: 50px;
+            max-height: 200px;
+        }
+        .note-form button {
+            padding: 10px 20px;
+            background-color: #003087;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+    </style>
+    <sound>
+        <div class="sidebar">
+            <a href=""><img src="{% static 'icons/music-sound.png' %}" alt="Visual Notes">Visual Notes</a>
+            {% if not labels %}
+            <a href=""><img src="{% static 'icons/edit-label-sound.png' %}" alt="Labels">Create Label</a>
+            {% else %}
+            {% for label in labels %}
+            <a href=""><img src="{% static 'icons/label-sound.png' %}" alt="Labels">{{label.label_name}}</a>
+            {% endfor %}
+            {% endif %}
+        </div>
+        <div class="note">
+            <!-- To add Note to Visual Database -->
+            <form class="note-form" method="POST" action="">
+                {% csrf_token %} <!-- CSRF verification, security satisfaction -->
+                <input type="text" name="title" placeholder="Song Title"><p></p>
+                <input type="text" name="description" placeholder="Take Note">
+                <button type="note-button" name="soundNoteSubmit" >Note</button>
+            </form>
+            <div class="note-pad">
+                {% for sound in notes %}
+                <div class="note-box">
+                    <h2 name="title">{{sound.note_title}}</h2>
+                    <h3 name="description">{{sound.note_description}}</h3>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </visual>
+
+{% endblock %}
