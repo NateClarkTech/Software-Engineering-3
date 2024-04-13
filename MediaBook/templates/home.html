@@ -1,6 +1,22 @@
 {% extends 'base.html' %}
+
 {% block content %}
-    <h1>Home</h1>
-    <p>Welcome to the home page!</p>
+    <style>
+        .button{
+            display:inline-block;
+            padding: 2px;
+            border: 2px;
+            border-color:black;
+            border-style: solid;
+            border-radius:5px;
+        }
+    </style>
+    <h1 style="text-align:center">Create Your Next Masterpiece</header>
+    <a href="mediabook/"><h3 style="text-align:center">What is Media Book?</h3></a>
+    <div class="button">
+        <a href="login/"><h3 style="text-align:center">Login</h3></a>
+    </div>
+    <div class="button">
+        <a href="register/"><h3 style="text-align:center">Register</h3></a>
+    </div>
 {% endblock %}
-```

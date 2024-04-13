@@ -31,6 +31,7 @@ urlpatterns = [
     path('' , views.home, name='home'),
     path('visual/' , include('Visual.urls')),
     path('sound/' , include('Sound.urls')),
+    path('mediabook/', views.media_book, name='mediabook'),
     ]
 
 

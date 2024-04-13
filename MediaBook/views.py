@@ -28,3 +28,6 @@ def logout_view(request):
 
 def home(request):
     return render(request, 'home.html')
+
+def media_book(request):
+    return render(request, 'mediabook.html')
