@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block title %}Profile{% endblock %}
+<!-- This is the template for the profile page, both for current user and for others -->
+{% block extendHeader %}
+<style>
+    @media (max-width: 992px) {
+        .navbar {
+            padding: 0.5rem 1rem;
+            body, html {        
+                height: 100%;
+                
+            
+            }
+        }
+    }
+   
+    .navbar, .nav-section, .fixed-bottom.bg-primary, .modal-content {
+        border-color: #dee2e6;
+    }
+    .profile-container, .profile-info {
+        border-radius: 0.25rem;
+        padding: 20px;
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+    }
+    .profile-image {
+        max-width: 100% !important;
+        border: 4px solid #007bff;
+    }
+    a, a:hover {
+        text-decoration: none;
+        color: #007bff;
+    }
+    .modal-header, .modal-footer {
+        border-bottom: 1px solid #dee2e6;
+        border-top: 1px solid #dee2e6;
+    }
+    @media (max-width: 992px) {
+        body, html {        
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+
+        }
+
+    }
+
+    /* profile badge coloring, yellow for returning students, and blue for current. */
+    {% if profile.new_student %}
+        .badge-spec {
+            /* round out the bottom border cornors */
+            border-bottom-left-radius: 0 !important;
+            border-bottom-right-radius: 0 !important;
+            
+        }
+        .badge.bg-primary {
+            background-color: #007bff !important;
+        }
+        .badge.bg-secondary {
+            background-color: #007bff !important;
+            display: inline-block;
+        }
+        .profile-image {
+            border: 4px solid #007bff;
+            display: flex;
+
+
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+    {% else %}
+        /* special radius controls for the top header. */
+        .badge-spec {
+            border-bottom-left-radius: 0 !important;
+            border-bottom-right-radius: 0 !important;
+        }
+        .badge.bg-primary {
+            background-color: #7C2855 !important;
+        }
+        .badge.bg-secondary {
+            background-color: #7C2855 !important;
+            display: inline-block;
+        }
+        .profile-image {
+            border: 4px solid #7C2855;
+            display: flex;
+        }
+        .btn-primary {
+            background-color: #7C2855;
+            border-color: #7C2855;
+        }
+    {% endif %}
+
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container profile-container">
+    <div class="row">
+        <!-- Left Column for Profile Image and Contact Information -->
+        <div class="col-md-5">
+            <div class="profile-info bg-white border rounded p-3 shadow-sm">
+                <span class=" badge-spec badge bg-secondary">
+
+                </span>
+                <!-- Profile Image -->
+                {% if profile.profile_picture %}
+                    <div>
+                        <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" class="profile-image">
+                        <h2 class="mt-2">{{ profile.user.username }}
+                        </h2>
+                    </div>
+                {% endif %}
+
+                <!-- Contact Information -->
+                <div class="contact-info">
+                    {% if profile.firstName || profile.lastName && profile.displayName %}
+                        <h3>Name:</h3>
+                        {% if profile.firstName %}
+                        <p>First Name: {{ profile.firstName }}</p>
+                        {% endif %}
+                        {% if profile.lastName %}
+                            <p>Last Name: {{ profile.lastName }}</p>
+                        {% endif %}
+                    {% endif %}
+                    <h3>Contact Information</h3>
+                    {% if profile.email && profile.displayEmail %}
+                        <p>Email: {{ profile.email }}</p>
+                    {% endif %}
+                    {% if profile.phoneNumber && profile.displayNumber %}
+                        <p>Phone: {{ profile.phoneNumber }}</p>
+                    {% endif %}
+                </div>
+                <!-- Button to link to the edit profile page -->
+                {% if user.is_authenticated and user == profile.user %}
+                    <a href="{% url 'ProfileApp:edit_profile' %}" class="btn btn-primary">Edit Profile</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Right Column for About and Quick Info -->
+        <div class="col-md-7">
+            <div class="profile-info bg-white border rounded p-3 shadow-sm">
+                <p>{{ profile.personal_info }}</p>
+            </div>
+            <!-- Show the back to search button if needed applicable-->
+            {% if request.GET.search %}
+            <a href="{% url 'ProfileApp:search_profiles' %}?query={{ request.GET.search }}" class="btn btn-primary">Back to Search</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Edit Profile Modal -->
+<!-- Modal code remains the same as before -->
+{% endblock %}

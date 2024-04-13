@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Boards - MedaBook{% endblock %}
+
+{% block content %}
+    <h1>Meda Book Idea Board works</h1>
+    {% if boards %}
+        {% for board in boards %}
+            <script>
+                console.log("{{ board }}");
+            </script>
+            <div>
+                <h2>{% board.title %}</h2>
+                <p>{% board.description %}</p>
+
+            </div>
+        {% endfor %}
+    {% else %}
+        <p><a href="createboard/">Create a board</a></p>
+    {% endif %}
+
+{% endblock %}

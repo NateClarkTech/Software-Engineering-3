@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+<!-- This is the page to handle the profile searching, and displaying of said results-->
+{% block title %}Search Profiles{% endblock %}
+{% block extendHeader %}
+<!-- Custom styling -->
+<style>
+    .profile{
+        display: flex;
+        flex-direction: column;
+        margin: 10px;
+    
+    }
+    .profile img{
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+    }
+    .profile h3{
+        margin-top: 10px;
+        text-align: center;
+    }
+    .profiles-list{
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+    }
+    #content{
+        /* Center the content */
+        display: flex;
+        justify-content: center;
+
+    }
+    .container{
+        margin-top: 50px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    /* Custom styling for the mobile view */
+    @media (max-width: 992px) {
+
+        .body-cont{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        /* Center the button and search bar for mobile */
+        form{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        button{
+            margin-top: 10px;
+        }
+        
+    }
+    
+</style>
+{% endblock %}
+<!-- Main content -->
+{% block content %}
+<div class="container">
+    <h1>Search Profiles</h1>
+    <!-- Search form -->
+    <form method="get" action="{% url 'Profile:search_profiles' %}">
+        {% csrf_token %} 
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+    <!-- Display search results -->
+    {% if query %}
+        <h2>Results for '{{ query }}':</h2>
+        <div class="profiles-list">
+            {% for profile in results %}
+                <div class="profile">
+                    <a href="{% url 'Profile:public_profile' profile.user.username %}?search={{ query }}">
+                        <img src="{{ profile.profile_picture.url }}" alt="{{ profile.user.username }}" />
+                        <h3>{{ profile.user.username }}</h3>
+                    </a>
+                </div>
+            {% empty %}
+                <p>No profiles found.</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
