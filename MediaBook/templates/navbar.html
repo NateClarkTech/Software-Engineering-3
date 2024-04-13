@@ -1,21 +1,56 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-        <a class="navbar-brand" href="#">Your App</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <a class="navbar-brand" href="{% url 'home' %}">Media Book</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'home' %}">Home</a>
+                    <a class="nav-link" href="{% url 'home' %}">Media Book</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'IdeaBoards_Home' %}">Project Boards</a> <!-- Placeholder href -->
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'sound' %}">Sound</a> <!-- Placeholder href -->
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'visual' %}">Visual</a> <!-- Placeholder href -->
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'forum_home' %}">Forum</a>
                 </li>
-                <!-- Authentication links -->
+            </ul>
+            <ul class="navbar-nav ml-auto">
                 {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="notificationsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-bell"></i>
+                        {% if global_notifications.count %}
+                            <span class="badge badge-danger">{{ global_notifications.count }}</span>
+                        {% endif %}
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="notificationsDropdown">
+                        {% for notification in global_notifications|slice:":5" %}
+                            <a class="dropdown-item" href={% url 'thread_detail' notification.thread.id %}>
+                                {{ notification.get_notification_type_display }} - {{ notification.date }}
+                            </a>
+                        {% empty %}
+                            <a class="dropdown-item" href="#">No new notifications</a>
+                        {% endfor %}
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item text-center" href="{% url 'notifications' %}">See all notifications</a>
+                    </div>
+                </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Profile
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <!-- Add additional profile-related links here -->
+                            <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                        </div>
                     </li>
                 {% else %}
                     <li class="nav-item">

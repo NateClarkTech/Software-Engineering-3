@@ -1,10 +1,13 @@
-<!-- forum/templates/forum/create_thread.html -->
 {% extends 'base.html' %}
 {% block content %}
-<h2>Create Thread on {{ page.title }}</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Create Thread</button>
-</form>
+<div class="container">
+    <h2>Create Thread on {{ page.title }}</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ thread_form.as_p }}
+        <h3>Initial Message</h3>
+        {{ comment_form.as_p }}
+        <button type="submit" class="btn btn-primary">Create Thread</button>
+    </form>
+</div>
 {% endblock %}

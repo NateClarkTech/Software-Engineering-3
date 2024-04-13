@@ -1,0 +1,24 @@
+<!-- notifications_page.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Notifications</h2>
+    {% if notifications.exists %}
+        <ul class="list-group">
+            {% for notification in notifications %}
+                <!-- Making the section a clickable link -->
+                <a href="{% url 'thread_detail' notification.thread.id %}" class="list-group item list-group-item-action">
+                    <!-- Customize based on your Notification model fields -->
+                    <li class="list-group-item">
+                        {{ notification.get_notification_type_display }} - {{ notification.date }}
+                        <!-- Add link to the related content if applicable -->
+                    </li>
+                </a>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>You have no notifications.</p>
+    {% endif %}
+</div>
+{% endblock %}
