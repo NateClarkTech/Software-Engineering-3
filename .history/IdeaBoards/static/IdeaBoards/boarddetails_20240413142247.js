@@ -88,7 +88,6 @@ document.getElementById("saveChanges").addEventListener("click", function() {
         },
         body: JSON.stringify(changesToBoard),
     }).then(data => {
-        console.log(data);
         changesToBoard = [];
     })
 });
