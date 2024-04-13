@@ -35,10 +35,8 @@ def IdeaBoards_Create(request):
                 new_board.user = request.user
                 new_board.save()
                 return redirect('IdeaBoards_Home')
-        
-        # No board was added so show the user their boards
-        else:
-            form = NewIdeaBoardForm(instance=request.user)
+
+        form = NewIdeaBoardForm(instance=request.user)
 
         return render(request, 'newboard.html', {'form': form})
     #If the user is not logged in redirect to landing page

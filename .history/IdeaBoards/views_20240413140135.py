@@ -26,8 +26,6 @@ def IdeaBoards_Home(request):
 def IdeaBoards_Create(request):
     #If the user is logged in render the create board page
     if request.user.is_authenticated:
-
-        #If the fetch request is a POST request, save add the new Board to the database for the user
         if request.method == 'POST':
             form = NewIdeaBoardForm(request.POST)
             if form.is_valid():
@@ -35,8 +33,6 @@ def IdeaBoards_Create(request):
                 new_board.user = request.user
                 new_board.save()
                 return redirect('IdeaBoards_Home')
-        
-        # No board was added so show the user their boards
         else:
             form = NewIdeaBoardForm(instance=request.user)
 
@@ -49,6 +45,7 @@ def IdeaBoards_Create(request):
 def IdeaBoard_Detail(request, id):
     board = IdeaBoard.objects.get(id=id)
     items = IdeaBoardItem.objects.filter(ideaboard=board)
+    form = NewIdeaBoardItemForm(request.POST)
 
     #If the user is the owner of the board
     if request.user == board.user:
@@ -72,10 +69,7 @@ def IdeaBoard_Detail(request, id):
                         new_item.owner = request.user
                         new_item.ideaboard = board
                         new_item.save()
-    
-        #give the HTML for the board with the board's items
+
         return render(request, 'boarddetail.html', {'board': board, 'items': items})
-    
-    #If the user is not the owner of the board redirect to them to their boards
     else:
         return render('IdeaBoards_Home')

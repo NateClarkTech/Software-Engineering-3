@@ -86,6 +86,11 @@ document.getElementById("saveChanges").addEventListener("click", function() {
             "Content-Type": "application/json",
             "X-CSRFToken": csrftoken  // Include the CSRF token in the headers
         },
-        body: JSON.stringify(changesToBoard),
+        body: JSON.stringify(changesToBoard)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        changesToBoard = [];
     })
 });

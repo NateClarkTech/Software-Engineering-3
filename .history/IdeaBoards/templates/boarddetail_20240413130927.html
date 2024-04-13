@@ -11,7 +11,6 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <form id="addItemForm">
-            {% csrf_token %}
             <div class="modal-header">
             <h5 class="modal-title" id="CreateItemModalLabel">Create New Item</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -63,7 +62,7 @@
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createBoardItem">
         Create Board Item
     </button>
-    <button id="saveChanges" boardNumber="{{ board.id }}" type="button" class="btn btn-primary" data-toggle="modal">
+    <button id="saveChanges" type="button" class="btn btn-primary" data-toggle="modal">
         Save Board
     </button>
     {% endblock %}

@@ -78,14 +78,18 @@ function getCookie(name) {
     }
     return cookieValue;
 }
-document.getElementById("saveChanges").addEventListener("click", function() {
-    // Send the POST request with the CSRF token included in the headers
-    fetch(window.location.pathname, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": csrftoken  // Include the CSRF token in the headers
-        },
-        body: JSON.stringify(changesToBoard),
-    })
+
+// Send the POST request with the CSRF token included in the headers
+fetch(window.location.pathname, {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": csrftoken  // Include the CSRF token in the headers
+    },
+    body: JSON.stringify(changesToBoard)
+})
+.then(response => response.json())
+.then(data => {
+    console.log(data);
+    changesToBoard = [];
 });
