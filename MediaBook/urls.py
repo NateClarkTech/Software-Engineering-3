@@ -32,10 +32,11 @@ urlpatterns = [
     path('forum/', include('Forum.urls')),
     path('boards/', include('IdeaBoards.urls')),
     path('profile/', include('ProfileApp.urls')),
-    path('' , views.home, name='home'),
     path('visual/' , include('Visual.urls')),
     path('sound/' , include('Sound.urls')),
     path('mediabook/', views.media_book, name='mediabook'),
+    path('' , views.home, name='home'),
+
     ]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

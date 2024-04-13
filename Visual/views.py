@@ -19,8 +19,8 @@ def visual(request):
                 VisualNote.objects.create(note_title=title, note_description=description, note_image=image)
         return redirect('visual')
     else: # if the method is GET
-        notes = noteQuery(VisualNote)
-        labels = labelQuery(VisualLabel)
+        notes = noteQuery()
+        labels = labelQuery()
         return render(request, 'visual.html', {"notes":notes, "labels":labels})
 
 def noteQuery():

@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'MediaBook',
     'Forum',
     'IdeaBoards',
-    'ProfileApp'
+    'ProfileApp',
     'Visual',
     'Sound',
 ]
