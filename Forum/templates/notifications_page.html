@@ -1,21 +1,59 @@
-<!-- notifications_page.html -->
 {% extends 'base.html' %}
 
 {% block content %}
 <div class="container mt-4">
     <h2>Notifications</h2>
-    {% if notifications.exists %}
+    {% if notifications.has_other_pages %}
+        <ul class="pagination">
+            {% if notifications.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page={{ notifications.previous_page_number }}">&laquo; Previous</a></li>
+            {% else %}
+                <li class="page-item disabled"><span class="page-link">&laquo; Previous</span></li>
+            {% endif %}
+            
+            {% for i in notifications.paginator.page_range %}
+                {% if notifications.number == i %}
+                    <li class="page-item active"><span class="page-link">{{ i }}</span></li>
+                {% else %}
+                    <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                {% endif %}
+            {% endfor %}
+            
+            {% if notifications.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ notifications.next_page_number }}">Next &raquo;</a></li>
+            {% else %}
+                <li class="page-item disabled"><span class="page-link">Next &raquo;</span></li>
+            {% endif %}
+        </ul>
+    {% endif %}
+    
+    {% if notifications %}
         <ul class="list-group">
             {% for notification in notifications %}
-                <!-- Making the section a clickable link -->
-                <a href="{% url 'thread_detail' notification.thread.id %}" class="list-group item list-group-item-action">
-                    <!-- Customize based on your Notification model fields -->
-                    <li class="list-group-item">
-                        {{ notification.get_notification_type_display }} - {{ notification.date }}
-                        <!-- Add link to the related content if applicable -->
-                    </li>
-                </a>
-            {% endfor %}
+            <li class="list-group-item">
+                <!-- Check the type of notification and create a link accordingly -->
+                {% if notification.notification_type == Notification.COMMENT %}
+                    <!-- Link to the thread detail page and directly to the comment -->
+                    <a href="{% url 'thread_detail_comment' notification.thread.id notification.comment.id %}">
+                        New comment on "{{ notification.thread.title }}"
+                    </a>
+                {% elif notification.notification_type == Notification.REPLY %}
+                    <!-- Link to the comment reply -->
+                    <a href="{% url 'thread_detail_comment' notification.thread.id notification.comment.id %}">
+                        New reply to your comment in "{{ notification.thread.title }}"
+                    </a>
+                {% else %}
+                    <a href="{% url 'thread_detail_comment' notification.thread.id notification.comment.id%}">
+                        New like on your comment in "{{ notification.thread.title }}"
+                    </a>
+
+                <!-- Add additional notification types as needed -->
+                
+                {% endif %}
+                <!-- Other notification details -->
+            </li>
+        {% endfor %}
+        
         </ul>
     {% else %}
         <p>You have no notifications.</p>

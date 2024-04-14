@@ -1,57 +1,48 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container">
-  <div class="row">
-    {% for page in pages %}
-    <div class="col-md-6">
-      <div class="card mb-4">
-        <div class="card-body">
-          <h5 class="card-title">{{ page.title }}</h5>
-          <a href="{% url 'thread_list' page.id %}" class="btn btn-primary">View Page</a>
+<div class="container mt-3">
+    <div class="row">
+        {% for page in pages %}
+        <div class="col-md-6 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{{ page.title }}</h5>
+                    <a href="{% url 'thread_list' page.id %}" class="btn btn-primary">View Page</a>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-    {% endfor %}
-    <!-- Latest Threads Section -->
-    <div class="col-md-8">
-      <h3>Latest Thread</h3>
-      <ul class="list-group">
-        {% for thread in latest_threads %}
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-          <a href="{% url 'thread_detail' thread.id %}">{{ thread.title }}</a>
-          <small class="text-muted">
-            {% if thread.latest_comment_username != "No comments" %}
-              {{ thread.latest_comment_username }} - updated {{ thread.latest_comment_time|timesince }} ago
-            {% else %}
-              No comments
-            {% endif %}
-          </small>        </li>
         {% endfor %}
-      </ul>
-
     </div>
-    <!-- Top Threads Section -->
-    <div class="col-md-4">
-      <h3>Top Threads</h3>
-      <ul class="list-group">
-        {% for thread in top_threads %}
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-          <a href="{% url 'thread_detail' thread.id %}">{{ thread.title }}</a>
-          <span class="badge badge-primary badge-pill">{{ thread.comment.count }}</span>
-        </li>
-        {% endfor %}
-      </ul>
+    <div class="row mt-4">
+        <div class="col-md-8">
+            <h3>Latest Threads</h3>
+            <ul class="list-group">
+                {% for thread in latest_threads %}
+                <li class="list-group-item">
+                    <a href="{% url 'thread_detail' thread.id %}">{{ thread.title }}</a>
+                    <small class="float-right text-muted">
+                        {% if thread.latest_comment_username != "No comments" %}
+                            {{ thread.latest_comment_username }} - updated {{ thread.latest_comment_time|timesince }} ago
+                        {% else %}
+                            No comments
+                        {% endif %}
+                    </small>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-md-4">
+            <h3>Top Threads</h3>
+            <ul class="list-group">
+                {% for thread in top_threads %}
+                <li class="list-group-item">
+                    <a href="{% url 'thread_detail' thread.id %}">{{ thread.title }}</a>
+                    <span class="badge badge-primary badge-pill float-right">{{ thread.comment.count }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
-  </div>
-  
-  {% if user.is_superuser %}
-  <!-- Admin Options -->
-  <div class="mt-4">
-    <h4>Admin Options</h4>
-    <a href="{% url 'create_page' %}" class="btn btn-success">Add Page</a>
-    <!-- Optionally, add links to modify existing pages -->
-  </div>
-  {% endif %}
 </div>
 {% endblock %}
