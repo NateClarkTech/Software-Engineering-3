@@ -148,6 +148,14 @@
   <div class="row">
     <div class="col-md-12 comment-section">
       <h2 class="text-white">{{ thread.title }}</h2> <!-- Title with adjusted color for visibility -->
+      <!-- Subscribe button -->
+      {% if user.is_authenticated %}
+        {% if user in thread.subscribers.all %}
+          <a href="{% url 'unsubscribe_from_thread' thread.id %}" class="btn btn-danger">Unsubscribe</a>
+        {% else %}
+          <a href="{% url 'subscribe_to_thread' thread.id %}" class="btn btn-primary">Subscribe</a>
+        {% endif %}
+      {% endif %}
       <!-- Comment Loop -->
       {% for comment in comments %}
       <div class="comment-wrapper">
