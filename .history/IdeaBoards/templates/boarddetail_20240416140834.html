@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+<!-- Source: https://getbootstrap.com/docs/5.3/components/modal/ -->
+<!-- New Item Modal -->
+<div class="modal fade" id="createBoardItem" tabindex="-1" role="dialog" aria-labelledby="CreateItemModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <form id="addItemForm">
+            {% csrf_token %}
+            <div class="modal-header">
+                <h5 class="modal-title" id="CreateItemModalLabel">Create New Item</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" class="form-control" id="title" name="title">
+                </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <input type="text" class="form-control" id="description" name="description">
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Add Item</button>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+<!-- Edit Item Modal -->
+<div class="modal fade" id="editBoardItem" tabindex="-1" role="dialog" aria-labelledby="EditItemModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <form id="editItemForm">
+            {% csrf_token %}
+            <div class="modal-header">
+                <h5 class="modal-title" id="EditItemModalLabel">Edit Board Item</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="title">New Title</label>
+                    <input type="text" class="form-control" id="title" name="title">
+                </div>
+                <div class="form-group">
+                    <label for="description">New Description</label>
+                    <input type="text" class="form-control" id="description" name="description">
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Save Change</button>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- View Item Modal -->
+<div class="modal fade" id="viewBoardItem" tabindex="-1" role="dialog" aria-labelledby="ViewItemModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ViewItemModalLabel"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h1 id="view-item-title"></h1>
+                <p id="view-item-text"></p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Save Change</button>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+    <div>
+        <h1>{{ board.title }}</h1>
+        <p>{{ board.description }}</p>
+    </div>
+
+    <div id='boardItems' class='row'>
+        {% if items %}
+            {% for item in items %}
+            <div id="board-item-{{ forloop.counter }}" class="card">
+                <div class="card-body">
+                    <h2 id="board-item-{{ forloop.counter }}-title" class='card-title'>{{ item.title }}</h2>
+                    <p id="board-item-{{ forloop.counter }}-description" class='card-description'>{{ item.description }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+        <div id='no-items-found'>
+            <p>No items found</p>
+        </div>
+        {% endif %}
+        <!-- Button trigger modal -->
+    </div>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createBoardItem">
+        Create Board Item
+    </button>
+    <button id="saveChanges" boardNumber="{{ board.id }}" type="button" class="btn btn-primary" data-toggle="modal">
+        Save Board
+    </button>
+    {% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'IdeaBoards/boarddetails.js' %}"></script>
+{% endblock %}
