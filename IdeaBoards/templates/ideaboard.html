@@ -4,6 +4,10 @@
 
 {% block title %}Boards - MedaBook{% endblock %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="{% static 'css/ideaboard.css' %}">
+{% endblock %}
+
 {% block content %}
     <!-- Source: https: //getbootstrap.com/docs/5.3/components/modal/ -->
     <!-- Modal -->
@@ -36,14 +40,16 @@
     <div class="row">
         {% if boards %}
             {% for board in boards %}
-                <a class='btn' href='{{ board.id }}/' role='button'>
-                    <div class="card">
-                        <div class="card-body">
-                            <h2 class="card-title">{{ board.title }}</h2>
-                            <p class="card-text">{{ board.description }}</p>
+                <div class="col-md-4 px-3 py-3">
+                    <a id="board-{{ forloop.counter }}"  href='{{ board.id }}/' role='button' class="btn btn-outline-primary">
+                        <div class="card card-custom">
+                            <div class="card-body">
+                                <h2 id="board-{{ forloop.counter }}-title" class='card-title'>{{ board.title }}</h2>
+                                <p id="board-{{ forloop.counter }}-description" class='card-description pb-2'>{{ board.description }}</p>
+                            </div>
                         </div>
-                    </div>
-                </a>
+                    </a>
+                </div>        
             {% endfor %}
         {% else %}
             <div class='card'>
@@ -52,7 +58,7 @@
                 </div>
             </div>
         {% endif %}
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createBoard">
+        <button  type="button" class="btn btn-primary" id="create-new-board" data-toggle="modal" data-target="#createBoard">
             Create New Project Board
         </button>
     </div>
