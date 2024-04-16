@@ -2,6 +2,7 @@ console.log('script loaded');
 
 let changesToBoard = [];
 const csrftoken = getCookie('csrftoken');
+let numberOfBoardItems = 0;
 
 // Function to add a new item to the board
 function addFormItem() {
@@ -18,29 +19,54 @@ function addFormItem() {
             }
         );
         console.log(changesToBoard);
+        numberOfBoardItems = numberOfBoardItems + 1;
 
         // Create new elements
+        let colDiv = document.createElement("div");
+        colDiv.classList.add("col-md-4", "px-3", "py-3");
+        
+        let button = document.createElement("button");
+        button.id = "board-item-" + numberOfBoardItems;
+        button.classList.add("btn", "btn-outline-primary");
+        
         let card = document.createElement("div");
-        card.classList.add("card");
+        card.classList.add("card", "card-custom"); // Add a custom class for the card
         
         let cardBody = document.createElement("div");
         cardBody.classList.add("card-body");
         
         let cardTitle = document.createElement("h2");
+        cardTitle.id = "board-item-" + numberOfBoardItems + "-title";
         cardTitle.classList.add("card-title");
         cardTitle.textContent = title;
         
         let cardDescription = document.createElement("p");
-        cardDescription.classList.add("card-description");
+        cardDescription.id = "board-item-" + numberOfBoardItems + "-description";
+        cardDescription.classList.add("card-description", "pb-2");
         cardDescription.textContent = description;
 
         // Build the hierarchy
         cardBody.appendChild(cardTitle);
         cardBody.appendChild(cardDescription);
         card.appendChild(cardBody);
+        button.appendChild(card);
+        colDiv.appendChild(button);
+            
+        // Add an event listener to the button
+        (function(index) {
+            colDiv.addEventListener("click", function() {
+                let title = document.getElementById("board-item-" + index + "-title").textContent;
+                let description = document.getElementById("board-item-" + index + "-description").textContent;
+        
+                document.getElementById("view-item-title").textContent = title;
+                document.getElementById("view-item-text").textContent = description;
+        
+                $('#viewBoardItem').modal('show');
+            });
+        })(numberOfBoardItems); // Pass numberOfBoardItems as an argument to the IIFE
 
         // Add the new card to the "row" div
-        document.getElementById("boardItems").appendChild(card);
+        document.getElementById("boardItems").appendChild(colDiv);
 
         // Close the modal
         $('#createBoardItem').modal('hide');
@@ -130,5 +156,6 @@ while (document.getElementById("board-item-" + i)) {
             $('#viewBoardItem').modal('show');
         });
     })(i);
+    numberOfBoardItems = numberOfBoardItems + 1;
     i = i + 1;
 }
