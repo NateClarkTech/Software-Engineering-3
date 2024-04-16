@@ -9,7 +9,7 @@ function addFormItem() {
     let title = document.getElementById("title").value;
     let description = document.getElementById("description").value;
 
-    if (title !== "" && description !== "") {
+    if (title !== "" && description !== "" && title.length <= 64 && description.length <= 512) {
         changesToBoard.push(
             {   
                 type: "add",
@@ -49,6 +49,28 @@ function addFormItem() {
             document.getElementById("no-items-found").remove();
         }
     }
+    else if (title.length > 64 && description.length > 512){
+        document.getElementById("error-modal-text").innerHTML = "Title must be less than 64 characters and description must be less than 512 characters";
+        $('#createBoardItem').modal('hide');
+        
+        $('#errorModel').modal('show');
+        
+    }
+    else if (title.length > 64){  
+        document.getElementById("error-modal-text").innerHTML = "Title must be less than 64 characters";
+        $('#createBoardItem').modal('hide');
+        $('#errorModel').modal('show');
+    }
+    else if (description.length > 512){
+        document.getElementById("error-modal-text").innerHTML = "Description must be less than 512 characters";    
+        $('#createBoardItem').modal('hide');
+        $('#errorModel').modal('show');
+    }
+    else {
+        document.getElementById("error-modal-text").innerHTML = "Please fill in all fields";
+        $('#createBoardItem').modal('hide');
+        $('#errorModel').modal('show');
+    }
 }
 
 // Add an event listener to the form so items can be added to the board
@@ -78,7 +100,8 @@ function getCookie(name) {
     }
     return cookieValue;
 }
-document.getElementById("saveChanges").addEventListener("click", function() {
+
+document.getElementById("save-board-button").addEventListener("click", function() {
     // Send the POST request with the CSRF token included in the headers
     fetch(window.location.pathname, {
         method: "POST",
@@ -92,3 +115,20 @@ document.getElementById("saveChanges").addEventListener("click", function() {
         changesToBoard = [];
     })
 });
+
+let i = 1;
+while (document.getElementById("board-item-" + i)) {
+    (function(index) {
+        console.log("button")
+        document.getElementById("board-item-" + index).addEventListener("click", function() {
+            let title = document.getElementById("board-item-" + index + "-title").textContent;
+            let description = document.getElementById("board-item-" + index + "-description").textContent;
+
+            document.getElementById("view-item-title").textContent = title;
+            document.getElementById("view-item-text").textContent = description;
+
+            $('#viewBoardItem').modal('show');
+        });
+    })(i);
+    i = i + 1;
+}
