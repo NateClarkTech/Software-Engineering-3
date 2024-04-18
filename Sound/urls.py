@@ -5,4 +5,5 @@ from . import views
 
 urlpatterns = [
     path('', views.sound, name='sound'),
+    path('<str:label_name>/', views.label_sort, name='label_sort'),
     ]
