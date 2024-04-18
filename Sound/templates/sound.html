@@ -13,7 +13,7 @@
             color: #333;
             width: 80px;
             padding: 20px 0;
-            
+            margin-right:10px;
         }
         .sidebar a {
             display: block;
@@ -27,23 +27,30 @@
             width: 40px;
             height: 30px;
             margin-right: 7px;
+            label-color:black;
         }
         .note {
             flex: 2.5;
-            display: -webkit-box;
             display: -webkit-flex;
             color: #fff;
             width: 80px;
             padding: 20px 0;
             -webkit-flex-direction: row;
-            flex-direction: row;
             flex-direction: column;
             height: 100%;
+        }
+        .addLabel{
+            display:inline-block;
+        }
+        .addLabel img{
+            width: 40px;
+            height: 30px;
         }
         .note-box {
             -webkit-flex-direction: column;
             -webkit-flex-direction: column;
-            display: -webkit-box;
+            display: flex;
+            flex-direction: column;
             text-align: center;
             -webkit-box-sizing:border-box;
             color: #333;
@@ -53,6 +60,7 @@
             min-height: 245px;
             position: relative;
             -webkit-align-items: center;
+            margin:7px;
         }
         .note-form input[type="text"] {
             flex: 1;
@@ -60,7 +68,6 @@
             margin-right: 10px;
             margin-bottom: 10px;
             font-size: 16px;
-            resize: vertical; /* to have the input box grow vertically as typed in */
             min-height: 50px;
             max-height: 200px;
         }
@@ -73,32 +80,88 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
+        .note-title {
+            flex:1;
+            font-size: 18px;
+            font-weight: bold;
+            background-color:#211951;
+            margin-bottom: 5px;
+        }
+        .note-description {
+            flex:2;
+            font-size: 14px;
+            background-color: #365486;
+            margin-bottom: 10px;
+        }
+
 
     </style>
     <sound>
         <div class="sidebar">
             <a href=""><img src="{% static 'icons/music-sound.png' %}" alt="Visual Notes">Visual Notes</a>
-            {% if not labels %}
-            <a href=""><img src="{% static 'icons/edit-label-sound.png' %}" alt="Labels">Create Label</a>
-            {% else %}
+            <button onclick="createLabel()"><img src="{% static 'icons/edit-label-sound.png' %}" alt="create label">Create Label</button>
+            <script>
+                function createLabel() {
+                    var T = document.getElementById("CreateLabel");
+                    if (T.style.display === "block") {
+                        T.style.display = "none";
+                    } else {
+                        T.style.display = "block";
+                    }
+                }
+            </script>
             {% for label in labels %}
-            <a href=""><img src="{% static 'icons/label-sound.png' %}" alt="Labels">{{label.label_name}}</a>
+            <a href="{{ label.label_name }}"><img src="{% static 'icons/label-sound.png' %}" alt="Labels">{{label.label_name}}</a>
             {% endfor %}
-            {% endif %}
+        </div>
+        <div id="CreateLabel" style="display: none;">
+            <!-- To add Label -->
+            <form class="note-form" method="POST" action="">
+                {% csrf_token %} <!-- CSRF verification, security satisfaction -->
+                <input type="text" name="createLabel" placeholder="Label Name"><p></p>
+                <button type="note-button" name="soundCreateLabel" >Create Label</button>
+            </form>
         </div>
         <div class="note">
-            <!-- To add Note to Visual Database -->
+            <!-- To add Note to Sound Database -->
             <form class="note-form" method="POST" action="">
                 {% csrf_token %} <!-- CSRF verification, security satisfaction -->
                 <input type="text" name="title" placeholder="Song Title"><p></p>
                 <input type="text" name="description" placeholder="Take Note">
+                <div id="AddLabel" class="addLabel">
+                    <img style="display:block;" onclick="selectLabel()" src="{% static 'icons/label-sound.png' %}" alt="select label"><span style="color:black">Add Label</span></img>
+                </div>
+                <script>
+                    function selectLabel() {
+                        var T = document.getElementById("LabelSelect");
+                        var i = document.getElementById("AddLabel");
+                        if (T.style.display === "block") {
+                            T.style.display = "none";
+                            i.style.display = "inline-block";
+                        } else {
+                            T.style.display = "inline-block";
+                            i.style.display = "none";
+                        }
+                    }
+                </script>
+                <div id="LabelSelect" class="label-selection" style="display:none;">
+                    <select name="labelselect" class="label-dropdown">
+                        {% for label in labels %}
+                            <option value="{{label}}">{{ label.label_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
                 <button type="note-button" name="soundNoteSubmit" >Note</button>
             </form>
             <div class="note-pad">
                 {% for sound in notes %}
                 <div class="note-box">
+                    <div class="note-title">
                     <h2 name="title">{{sound.note_title}}</h2>
+                    </div>
+                    <div class="note-description">
                     <h3 name="description">{{sound.note_description}}</h3>
+                    </div>
                 </div>
                 {% endfor %}
             </div>
