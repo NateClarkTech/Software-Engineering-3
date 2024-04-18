@@ -81,6 +81,7 @@
             transition: background-color 0.3s ease;
         }
         .note-title {
+<<<<<<< Updated upstream
             flex:1;
             font-size: 18px;
             font-weight: bold;
@@ -94,6 +95,15 @@
             margin-bottom: 10px;
         }
 
+=======
+            background-color:#211951;
+            display: -webkit-inline-box;
+            direction: column;
+        }
+        .note-description {
+            background-color: 
+        }
+>>>>>>> Stashed changes
 
     </style>
     <sound>
@@ -156,12 +166,17 @@
             <div class="note-pad">
                 {% for sound in notes %}
                 <div class="note-box">
+<<<<<<< Updated upstream
                     <div class="note-title">
                     <h2 name="title">{{sound.note_title}}</h2>
                     </div>
                     <div class="note-description">
                     <h3 name="description">{{sound.note_description}}</h3>
                     </div>
+=======
+                    <div class="note-title"><h2 name="title">{{sound.note_title}}</h2></div>
+                    <div class="note-description"><h3 name="description">{{sound.note_description}}</h3></div>
+>>>>>>> Stashed changes
                 </div>
                 {% endfor %}
             </div>
