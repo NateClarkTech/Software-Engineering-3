@@ -98,7 +98,7 @@
     </style>
     <sound>
         <div class="sidebar">
-            <a href=""><img src="{% static 'icons/music-sound.png' %}" alt="Visual Notes">Visual Notes</a>
+            <a href="{% url 'sound' %}"><img src="{% static 'icons/music-sound.png' %}" alt="Sound Notes">Sound Notes</a>
             <button onclick="createLabel()"><img src="{% static 'icons/edit-label-sound.png' %}" alt="create label">Create Label</button>
             <script>
                 function createLabel() {
@@ -111,7 +111,7 @@
                 }
             </script>
             {% for label in labels %}
-            <a href="{{ label.label_name }}"><img src="{% static 'icons/label-sound.png' %}" alt="Labels">{{label.label_name}}</a>
+            <a href="{% url 'label_sort' label.label_name %}"><img src="{% static 'icons/label-sound.png' %}" alt="Labels">{{label.label_name}}</a>
             {% endfor %}
         </div>
         <div id="CreateLabel" style="display: none;">
@@ -166,6 +166,6 @@
                 {% endfor %}
             </div>
         </div>
-    </visual>
+    </sound>
 
 {% endblock %}
