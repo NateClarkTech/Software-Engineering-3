@@ -22,6 +22,7 @@ from django.conf import settings
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
+from Forum import views as forum
 
 
 urlpatterns = [
@@ -35,6 +36,8 @@ urlpatterns = [
     path('visual/' , include('Visual.urls')),
     path('sound/' , include('Sound.urls')),
     path('mediabook/', views.media_book, name='mediabook'),
+    path('notifications/mark_as_read/<int:notification_id>/', forum.mark_notification_as_read, name='mark_notification_as_read'),
+
     path('' , views.home, name='home'),
 
     ]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

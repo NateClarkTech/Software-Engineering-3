@@ -7,6 +7,89 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- Add custom stylesheets here -->
     {% block stylesheets %}{% endblock %}
+    <style>
+        .notification-badge {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            display: block; /* Initially hidden if no notifications */
+        }
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            display: none; /* Hidden by default, shown only if there are notifications */
+            padding: 3px 6px;
+            border-radius: 50%;
+            background-color: red;
+            color: white;
+            font-size: 12px;
+        }
+
+
+        /* colors for the whole site */
+        body {
+            background-color: #0F1035;
+            color: #fff;
+        }
+
+        /* navbar */
+        .navbar {
+            background-color: #211951 !important;
+        }
+
+        .custom-border-wes {
+            border: 1px solid #365486;
+        }
+
+        /* remove the arrow on the notificaiton icon */
+        .dropdown-toggle::after {
+            display: none;
+        }
+
+        /* pagination styles mostly made by GPT */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            padding: 1rem 0;
+          }
+          
+          .page-link {
+            color: #ecf0f1; 
+            background-color: #211951;
+            border: 1px solid #365486; 
+            margin-left: 0.25rem;
+            margin-right: 0.25rem;
+          }
+          
+          .page-link:hover, .page-item.active .page-link {
+            color: #ecf0f1;
+            background-color: #4e6d8c; /* Lighter blue for hover/active states */
+            border-color: #3b5998; /* A different blue for border */
+          }
+          
+          .page-item.active .page-link {
+            font-weight: bold; /* Make the active page number bold */
+            z-index: 1;
+          }
+
+          .btn {
+            background-color: #211951;
+            color: #fff;
+            border: 1px solid #365486;
+          }
+
+
+        /* list group styles */
+
+
+
+
+
+        
+        
+        {% block extra_css %}{% endblock %}
+    </style>
 </head>
 <body>
     <!-- Navbar -->
