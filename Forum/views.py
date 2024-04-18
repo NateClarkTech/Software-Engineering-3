@@ -2,6 +2,7 @@
 from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.urls import reverse
 from .models import Notification, Thread, Page, Comment
 from .forms import ThreadForm, PageForm, CommentForm
 from django.db.models import Count
@@ -47,7 +48,7 @@ def thread_detail(request, thread_id, comment_id=None):
     thread = get_object_or_404(Thread, id=thread_id)
     comments_list = Comment.objects.filter(thread=thread).order_by('created_at')
     
-    per_page = 5
+    per_page = 15
     paginator = Paginator(comments_list, per_page)
 
     # Default to page 1 if no specific comment is targeted
@@ -151,13 +152,22 @@ def create_thread(request, page_id):
     })
     
     
-    
+from .utils import convert_media_links_to_embed, clean_html
 @login_required
 def create_comment(request, thread_id):
     thread = get_object_or_404(Thread, id=thread_id)
     form = CommentForm(request.POST)
     if form.is_valid():
+        comment_content = form.cleaned_data['content']
+        # Convert YouTube links to embeds
+
+        # Convert links to embeds and sanitize
+        comment_content = convert_media_links_to_embed(comment_content)
+        comment_content = clean_html(comment_content)  # Clean the HTML
+
+        
         comment = form.save(commit=False)
+        comment.content = comment_content  # Set the processed content with YouTube embeds
         comment.user = request.user
         comment.thread = thread
         comment.save()
@@ -165,7 +175,7 @@ def create_comment(request, thread_id):
         # Create a set to collect unique recipients
         recipients = set(thread.subscribers.all())  # Start with all subscribers
 
-        # Always add the original poster if they're not the one commenting
+        # Always add the original poster 
         if thread.original_poster != request.user:
             recipients.add(thread.original_poster)
 
@@ -182,10 +192,10 @@ def create_comment(request, thread_id):
                 comment=comment
             )
             
-        # if the comment is a reply
+        # if the comment is a reply use the signals, because for some reason it just fucking works
         
 
-        return redirect('thread_detail', thread_id=thread.id)
+        return redirect(reverse('thread_detail_comment', args=[thread.id, comment.id]))
     else:
         # Handle errors or redirect
         return render(request, 'thread_detail.html', {'form': form, 'thread': thread})
@@ -249,24 +259,28 @@ def delete_comment(request, comment_id):
     comment.delete()
     return redirect('thread_detail', thread_id=comment.thread.id)
 
-
+# Could be renamed to toggle-like, but I dont want to change it and break things
 def like_comment(request, comment_id):
+    # Some checks to make sure that the user cannot like their comment, even by messing with the urls
+
     comment = get_object_or_404(Comment, id=comment_id)
+    if request.user == comment.user and not request.user.is_superuser:
+        # Throw an error, they are not authorized to do this
+        return HttpResponseForbidden("You shouldn't be seeing this. bad. no liking this comment.")
     if request.user in comment.likes.all():
         comment.likes.remove(request.user)
         # No notification on unlike
     else:
         comment.likes.add(request.user)
         # Create notification for like
-        if comment.user != request.user:  # Don't notify if liking their own comment
-            Notification.objects.create(
-                notification_type=Notification.LIKE,
-                to_user=comment.user,
-                from_user=request.user,
-                thread=comment.thread,
-                comment=comment,
-                is_read=False
-            )
+        Notification.objects.create(
+            notification_type=Notification.LIKE,
+            to_user=comment.user,
+            from_user=request.user,
+            thread=comment.thread,
+            comment=comment,
+            is_read=False
+        )
     return redirect('thread_detail', thread_id=comment.thread.id)
 
 
@@ -275,7 +289,9 @@ def like_comment(request, comment_id):
 @login_required
 def notifications_page(request):
     user_notifications_list = request.user.notifications.all().order_by('-date')
-    paginator = Paginator(user_notifications_list, 10)  # Show 10 notifications per page
+    paginator = Paginator(user_notifications_list, 20)  # Show 20 notifications per page
+    # mark all notifications as read
+    user_notifications_list.update(is_read=True)
 
     page_number = request.GET.get('page')
     user_notifications = paginator.get_page(page_number)
@@ -296,13 +312,12 @@ def reply_to_comment(request, thread_id, parent_comment_id):
             comment.parent = parent_comment  # Set the parent comment
             comment.save()
             
-            return redirect('thread_detail', thread_id=thread_id)
-            # Redirect or handle as needed
-    # Form rendering and other view logic
+            return redirect('thread_detail_comment' , thread_id=thread.id, comment_id=comment.id)
     return render(request, 'reply_to_comment.html', {'form': form, 'thread': thread, 'parent_comment': parent_comment})
 
 
 # views to handle subscribing and unsubscribing from threads
+#TODO: combine these into one "toggle" view later. 
 @login_required
 def subscribe_to_thread(request, thread_id):
     thread = get_object_or_404(Thread, id=thread_id)

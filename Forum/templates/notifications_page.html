@@ -1,5 +1,16 @@
 {% extends 'base.html' %}
+{% block extra_css %}
+.list-group-item {
+    background-color: #211951;
+    color: white;
+    border: none;
+}
+/* make the notification links white */
+.list-group-item a {
+    color: white;
+}
 
+{% endblock %}
 {% block content %}
 <div class="container mt-4">
     <h2>Notifications</h2>
@@ -32,12 +43,12 @@
             {% for notification in notifications %}
             <li class="list-group-item">
                 <!-- Check the type of notification and create a link accordingly -->
-                {% if notification.notification_type == Notification.COMMENT %}
+                {% if notification.notification_type == notification.COMMENT %}
                     <!-- Link to the thread detail page and directly to the comment -->
                     <a href="{% url 'thread_detail_comment' notification.thread.id notification.comment.id %}">
                         New comment on "{{ notification.thread.title }}"
                     </a>
-                {% elif notification.notification_type == Notification.REPLY %}
+                {% elif notification.notification_type == notification.REPLY %}
                     <!-- Link to the comment reply -->
                     <a href="{% url 'thread_detail_comment' notification.thread.id notification.comment.id %}">
                         New reply to your comment in "{{ notification.thread.title }}"
@@ -47,9 +58,10 @@
                         New like on your comment in "{{ notification.thread.title }}"
                     </a>
 
-                <!-- Add additional notification types as needed -->
+                <!-- Spot to add additional notification types as needed -->
                 
                 {% endif %}
+                
                 <!-- Other notification details -->
             </li>
         {% endfor %}

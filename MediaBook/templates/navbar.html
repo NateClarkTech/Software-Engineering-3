@@ -4,19 +4,20 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+        
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'home' %}">Media Book</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'IdeaBoards_Home' %}">Project Boards</a> <!-- Placeholder href -->
+                    <a class="nav-link" href="{% url 'IdeaBoards_Home' %}">Project Boards</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'sound' %}">Sound</a> <!-- Placeholder href -->
+                    <a class="nav-link" href="{% url 'sound' %}">Sound</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'visual' %}">Visual</a> <!-- Placeholder href -->
+                    <a class="nav-link" href="{% url 'visual' %}">Visual</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'forum_home' %}">Forum</a>
@@ -24,22 +25,25 @@
             </ul>
             <ul class="navbar-nav ml-auto">
                 {% if user.is_authenticated %}
+
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="notificationsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bell" viewBox="0 0 16 16">
-                            <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2M8 1.918l-.797.161A4 4 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4 4 0 0 0-3.203-3.92zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5 5 0 0 1 13 6c0 .88.32 4.2 1.22 6"/>
+                    <a class="nav-link dropdown-toggle d-none d-lg-block" href="#" id="notificationsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-bell" viewBox="0 0 16 16">
+                            <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4 4 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4 4 0 0 0-3.203-3.92L8 1.918z"/>
                         </svg>
-                        <!-- Conditionally render the style attribute for the notification badge -->
                         {% if global_notifications.count > 0 %}
-                        <span class="badge badge-danger notification-badge" style="display: inline-block;">{{ global_notifications.count }}</span>
+                        <span class="badge badge-danger notification-badge position-absolute" style="top: -5px; right: -5px; display: block;">{{ global_notifications.count }}</span>
                         {% else %}
                         <span class="badge badge-danger notification-badge" style="display: none;">{{ global_notifications.count }}</span>
                         {% endif %}
                     </a>
-                    
-                    
+                    <a class="nav-link d-lg-none" href="{% url 'notifications' %}">Notifications
+                        {% if global_notifications.count > 0 %}
+                        <span class="badge badge-danger">{{ global_notifications.count }}</span>
+                        {% endif %}
+                    </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="notificationsDropdown">
-                        <!-- Notification link -->
+                        <!-- Notification items -->
                         {% for notification in global_notifications|slice:":5" %}
                         <div class="dropdown-item">
                             {% if notification.comment %}
@@ -54,30 +58,31 @@
                             <button onclick="markAsReadOnly({{ notification.id }}, event);" class="btn btn-sm btn-link">Mark as read</button>
                         </div>
                         {% endfor %}
-
-                    
+                        <!-- Link to all notifications -->
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item text-center" href="{% url 'notifications' %}">See all notifications</a>
                     </div>
-                    
-                    
                 </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Profile
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <!-- Add additional profile-related links here -->
-                            <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
-                        </div>
-                    </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Profile
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="userDropdown">
+                        <a class="dropdown-item" href="{% url 'ProfileApp:profile' %}">View Profile</a>
+                        <a class="dropdown-item" href="{% url 'ProfileApp:edit_profile' %}">Update Profile</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                    </div>
+                </li>
+                <!-- Other nav items for the user -->
                 {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'login' %}">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'register' %}">Register</a>
-                    </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'register' %}">Register</a>
+                </li>
                 {% endif %}
             </ul>
         </div>

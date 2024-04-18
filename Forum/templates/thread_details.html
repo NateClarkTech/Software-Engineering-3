@@ -51,7 +51,7 @@
   .comment-body {
     font-size: 1rem;
     color: #ecf0f1; /* Light text color for main comment body */
-    padding-left: 70px; /* Align text with the author's name */
+    /* padding-left: 70px; */
   }
   .comment-actions {
     display: flex;
@@ -87,8 +87,8 @@
     font-size: 0.8rem;
     padding: 0.2rem 0.6rem;
     margin: 0; /* Override default margins */
-    color: #ecf0f1;
-    background-color: #34495e;
+    color: white;
+    background-color: #211951;
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -96,11 +96,12 @@
   }
 
   .btn-reply:hover {
-    background-color: #4e6d8c;
+    color: black;
+    
   }
   /* Style for the 'Post Comment' form */
   .comment-form-wrapper {
-    background-color: #34495e; /* Dark theme for the form background */
+    background-color: #34495e; 
     padding: 20px;
     border-radius: 8px;
     margin-top: 30px; /* Space from the last comment */
@@ -109,34 +110,54 @@
     color: #ecf0f1; /* Light color for the form title */
     margin-bottom: 15px;
   }
+
+  
   .comment-form-textarea {
     width: 100%;
     padding: 10px;
     border-radius: 4px;
     border: 1px solid #7f8c8d; /* Subtle border color */
     min-height: 100px; /* Larger text area for comments */
-    background-color: #2c3e50; /* Slightly lighter than form background for contrast */
-    color: #ecf0f1; /* Light text color */
+    background-color: #365486; /* Slightly lighter than form background for contrast */
+    color: white; /* Light text color */
   }
-  .comment-form-btn {
-    background-color: #f39c12; /* Standout color for submit button */
-    border: none;
-    padding: 10px 15px;
-    border-radius: 4px;
-    color: #ecf0f1;
-    font-weight: bold;
-    text-transform: uppercase; /* Uppercase text for the button */
-    float: right; /* Align the submit button to the right */
-    margin-top: 10px; /* Space from the textarea */
+
+  /* move the likes over to the left */
+  .likes {
+    color: #aea7d6 !important;
   }
-  .comment-form-textarea {
+
+  /* like button move to the left */
+  .likes-btn {
+    margin-right: auto;
+  }
+
+  /* move the subscribe button to the right */
+  .subscribe-btn {
+    margin-left: auto;
+    float: right;
+    background-color: #211951;
+
+  }
+
+  /* make sure the pre will wrap arround when it reaches the end of the line */
+  pre {
+    white-space: pre-wrap;
+  }
+
+  .responsive-iframe {
+    position: relative;
+    overflow: hidden;
+    padding-top: 56.25%; /* Aspect ratio of 16:9 */
+  }
+  
+  .responsive-iframe iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    padding: 10px;
-    border-radius: 4px;
-    border: 1px solid #7f8c8d; /* Subtle border color */
-    min-height: 100px; /* Larger text area for comments */
-    background-color: #2c3e50; /* Slightly lighter than form background for contrast */
-    color: #ecf0f1; /* Light text color */
+    height: 100%;
+    border: 0;
   }
   
 
@@ -147,15 +168,19 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12 comment-section">
-      <h2 class="text-white">{{ thread.title }}</h2> <!-- Title with adjusted color for visibility -->
+      <h2 class="text-white">{{ thread.title }}
+        <span> 
+          {% if user.is_authenticated %}
+            {% if user in thread.subscribers.all %}
+              <a href="{% url 'unsubscribe_from_thread' thread.id %}" class="btn btn-danger subscribe-btn">Unsubscribe</a>
+            {% else %}
+              <a href="{% url 'subscribe_to_thread' thread.id %}" class="btn btn-primary subscribe-btn">Subscribe</a>
+            {% endif %}
+          {% endif %}
+        </span>
+      </h2> <!-- Title with adjusted color for visibility -->
       <!-- Subscribe button -->
-      {% if user.is_authenticated %}
-        {% if user in thread.subscribers.all %}
-          <a href="{% url 'unsubscribe_from_thread' thread.id %}" class="btn btn-danger">Unsubscribe</a>
-        {% else %}
-          <a href="{% url 'subscribe_to_thread' thread.id %}" class="btn btn-primary">Subscribe</a>
-        {% endif %}
-      {% endif %}
+
       <!-- Comment Loop -->
       {% for comment in comments %}
       <div class="comment-wrapper">
@@ -197,26 +222,34 @@
           </div>
           {% endif %}
 
-          <p>{{ comment.content }}</p>
+          <!-- Print the comment, and allow for the urls to apply -->
+          {% autoescape off %}
+            <pre>{{ comment.content }}</pre>
+          {% endautoescape %}
+
           <!-- If it's a reply to another comment, show this -->
 
         <!-- Comment Actions -->
         <div class="comment-actions">
+          <!-- Making it a little compleicated to fix the styling issues, but the likes text should be aligned to the left, and if logged in there should be a button for liking-->
             {% if user.is_authenticated %}
-            <span class="text-muted likes">Likes: {{ comment.likes.count }}</span>
             {% if user.is_authenticated and comment.user != user %}
               {% if user in comment.likes.all %}
-              <a href="{% url 'like_comment' comment.id %}" class="comment-action-btn">Unlike</a>
+              <span class="text-muted likes">Likes: {{ comment.likes.count }}</span>
+              <a href="{% url 'like_comment' comment.id %}" class="comment-action-btn likes-btn">Unlike</a>
               {% else %}
-              <a href="{% url 'like_comment' comment.id %}" class="comment-action-btn">Like</a>
+              <span class="text-muted likes">Likes: {{ comment.likes.count }}</span>
+              <a href="{% url 'like_comment' comment.id %}" class="comment-action-btn likes-btn">Like</a>
               {% endif %}
+            {% else %}
+              <span class="text-muted likes likes-btn">Likes: {{ comment.likes.count }}</span>
             {% endif %}
 
           {% if comment.user == user or user.is_superuser %}
             <a href="{% url 'edit_comment' comment.id %}" class="comment-action-btn">Edit</a>
             <a href="{% url 'delete_comment' comment.id %}" class="comment-action-btn">Delete</a>
           {% endif %}
-          <button class="comment-action-btn reply-btn" data-commentid="{{ comment.id }}">Reply</button>
+          <button class="comment-action-btn btn-reply" data-commentid="{{ comment.id }}">Reply</button>
 
           {% endif %}
         </div>
@@ -274,7 +307,7 @@
     <form method="post" action="{% url 'create_comment' thread.id %}">
       {% csrf_token %}
       <textarea name="content" class="comment-form-textarea" placeholder="Write your comment here..."></textarea>
-      <button type="submit" class="btn btn-primary">Post Comment</button>
+      <button type="submit" class="btn">Post Comment</button>
     </form>
     
   </div>
@@ -321,7 +354,7 @@
 {% block scripts %}
 <script>
   $(document).ready(function() {
-    $('.reply-btn').click(function() {
+    $('.btn-reply').click(function() {
       var parentCommentId = $(this).data('commentid');
       var replyFormAction = "{% url 'reply_to_comment' thread.id 0 %}".replace('/0/', '/' + parentCommentId + '/');
       $('#replyForm').attr('action', replyFormAction);

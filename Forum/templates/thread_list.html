@@ -1,6 +1,15 @@
 <!-- forum/templates/forum/thread_list.html -->
 {% extends 'base.html' %}
 
+{% block extra_css %}
+.list-group-item {
+  background-color: #211951;
+  color: white;
+}
+
+{% endblock %}
+
+
 {% block content %}
 <div class="container">
   <div class="row">
@@ -15,9 +24,9 @@
   </div>
   <div class="row">
     <div class="col-md-12">
-      <ul class="list-group">
+      <ul class="list-group custom-border-wes">
         {% for thread in threads %}
-        <li class="list-group-item d-flex justify-content-between align-items-center">
+        <li class="list-group-item d-flex justify-content-between align-items-center custom-border-wes">
           <a href="{% url 'thread_detail' thread.id %}">{{ thread.title }}</a>
           <small class="text-muted">
             {% if thread.latest_comment_username != "No comments" %}

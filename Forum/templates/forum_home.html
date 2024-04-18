@@ -1,11 +1,33 @@
 {% extends 'base.html' %}
+{% block extra_css %}
+
+    .list-group-item {
+        background-color: #211951;
+        color: white;
+        border: none;
+    }
+
+    .card-body {
+        background-color: #211951;
+        color: white;
+    }.
+
+    .card {
+        color: white;
+        border: 1px solid #365486;
+    }
+
+
+
+
+{% endblock %}
 
 {% block content %}
 <div class="container mt-3">
     <div class="row">
         {% for page in pages %}
         <div class="col-md-6 mb-3">
-            <div class="card shadow-sm">
+            <div class="card custom-border-wes">
                 <div class="card-body">
                     <h5 class="card-title">{{ page.title }}</h5>
                     <a href="{% url 'thread_list' page.id %}" class="btn btn-primary">View Page</a>
@@ -17,9 +39,9 @@
     <div class="row mt-4">
         <div class="col-md-8">
             <h3>Latest Threads</h3>
-            <ul class="list-group">
+            <ul class="list-group custom-border-wes">
                 {% for thread in latest_threads %}
-                <li class="list-group-item">
+                <li class="list-group-item custom-border-wes">
                     <a href="{% url 'thread_detail' thread.id %}">{{ thread.title }}</a>
                     <small class="float-right text-muted">
                         {% if thread.latest_comment_username != "No comments" %}
@@ -34,9 +56,9 @@
         </div>
         <div class="col-md-4">
             <h3>Top Threads</h3>
-            <ul class="list-group">
+            <ul class="list-group custom-border-wes">
                 {% for thread in top_threads %}
-                <li class="list-group-item">
+                <li class="list-group-item custom-border-wes">
                     <a href="{% url 'thread_detail' thread.id %}">{{ thread.title }}</a>
                     <span class="badge badge-primary badge-pill float-right">{{ thread.comment.count }}</span>
                 </li>
