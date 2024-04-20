@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    {% load static %}
+
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
     <!-- Add custom stylesheets here -->
     {% block stylesheets %}{% endblock %}
     <style>
@@ -79,6 +83,15 @@
             border: 1px solid #365486;
           }
 
+          .card-body {
+            background-color: #211951;
+            color: white;
+        }.
+    
+        .card {
+            color: white;
+            border: 1px solid #365486;
+        }
 
         /* list group styles */
 
