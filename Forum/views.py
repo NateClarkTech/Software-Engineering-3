@@ -200,11 +200,12 @@ def create_comment(request, thread_id):
         # Handle errors or redirect
         return render(request, 'thread_detail.html', {'form': form, 'thread': thread})
 
-
-
-@login_required
-@user_passes_test(lambda u: u.is_superuser)
+# I am not using the @login_required here as it simply redirects to login, but there should be NO reason for a normal user to get this.
 def create_page(request):
+    # if the user isnt a superuser return forbidden
+    if not request.user.is_superuser:
+        return HttpResponseForbidden("You cannot do this.")
+    
     if request.method == 'POST':
         form = PageForm(request.POST)
         if form.is_valid():
@@ -249,11 +250,13 @@ def edit_comment(request, comment_id):
     return render(request, 'edit_comment.html', {'form': form, 'comment': comment})
 
 # To make it easier on myself, I have a seperate view for deleting a comment
-@login_required
 def delete_comment(request, comment_id):
+    # Add a check to see uf the user is authentacated at all
+    if not request.user.is_authenticated:
+        return HttpResponseForbidden("You are not authorized to delete this comment.")
     comment = get_object_or_404(Comment, id=comment_id)
     # Check if the user is the author of the comment or a superuser
-    if request.user != comment.user and not request.user.is_superuser:
+    if not (request.user == comment.user or request.user.is_superuser):
         # Throw an error, they are not authorized to do this
         return HttpResponseForbidden("You are not authorized to delete this comment.")
     comment.delete()
