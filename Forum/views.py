@@ -254,9 +254,10 @@ def delete_comment(request, comment_id):
     # Add a check to see uf the user is authentacated at all
     if not request.user.is_authenticated:
         return HttpResponseForbidden("You are not authorized to delete this comment.")
+    
     comment = get_object_or_404(Comment, id=comment_id)
     # Check if the user is the author of the comment or a superuser
-    if not (request.user == comment.user or request.user.is_superuser):
+    if request.user != comment.user and not request.user.is_superuser:
         # Throw an error, they are not authorized to do this
         return HttpResponseForbidden("You are not authorized to delete this comment.")
     comment.delete()
