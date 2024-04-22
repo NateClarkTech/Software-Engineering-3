@@ -23,11 +23,11 @@ function addFormItem() {
 
         // Create new elements
         let colDiv = document.createElement("div");
-        colDiv.classList.add("col-md-4", "px-3", "py-3");
+        colDiv.classList.add("col-md-4", "px-3", "py-3", "text-center");
         
         let button = document.createElement("button");
         button.id = "board-item-" + numberOfBoardItems;
-        button.classList.add("btn", "btn-outline-primary");
+        button.classList.add("btn", "btn-outline-primary", "btn-size");
         
         let card = document.createElement("div");
         card.classList.add("card", "card-custom"); // Add a custom class for the card
@@ -51,6 +51,8 @@ function addFormItem() {
         card.appendChild(cardBody);
         button.appendChild(card);
         colDiv.appendChild(button);
+
+            
             
         // Add an event listener to the button
         (function(index) {
@@ -67,6 +69,26 @@ function addFormItem() {
 
         // Add the new card to the "row" div
         document.getElementById("boardItems").appendChild(colDiv);
+
+        // Create the "New Note" button
+        let createNewItemButton = document.createElement("button");
+        createNewItemButton.type = "button";
+        createNewItemButton.classList.add("btn", "btn-primary");
+        createNewItemButton.id = "create-new-item-button";
+        createNewItemButton.setAttribute("data-toggle", "modal");
+        createNewItemButton.setAttribute("data-target", "#createBoardItem");
+        createNewItemButton.textContent = "New Note";
+
+        // Create the "Save Board" button
+        let saveBoardButton = document.createElement("button");
+        saveBoardButton.type = "button";
+        saveBoardButton.classList.add("btn", "btn-primary");
+        saveBoardButton.id = "save-board-button";
+        saveBoardButton.textContent = "Save Board";
+
+        // Add the buttons to the document
+        document.getElementById("buttonContainer").appendChild(createNewItemButton);
+        document.getElementById("buttonContainer").appendChild(saveBoardButton);
 
         // Close the modal
         $('#createBoardItem').modal('hide');

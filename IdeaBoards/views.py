@@ -33,7 +33,7 @@ def IdeaBoard_Detail(request, id):
 
         #If the fetch request is a POST request, save the changes to the board to the database
         if request.method == 'POST':
-            #print(request.body, request.POST, request.method)
+            print(request.body, request.POST, request.method)
 
             #get the data from the body and decode it
             data = json.loads(request.body.decode('utf-8'))
