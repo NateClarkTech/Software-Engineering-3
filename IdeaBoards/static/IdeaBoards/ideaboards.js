@@ -24,7 +24,22 @@ while (document.getElementById("board-" + i)) {
             }
             
             //bring up modal to edit the name and description of the board
-            if (state === "edit"){}
+            if (state === "edit"){
+                let boardName = document.getElementById("board-" + index + "-title").textContent;
+                let boardDescription = document.getElementById("board-" + index + "-description").textContent;
+                let board_id = board.getAttribute("data-url");
+
+                editBoardTitle = document.getElementById("editBoardTitleInput");
+                editBoardTitle.placeholder = boardName;
+                editBoardTitle.value = boardName;
+                editBoardTitle.setAttribute("data-id", board_id);
+
+                editBoardDescription = document.getElementById("editBoardDescriptionInput");
+                editBoardDescription.placeholder = boardDescription;
+                editBoardDescription.value = boardDescription;
+
+                $('#editBoard').modal('show');
+            }
 
             //bring up modal to confirm deletion
             if (state === "delete"){
@@ -67,10 +82,10 @@ document.getElementById("modes").addEventListener("change", function() {
 });
 
 /**********************************************************************
- * Sends a Post request to delete the board with the given board_id.
+ * Sends a DELETE request to delete the board with the given board_id.
  **********************************************************************/
 document.getElementById("delete-board-button").addEventListener("click", function() {
-    // Send the POST request with the CSRF token included in the headers
+    // Send the DELETE request with the CSRF token included in the headers
 
     let boardToDelete = document.getElementById("deleteModalWarning").getAttribute("data-id");
 
@@ -86,6 +101,30 @@ document.getElementById("delete-board-button").addEventListener("click", functio
         window.location.href = "/";
     })
 });
+
+/**********************************************************************
+ * Sends a PATCH request to edit the board with the given board_id.
+ **********************************************************************/
+document.getElementById("edit-board-button").addEventListener("click", function() {
+    // Send the PATCH request with the CSRF token included in the headers
+
+    let boardToEdit = document.getElementById("editBoardTitleInput").getAttribute("data-id");
+    let newTitle = document.getElementById("editBoardTitleInput").value;
+    let newDescription = document.getElementById("editBoardDescriptionInput").value;
+
+    fetch(window.location.pathname, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrftoken  // Include the CSRF token in the headers
+        },
+        body: JSON.stringify([{type: "edit", board_id: boardToEdit, newTitle: newTitle, newDescription: newDescription}]),
+    }).then(data => {
+        console.log(data);
+        window.location.href = "/";
+    })
+});
+
 
 // Get the CSRF token from the cookie
 function getCookie(name) {

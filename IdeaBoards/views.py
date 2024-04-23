@@ -13,16 +13,28 @@ def IdeaBoards_Home(request):
     #If the user is logged in render the boards page
     if request.user.is_authenticated:
 
-        print(request.method)
+        print(request.POST, request.method)
 
         #If the request is a POST request
         if request.method == 'POST':
-            print(request.POST, request.method)
             form = NewIdeaBoardForm(request.POST)
             if form.is_valid():
                 new_board = form.save(commit=False)
                 new_board.user = request.user
                 new_board.save()
+                
+        if request.method == 'PATCH':
+            data = json.loads(request.body.decode('utf-8'))
+            
+            #update the board in the database
+            for item in data:
+                if item['type'] == 'edit':
+                    print(item)
+                    board = IdeaBoard.objects.get(id=item['board_id'])
+                    board.title = item['newTitle']
+                    board.description = item['newDescription']
+                    board.save()
+
 
         #If the request is a DELETE request
         if request.method == 'DELETE':
@@ -32,7 +44,6 @@ def IdeaBoards_Home(request):
             for item in data:
                 if item['type'] == 'delete':
                     board = IdeaBoard.objects.get(id=item['board_id']).delete()
-
 
         
         form = NewIdeaBoardForm(instance=request.user)
