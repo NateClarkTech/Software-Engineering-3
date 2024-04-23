@@ -80,7 +80,7 @@ document.getElementById("delete-board-button").addEventListener("click", functio
             "Content-Type": "application/json",
             "X-CSRFToken": csrftoken  // Include the CSRF token in the headers
         },
-        body: JSON.stringify({type: "delete", board_id: boardToDelete}),
+        body: JSON.stringify([{type: "delete", board_id: boardToDelete}]),
     }).then(data => {
         console.log(data);
         window.location.href = "/";

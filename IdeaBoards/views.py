@@ -3,11 +3,19 @@ from .forms import *
 from django.contrib.auth.decorators import login_required
 import json
 
-# Create your views here.
+"""
+IdeaBoards_Home: 
+    This is a view for the databoards.
+    This page will display all the boards a user owns
+    Users can create, delete, edit, and view their boards
+"""
 def IdeaBoards_Home(request):
     #If the user is logged in render the boards page
     if request.user.is_authenticated:
 
+        print(request.method)
+
+        #If the request is a POST request
         if request.method == 'POST':
             print(request.POST, request.method)
             form = NewIdeaBoardForm(request.POST)
@@ -15,6 +23,17 @@ def IdeaBoards_Home(request):
                 new_board = form.save(commit=False)
                 new_board.user = request.user
                 new_board.save()
+
+        #If the request is a DELETE request
+        if request.method == 'DELETE':
+            data = json.loads(request.body.decode('utf-8'))
+            
+            #Delete the board from the database
+            for item in data:
+                if item['type'] == 'delete':
+                    board = IdeaBoard.objects.get(id=item['board_id']).delete()
+
+
         
         form = NewIdeaBoardForm(instance=request.user)
         boards = IdeaBoard.objects.filter(user=request.user)
@@ -23,6 +42,13 @@ def IdeaBoards_Home(request):
     else:
         return redirect('/')
     
+
+"""
+IdeaBoard_Details: 
+    This is a view for a board
+    This page will display all the notes on the board
+    Users can add, delete, and edit notes on the board
+"""
 @login_required
 def IdeaBoard_Detail(request, id):
     board = IdeaBoard.objects.get(id=id)
