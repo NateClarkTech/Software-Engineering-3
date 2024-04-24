@@ -87,6 +87,17 @@ def IdeaBoard_Detail(request, id):
                         new_item.owner = request.user
                         new_item.ideaboard = board
                         new_item.save()
+
+                #if the type is edit, edit the item in the database
+                if item['type'] == 'edit':
+                    editedIitem = IdeaBoardItem.objects.get(id=item['item_id'])
+                    editedIitem.title = item['title']
+                    editedIitem.description = item['description']
+                    editedIitem.save()
+
+                #if the type is delete, delete the item from the database
+                if item['type'] == 'delete':
+                    item = IdeaBoardItem.objects.get(id=item['item_id']).delete()
     
         #give the HTML for the board with the board's items
         return render(request, 'boarddetail.html', {'board': board, 'items': items})

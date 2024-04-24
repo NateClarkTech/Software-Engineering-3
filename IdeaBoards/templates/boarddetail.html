@@ -71,7 +71,7 @@
 
                 <div class="modal-body">
                     <h5>New Item Title<p class="text-danger" style="display: inline; margin: 0;">*</p></h5>
-                    <input type="text" id="editItemTitleInput" data-id='none' class="form-control" placeholder="New Item Title">
+                    <input type="text" id="editItemTitleInput" data-id='none' data-index="none" class="form-control" placeholder="New Item Title">
                     <h5>New Item Description</h5>
                     <input type="text" id="editItemDescriptionInput" class="form-control" placeholder="New Item Description">
                     <p><p class="text-danger" style="display: inline; margin: 0;">*</p> required field</p>
@@ -79,7 +79,7 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary text-danger" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary text-success">Confirm Change</button>
+                    <button id="edit-item-button" type="button" class="btn btn-primary text-success">Confirm Change</button>
                 </div>
             </div>
         </div>
@@ -98,7 +98,7 @@
                 </div>
 
                 <div class="modal-body">
-                    <h2 id="deleteModalWarning" data-id="none">Are you sure you want to delete this item?</h2>
+                    <h2 id="deleteModalWarning" data-id="none" data-index="none">Are you sure you want to delete this item?</h2>
                     <h2>This action cannot be undone.</h2>
                 </div>
 
@@ -112,16 +112,16 @@
     </div>
 
     <!-- Error Modal -->
-    <div class="modal fade" id="errorModel" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal fade" id="errorModel" tabindex="-1" labelledby="error-modal-label" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
+                    <h5 class="modal-title text-danger" id="error-modal-label">Error</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <h1 class="text-danger">Error:</h1>
                     <h1 id="error-modal-text" class="text-wrap text-danger"></h1>
                 </div>
             </div>
@@ -158,9 +158,9 @@
         <div id='boardItems' class='col-12 row px-0 mx-0'>
             {% if items %}
                 {% for item in items %}
-                    <div class="col-md-4 px-3 py-3 text-center">
+                    <div id="board-item-container-{{ forloop.counter }}" class="col-md-4 px-3 py-3 text-center">
                         <button id="board-item-{{ forloop.counter }}" class="btn btn-outline-primary btn-size">
-                            <div class="card card-custom"> <!-- Add a custom class for the card -->
+                            <div class="card card-custom"> 
                                 <div class="card-body">
                                     <h2 id="board-item-{{ forloop.counter }}-title" data-id="{{ item.id }}" class='card-title'>{{ item.title }}</h2>
                                     <p id="board-item-{{ forloop.counter }}-description" class='card-description pb-2'>{{ item.description }}</p>

@@ -22,37 +22,6 @@ state = "view";
 document.getElementById("modes").value = "view";
 
 /**********************************************************************
- * Adds an event listener to the "modes" dropdown menu
- * When the drop down menu selects the mode switch state to that mode
- * This is used to handel what happens when a board is clicked
- * 
- * Author: Nathaniel Clark
- **********************************************************************/
-document.getElementById("modes").addEventListener("change", function() {
-    // Get the selected value
-    var selectedValue = this.value;
-    
-    //change state to view
-    if (selectedValue === "view"){
-        state = "view";
-    }
-
-    //change state to delete
-    if (selectedValue === "delete"){
-        state = "delete";
-    }
-
-    //change state to edit
-    if (selectedValue === "edit"){
-        state = "edit";
-    }
-});
-
-
-
-
-
-/**********************************************************************
  * retrieves the value of the CSRF token from the cookie
  * 
  * Author: Nathaniel Clark (ChatGPT used to help)
@@ -187,6 +156,92 @@ function addFormItem() {
 }
 
 /**********************************************************************
+ * Edit an item on the board using javascript if the form is valid
+ * 
+ * WARNING - Edited objects will not be saved to the board if the
+ * "Save Board" button is not clicked
+ * 
+ * Author: Nathaniel Clark
+ * ********************************************************************/
+document.getElementById("edit-item-button").addEventListener("click", function() {
+
+    let itemToEdit = document.getElementById("editItemTitleInput").getAttribute("data-id");
+    let itemIndex = document.getElementById("editItemTitleInput").getAttribute("data-index");
+    let newTitle = document.getElementById("editItemTitleInput").value;
+    let newDescription = document.getElementById("editItemDescriptionInput").value;
+
+    if (newTitle !== "" && newTitle.length <= 64) {
+        changesToBoard.push(
+            {
+                type: "edit",
+                item_id: itemToEdit,
+                title: newTitle,
+                description: newDescription
+            }
+        );
+
+        // Update the title and description of the item
+        document.getElementById("board-item-" + itemIndex + "-title").textContent = newTitle;
+        document.getElementById("board-item-" + itemIndex + "-description").textContent = newDescription;
+
+        // Close the modal
+        $('#editBoardItem').modal('hide');
+    }
+    else if (newTitle.length > 64){
+        document.getElementById("error-modal-text").innerHTML = "Title must be less than 64 characters";
+        $('#editBoardItem').modal('hide');
+        $('#errorModel').modal('show');
+    }
+    else if (newTitle.length <= 0){
+        document.getElementById("error-modal-text").innerHTML = "Title field can't be empty";
+        $('#editBoardItem').modal('hide');
+        $('#errorModel').modal('show');
+    }
+    else {
+        document.getElementById("error-modal-text").innerHTML = "Unknown error has occured, please contact the site administrator";
+        $('#editBoardItem').modal('hide');
+        $('#errorModel').modal('show');
+    }
+});
+
+/**********************************************************************
+ * Delete an item on the board using javascript
+ * 
+ * WARNING - Deleted objects will not be removed from the board if the
+ * "Save Board" button is not clicked
+ * 
+ * Author: Nathaniel Clark
+ * ********************************************************************/
+
+document.getElementById("delete-item-button").addEventListener("click", function() {
+    let itemToDelete = document.getElementById("deleteModalWarning").getAttribute("data-id");
+    let itemIndex = document.getElementById("deleteModalWarning").getAttribute("data-index");
+
+    changesToBoard.push(
+        {
+            type: "delete",
+            item_id: itemToDelete
+        }
+    );
+
+    // Remove the item from the board
+    document.getElementById("board-item-container-" + itemIndex).remove();
+    numberOfBoardItems = numberOfBoardItems - 1;
+    
+    if (numberOfBoardItems === 0) {
+        let noItemsFoundDiv = document.createElement("div");
+        noItemsFoundDiv.id = "no-items-found";
+        noItemsFoundText = document.createElement("p");
+        noItemsFoundText.textContent = "No items found";
+        noItemsFoundDiv.appendChild(noItemsFoundText);
+        document.getElementById("boardItems").appendChild(noItemsFoundDiv);
+    }
+    
+    // Close the modal
+    $('#deleteItem').modal('hide');
+});
+
+/**********************************************************************
  * Adds an event listener to the button that adds a new item to the board
  * 
  * When the button is clicked, add the item to the board which is handled by addFormItem
@@ -230,6 +285,33 @@ document.getElementById("save-board-button").addEventListener("click", function(
 });
 
 /**********************************************************************
+ * Adds an event listener to the "modes" dropdown menu
+ * When the drop down menu selects the mode switch state to that mode
+ * This is used to handel what happens when a board is clicked
+ * 
+ * Author: Nathaniel Clark
+ **********************************************************************/
+document.getElementById("modes").addEventListener("change", function() {
+    // Get the selected value
+    var selectedValue = this.value;
+    
+    //change state to view
+    if (selectedValue === "view"){
+        state = "view";
+    }
+
+    //change state to delete
+    if (selectedValue === "delete"){
+        state = "delete";
+    }
+
+    //change state to edit
+    if (selectedValue === "edit"){
+        state = "edit";
+    }
+});
+
+/**********************************************************************
  * Adds an event listener to each item to do a specified action when clicked
  * What action that occurs is based on the current state
  * 
@@ -268,6 +350,7 @@ while (document.getElementById("board-item-" + i)) {
                 editItemTitle.placeholder = itemTitle.textContent;
                 editItemTitle.value = itemTitle.textContent;
                 editItemTitle.setAttribute("data-id", item_id)
+                editItemTitle.setAttribute("data-index", index);
 
                 let editItemDescription = document.getElementById("editItemDescriptionInput");
                 editItemDescription.placeholder = itemDescription.textContent;
@@ -284,6 +367,7 @@ while (document.getElementById("board-item-" + i)) {
 
                 deleteModalText.textContent = "Are you sure you want to delete the item titled: " + boardName.textContent + "?";
                 deleteModalText.setAttribute("data-id", board_id);
+                deleteModalText.setAttribute("data-index", index);
 
                 $('#deleteItem').modal('show');
             }
