@@ -1,6 +1,18 @@
+/**
+ * Date Created: 4/24/2024
+ * Date Modified: 4/24/2024
+ * 
+ * Author: Nathaniel Clark
+* Purpose: This script is used to handle the functionality of the idea board page.
+*/
+
+
 console.log('script loaded');
 
+// Set the initial state to "view"
 let state = "view";
+document.getElementById("modes").value = "view";
+
 const csrftoken = getCookie('csrftoken');
 
 /**********************************************************************
@@ -10,6 +22,8 @@ const csrftoken = getCookie('csrftoken');
  * - view: Redirects to the board's detail page
  * - edit: brings up modal to edit the name and description of the board
  * - delete: brings up modal to confirm deletion
+ * 
+ * Author: Nathaniel Clark
  **********************************************************************/
 let i = 1;
 while (document.getElementById("board-" + i)) {
@@ -17,14 +31,14 @@ while (document.getElementById("board-" + i)) {
     (function(index) {
         let board = document.getElementById("board-" + index)
 
-        document.getElementById("board-" + index).addEventListener("click", function() {
+        board.addEventListener("click", function() {
             //redirect to the board's detail page
             if (state === "view"){
                 window.location.href = board.getAttribute("data-url");
             }
             
             //bring up modal to edit the name and description of the board
-            if (state === "edit"){
+            else if (state === "edit"){
                 let boardName = document.getElementById("board-" + index + "-title").textContent;
                 let boardDescription = document.getElementById("board-" + index + "-description").textContent;
                 let board_id = board.getAttribute("data-url");
@@ -42,7 +56,7 @@ while (document.getElementById("board-" + i)) {
             }
 
             //bring up modal to confirm deletion
-            if (state === "delete"){
+            else if (state === "delete"){
                 let boardName = document.getElementById("board-" + index + "-title").textContent;
                 let board_id = board.getAttribute("data-url");
                 let deleteModalText = document.getElementById("deleteModalWarning");
@@ -60,6 +74,8 @@ while (document.getElementById("board-" + i)) {
  * Adds an event listener to the "modes" dropdown menu
  * When the drop down menu selects the mode switch state to that mode
  * This is used to handel what happens when a board is clicked
+ * 
+ * Author: Nathaniel Clark
  **********************************************************************/
 document.getElementById("modes").addEventListener("change", function() {
     // Get the selected value
@@ -83,6 +99,10 @@ document.getElementById("modes").addEventListener("change", function() {
 
 /**********************************************************************
  * Sends a DELETE request to delete the board with the given board_id.
+ * 
+ * Author: Nathaniel Clark
+ * formate gotten from chat GPT
+ * https://chat.openai.com/share/274e26c2-df74-4548-926b-cde8ff1216b0
  **********************************************************************/
 document.getElementById("delete-board-button").addEventListener("click", function() {
     // Send the DELETE request with the CSRF token included in the headers
@@ -104,6 +124,10 @@ document.getElementById("delete-board-button").addEventListener("click", functio
 
 /**********************************************************************
  * Sends a PATCH request to edit the board with the given board_id.
+ * 
+ * Author: Nathaniel Clark
+ * formate gotten from chat GPT
+ * https://chat.openai.com/share/274e26c2-df74-4548-926b-cde8ff1216b0
  **********************************************************************/
 document.getElementById("edit-board-button").addEventListener("click", function() {
     // Send the PATCH request with the CSRF token included in the headers
@@ -112,21 +136,61 @@ document.getElementById("edit-board-button").addEventListener("click", function(
     let newTitle = document.getElementById("editBoardTitleInput").value;
     let newDescription = document.getElementById("editBoardDescriptionInput").value;
 
-    fetch(window.location.pathname, {
-        method: "PATCH",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": csrftoken  // Include the CSRF token in the headers
-        },
-        body: JSON.stringify([{type: "edit", board_id: boardToEdit, newTitle: newTitle, newDescription: newDescription}]),
-    }).then(data => {
-        console.log(data);
-        window.location.href = "/";
-    })
+    //Throw error if title is too long
+    if (newTitle.length > 64){
+        errorText = document.getElementById("errorText");
+        errorText.textContent = "Title must be less than 64 characters";
+
+        $('#editBoard').modal('hide');
+        $('#errorModal').modal('show');
+    }
+    else if (newDescription.length > 128){
+        errorText = document.getElementById("errorText");
+        errorText.textContent = "Description must be less than 128 characters";
+
+        $('#editBoard').modal('hide');
+        $('#errorModal').modal('show');
+    }
+    //Throw error if a field is empty
+    else if (newTitle === "") {
+        errorText = document.getElementById("errorText");
+        errorText.textContent = "Project board must have a title";
+
+        $('#editBoard').modal('hide');
+        $('#errorModal').modal('show');
+    }
+    //If the two above tests
+    else if (newTitle !== ""){
+        fetch(window.location.pathname, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrftoken  // Include the CSRF token in the headers
+            },
+            body: JSON.stringify([{type: "edit", board_id: boardToEdit, newTitle: newTitle, newDescription: newDescription}]),
+        }).then(data => {
+            $('#editBoard').modal('hide');
+            console.log(data);
+            window.location.href = "/";
+        })
+    }
+    //Something has gone very wrong
+    else {
+        errorText = document.getElementById("errorText");
+        errorText.textContent = "An Unknown Error has occured, please contact the site administrator";
+
+        $('#editBoard').modal('hide');
+        $('#errorModel').modal('show');
+    }
 });
 
 
-// Get the CSRF token from the cookie
+/**********************************************************************
+ * retrieves the value of the CSRF token from the cookie
+ * 
+ * Author: Nathaniel Clark (ChatGPT used to help)
+ * https://chat.openai.com/share/274e26c2-df74-4548-926b-cde8ff1216b0
+ * ********************************************************************/
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {

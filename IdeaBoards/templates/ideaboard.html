@@ -35,27 +35,28 @@
     </div>
 
     <!-- Edit Board Modal -->
-    <div class="modal fade" id="editBoard" tabindex="-1" role="dialog" aria-labelledby="EditItemModalLabel" aria-hidden="true">
+    <div class="modal fade" id="editBoard" tabindex="-1" role="dialog" aria-labelledby="EditBoardModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="form">
             <div class="modal-content">
 
                     <div class="modal-header">
-                        <h5 class="modal-title" id="EditItemModalLabel">Edit Board</h5>
+                        <h5 class="modal-title" id="EditBoardModalLabel">Edit Board</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
 
                     <div class="modal-body">
-                        <h5>New Board Title</h5>
+                        <h5>New Board Title<p class="text-danger" style="display: inline; margin: 0;">*</p></h5>
                         <input type="text" id="editBoardTitleInput" data-id='none' class="form-control" placeholder="New Board Title">
                         <h5>New Board Description</h5>
                         <input type="text" id="editBoardDescriptionInput" class="form-control" placeholder="New Board Description">
+                        <p><p class="text-danger" style="display: inline; margin: 0;">*</p> required field</p>
                     </div>
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button id='edit-board-button' type="submit" class="btn btn-primary">Complete Changes</button>
+                        <button id='edit-board-button' type="submit" class="btn btn-primary">Confirm Changes</button>
                     </div>
 
             </div>
@@ -63,12 +64,12 @@
     </div>
 
     <!-- Delete Board Modal -->
-    <div class="modal fade" id="deleteBoard" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal fade" id="deleteBoard" tabindex="-1" role="dialog" labelledby="DeleteBoardModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="form">
             <div class="modal-content">
 
                 <div class="modal-header">
-                    <h5 class="modal-title text-danger" id="CreateItemModalLabel">Delete</h5>
+                    <h5 class="modal-title text-danger" id="DeleteBoardModalLabel">Delete</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -82,6 +83,31 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     <button id='delete-board-button' type="submit" class="btn btn-primary btn-danger">Delete Board</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Error Modal -->
+    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" area-labelledby="ErrorModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="form">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title text-danger" id="ErrorModalLabel">ERROR</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <h2>ERROR:</h2>
+                    <h2 id="errorText"></h2>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 </div>
 
             </div>
