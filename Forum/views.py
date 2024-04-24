@@ -132,7 +132,22 @@ def create_thread(request, page_id):
         thread_form = ThreadForm(request.POST)
         comment_form = CommentForm(request.POST)
         if thread_form.is_valid() and comment_form.is_valid():
+            
             thread = thread_form.save(commit=False)
+            
+            comment_content = comment_form.cleaned_data['content']
+            # Convert links to embeds
+
+            # Convert links to embeds and sanitize
+            comment_content = convert_media_links_to_embed(comment_content)
+            comment_content = clean_html(comment_content)  # Clean the HTML
+
+
+            comment = comment_form.save(commit=False)
+            comment.content = comment_content  # Set the processed content with YouTube embeds
+
+
+
             thread.page = page
             thread.original_poster = request.user
             thread.save()  # Save the thread to get a valid ID
