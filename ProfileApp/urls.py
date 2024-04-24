@@ -16,7 +16,7 @@ urlpatterns = [
 
     path('', views.profile, name='profile'),  # For the logged-in user's profile
     path('profile/', views.profile, name='profile'),  # For the logged-in user's profile
-    path('profile/<str:username>/', views.public_profile, name='public_profile'),  # For viewing other users' profiles
+    path('profile/<str:username>/', views.profile, name='public_profile'),  # For viewing other users' profiles
     path('edit_profile/', views.edit_profile, name='edit_profile'),
     path('search/', views.search_profiles, name='search_profiles'),
 

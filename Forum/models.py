@@ -13,6 +13,8 @@ class Thread(models.Model):
 
     # A list of users who have "subscribed" to the thread
     subscribers = models.ManyToManyField(User, related_name='subscribed_threads', blank=True)
+    
+    created_at = models.DateTimeField(auto_now_add=True)
     # Add other fields
     @property
     def comment_count(self):
