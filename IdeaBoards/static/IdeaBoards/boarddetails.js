@@ -12,7 +12,7 @@ console.log('script loaded');
 let changesToBoard = [];
 
 //Used for assigning a unique id to each board item
-let assignBoardId = 0;
+let assignBoardId = 1;
 
 // Variable to keep track of the number of board items
 let numberOfBoardItems = 0;
@@ -59,7 +59,7 @@ function addFormItem() {
     if (title !== "" && description !== "" && title.length <= 64) {
         changesToBoard.push(
             {   
-                type: "add",
+                changeType: "add",
                 title: title,
                 description: description
             }
@@ -71,6 +71,7 @@ function addFormItem() {
         // Create new elements
         let colDiv = document.createElement("div");
         colDiv.classList.add("col-md-4", "px-3", "py-3", "text-center");
+        colDiv.id = "board-item-container-" + assignBoardId;
         
         let button = document.createElement("button");
         button.id = "board-item-" + assignBoardId;
@@ -102,13 +103,52 @@ function addFormItem() {
         // Add an event listener to the button
         (function(index) {
             colDiv.addEventListener("click", function() {
-                let title = document.getElementById("board-item-" + index + "-title").textContent;
-                let description = document.getElementById("board-item-" + index + "-description").textContent;
+
+                //bring up modal to view item
+                if (state === "view"){
+                    let itemTitle = document.getElementById("board-item-" + index + "-title").textContent;
+                    let itemDescription = document.getElementById("board-item-" + index + "-description").textContent;
+                    
+                    document.getElementById("view-item-title").textContent = itemTitle;
+                    document.getElementById("view-item-text").textContent = itemDescription;
+                    
+                    $('#viewBoardItem').modal('show');
+                }
         
-                document.getElementById("view-item-title").textContent = title;
-                document.getElementById("view-item-text").textContent = description;
+                //bring up modal to edit item
+                else if (state === "edit"){
+                    let itemTitle = document.getElementById("board-item-" + index + "-title");
+                    let itemDescription = document.getElementById("board-item-" + index + "-description");
+                    let item_id = itemTitle.getAttribute("data-id");
+                    
+                    let editItemTitle = document.getElementById("editItemTitleInput");
+                    editItemTitle.placeholder = itemTitle.textContent;
+                    editItemTitle.value = itemTitle.textContent;
+                    editItemTitle.setAttribute("data-id", item_id)
+                    editItemTitle.setAttribute("data-index", index);
+    
+                    let editItemDescription = document.getElementById("editItemDescriptionInput");
+                    editItemDescription.placeholder = itemDescription.textContent;
+                    editItemDescription.value = itemDescription.textContent;
+                    
+                    $('#editBoardItem').modal('show');
+                }
         
-                $('#viewBoardItem').modal('show');
+                //bring up modal to confirm deletion
+                else if (state === "delete"){
+                    let boardName = document.getElementById("board-item-" + index + "-title");
+                    let boardDescription = document.getElementById("board-item-" + index + "-description");
+                    let board_id = boardName.getAttribute("data-id");
+                    let deleteModalText = document.getElementById("deleteModalWarning");
+    
+                    deleteModalText.textContent = "Are you sure you want to delete the item titled: " + boardName.textContent + "?";
+                    deleteModalText.setAttribute("data-id", board_id);
+                    deleteModalText.setAttribute("data-index", index);
+                    deleteModalText.setAttribute("data-delete-item-name", boardName.textContent);
+                    deleteModalText.setAttribute("data-delete-item-description", boardDescription.textContent);
+    
+                    $('#deleteItem').modal('show');
+                }
             });
         })(assignBoardId); // Pass assignBoardId as an argument to the IIFE
 
@@ -117,7 +157,7 @@ function addFormItem() {
 
         // Create the "New Note" button
         let createNewItemButton = document.createElement("button");
-        createNewItemButton.type = "button";
+        createNewItemButton.changeType = "button";
         createNewItemButton.classList.add("btn", "btn-primary");
         createNewItemButton.id = "create-new-item-button";
         createNewItemButton.setAttribute("data-toggle", "modal");
@@ -126,7 +166,7 @@ function addFormItem() {
 
         // Create the "Save Board" button
         let saveBoardButton = document.createElement("button");
-        saveBoardButton.type = "button";
+        saveBoardButton.changeType = "button";
         saveBoardButton.classList.add("btn", "btn-primary");
         saveBoardButton.id = "save-board-button";
         saveBoardButton.textContent = "Save Board";
@@ -173,7 +213,7 @@ document.getElementById("edit-item-button").addEventListener("click", function()
     if (newTitle !== "" && newTitle.length <= 64) {
         changesToBoard.push(
             {
-                type: "edit",
+                changeType: "edit",
                 item_id: itemToEdit,
                 title: newTitle,
                 description: newDescription
@@ -216,29 +256,39 @@ document.getElementById("edit-item-button").addEventListener("click", function()
 document.getElementById("delete-item-button").addEventListener("click", function() {
     let itemToDelete = document.getElementById("deleteModalWarning").getAttribute("data-id");
     let itemIndex = document.getElementById("deleteModalWarning").getAttribute("data-index");
+    let itemTitle = document.getElementById("deleteModalWarning").getAttribute("data-delete-item-name");
+    let itemDescription = document.getElementById("deleteModalWarning").getAttribute("data-delete-item-description");
 
-    changesToBoard.push(
-        {
-            type: "delete",
-            item_id: itemToDelete
+    //duct changeType solution to delete items that were added before being saved to the database
+    for (item in changesToBoard) {
+        if (changesToBoard[item].changeType === "add" && changesToBoard[item].title === itemTitle && changesToBoard[item].description === itemDescription){
+            changesToBoard.pop(item);
+            
         }
-    );
-
-    // Remove the item from the board
-    document.getElementById("board-item-container-" + itemIndex).remove();
-    numberOfBoardItems = numberOfBoardItems - 1;
-    
-    if (numberOfBoardItems === 0) {
-        let noItemsFoundDiv = document.createElement("div");
-        noItemsFoundDiv.id = "no-items-found";
-        noItemsFoundText = document.createElement("p");
-        noItemsFoundText.textContent = "No items found";
-        noItemsFoundDiv.appendChild(noItemsFoundText);
-        document.getElementById("boardItems").appendChild(noItemsFoundDiv);
-    }
-    
-    // Close the modal
-    $('#deleteItem').modal('hide');
+        else{
+            changesToBoard.push(
+                {
+                    changeType: "delete",
+                    item_id: itemToDelete
+                }
+            );
+        }
+        // Remove the item from the board
+        document.getElementById("board-item-container-" + itemIndex).remove();
+        numberOfBoardItems = numberOfBoardItems - 1;
+        
+        if (numberOfBoardItems === 0) {
+            let noItemsFoundDiv = document.createElement("div");
+            noItemsFoundDiv.id = "no-items-found";
+            noItemsFoundText = document.createElement("p");
+            noItemsFoundText.textContent = "No items found";
+            noItemsFoundDiv.appendChild(noItemsFoundText);
+            document.getElementById("boardItems").appendChild(noItemsFoundDiv);
+        }
+        
+        // Close the modal
+        $('#deleteItem').modal('hide');
+    }    
 });
 
 /**********************************************************************
@@ -274,7 +324,7 @@ document.getElementById("save-board-button").addEventListener("click", function(
     fetch(window.location.pathname, {
         method: "POST",
         headers: {
-            "Content-Type": "application/json",
+            "Content-changeType": "application/json",
             "X-CSRFToken": csrftoken,  // Include the CSRF token in the headers
         },
         body: JSON.stringify(changesToBoard),
@@ -362,12 +412,15 @@ while (document.getElementById("board-item-" + i)) {
             //bring up modal to confirm deletion
             else if (state === "delete"){
                 let boardName = document.getElementById("board-item-" + index + "-title");
+                let boardDescription = document.getElementById("board-item-" + index + "-description");
                 let board_id = boardName.getAttribute("data-id");
                 let deleteModalText = document.getElementById("deleteModalWarning");
 
                 deleteModalText.textContent = "Are you sure you want to delete the item titled: " + boardName.textContent + "?";
                 deleteModalText.setAttribute("data-id", board_id);
                 deleteModalText.setAttribute("data-index", index);
+                deleteModalText.setAttribute("data-delete-item-name", boardName.textContent);
+                deleteModalText.setAttribute("data-delete-item-description", boardDescription.textContent);
 
                 $('#deleteItem').modal('show');
             }

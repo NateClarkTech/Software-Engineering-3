@@ -79,8 +79,8 @@ def IdeaBoard_Detail(request, id):
             for item in data:
                 #print(item)
 
-                #if the type is add, add the item to the database pointing at the board
-                if (item['type'] == 'add'):
+                #if the changeType is add, add the item to the database pointing at the board
+                if (item['changeType'] == 'add'):
                     form = NewIdeaBoardItemForm(item)
                     if form.is_valid():
                         new_item = form.save(commit=False)
@@ -88,15 +88,15 @@ def IdeaBoard_Detail(request, id):
                         new_item.ideaboard = board
                         new_item.save()
 
-                #if the type is edit, edit the item in the database
-                if item['type'] == 'edit':
+                #if the changeType is edit, edit the item in the database
+                if item['changeType'] == 'edit':
                     editedIitem = IdeaBoardItem.objects.get(id=item['item_id'])
                     editedIitem.title = item['title']
                     editedIitem.description = item['description']
                     editedIitem.save()
 
-                #if the type is delete, delete the item from the database
-                if item['type'] == 'delete':
+                #if the changeType is delete, delete the item from the database
+                if item['changeType'] == 'delete':
                     item = IdeaBoardItem.objects.get(id=item['item_id']).delete()
     
         #give the HTML for the board with the board's items
