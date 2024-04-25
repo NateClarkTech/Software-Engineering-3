@@ -260,35 +260,40 @@ document.getElementById("delete-item-button").addEventListener("click", function
     let itemDescription = document.getElementById("deleteModalWarning").getAttribute("data-delete-item-description");
 
     //duct changeType solution to delete items that were added before being saved to the database
+    let itemIsSavedLocally = false;
     for (item in changesToBoard) {
         if (changesToBoard[item].changeType === "add" && changesToBoard[item].title === itemTitle && changesToBoard[item].description === itemDescription){
-            changesToBoard.pop(item);
-            
+            itemIsSavedLocally = true;
         }
-        else{
-            changesToBoard.push(
-                {
-                    changeType: "delete",
-                    item_id: itemToDelete
-                }
-            );
-        }
-        // Remove the item from the board
-        document.getElementById("board-item-container-" + itemIndex).remove();
-        numberOfBoardItems = numberOfBoardItems - 1;
+    }
         
-        if (numberOfBoardItems === 0) {
-            let noItemsFoundDiv = document.createElement("div");
-            noItemsFoundDiv.id = "no-items-found";
-            noItemsFoundText = document.createElement("p");
-            noItemsFoundText.textContent = "No items found";
-            noItemsFoundDiv.appendChild(noItemsFoundText);
-            document.getElementById("boardItems").appendChild(noItemsFoundDiv);
-        }
+    if (itemIsSavedLocally){
+        changesToBoard.pop(item);
+    }
+    else{
+        changesToBoard.push(
+            {
+                changeType: "delete",
+                item_id: itemToDelete
+            }
+        );
+    }
+
+    // Remove the item from the board
+    document.getElementById("board-item-container-" + itemIndex).remove();
+    numberOfBoardItems = numberOfBoardItems - 1;
         
-        // Close the modal
-        $('#deleteItem').modal('hide');
-    }    
+    if (numberOfBoardItems === 0) {
+        let noItemsFoundDiv = document.createElement("div");
+        noItemsFoundDiv.id = "no-items-found";
+        noItemsFoundText = document.createElement("p");
+        noItemsFoundText.textContent = "No items found";
+        noItemsFoundDiv.appendChild(noItemsFoundText);
+        document.getElementById("boardItems").appendChild(noItemsFoundDiv);
+    }
+        
+    // Close the modal
+    $('#deleteItem').modal('hide');
 });
 
 /**********************************************************************
