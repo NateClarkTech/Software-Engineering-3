@@ -17,6 +17,10 @@ def visual(request):
             image = request.POST.get('image', '').strip()
             if title or description or image: 
                 VisualNote.objects.create(note_title=title, note_description=description, note_image=image)
+        if "visualCreateLabel" in request.POST:
+            label = request.POST.get('createLabel', "").strip()
+            if label: # check if label exists
+                VisualLabel.objects.create(label_name=label)
         return redirect('visual')
     else: # if the method is GET
         notes = noteQuery()
@@ -27,3 +31,11 @@ def noteQuery():
     return VisualNote.objects.all().order_by('-created_at')
 def labelQuery():
     return VisualLabel.objects.all().order_by("label_name")
+
+
+@login_required
+def label_sort(request, label_name):
+    notes = noteQuery()
+    labels = labelQuery()
+    label = VisualLabel.objects.get(label_name=label_name)
+    return render(request, 'label_sort.html', {'label': label, "notes":notes, "labels":labels})
