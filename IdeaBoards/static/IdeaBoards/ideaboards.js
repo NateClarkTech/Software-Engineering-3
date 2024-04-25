@@ -206,3 +206,31 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+
+
+// JavaScript to handle form submission and displaying result
+document.getElementById('getRecc').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent default form submission
+      
+    // Get input value
+    var inputData = document.getElementById('genreName').value;
+      
+    // Send input data to Django view using AJAX
+    $.ajax({
+        url: '/recc_result/',
+        method: 'POST',
+        dataType: 'json',
+        data: {
+        input_data: inputData,
+        csrfmiddlewaretoken: '{{ csrf_token }}' // Adding CSRF token for security
+        },
+        success: function(data) {
+        // Display the result from backend
+        document.getElementById('resultText').innerText = data.result;
+        document.getElementById('resultArea').style.display = 'block';
+        },
+        error: function(xhr, status, error) {
+        console.error('Error:', error);
+        }
+    });
+});

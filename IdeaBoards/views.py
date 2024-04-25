@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from .forms import *
 from django.contrib.auth.decorators import login_required
 import json
+from IdeaBoards.spotify import *
+from django.http import JsonResponse
 
 """
 IdeaBoards_Home: 
@@ -17,11 +19,19 @@ def IdeaBoards_Home(request):
 
         #If the request is a POST request
         if request.method == 'POST':
-            form = NewIdeaBoardForm(request.POST)
-            if form.is_valid():
-                new_board = form.save(commit=False)
-                new_board.user = request.user
-                new_board.save()
+            if "createBoard" in request.POST:
+                form = NewIdeaBoardForm(request.POST)
+                if form.is_valid():
+                    new_board = form.save(commit=False)
+                    new_board.user = request.user
+                    new_board.save()
+            if "get_recc" in request.POST:
+                genre_name = request.POST.get('genreName')
+                if genre_name:
+                    recc = get_recc(genre_name)
+                    return JsonResponse({'result': recc})
+                else:
+                    return JsonResponse({'error': 'Invalid request method'})
                 
         if request.method == 'PATCH':
             data = json.loads(request.body.decode('utf-8'))
