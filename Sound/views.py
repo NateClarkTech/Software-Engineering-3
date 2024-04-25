@@ -6,6 +6,7 @@ from django.contrib.auth import login, logout
 from Sound.models import *
 
 from django.shortcuts import render, redirect, get_object_or_404
+from Sound.spotify import *
 
 # Bilge implemented this application.
 
@@ -23,6 +24,13 @@ def sound(request):
             label = request.POST.get('createLabel', "").strip()
             if label:
                 SoundLabel.objects.create(label_name=label)
+        if "get_recc" in request.POST:
+            genre_name = request.POST.get('get_recc', '').strip()
+            if genre_name:
+                recc = get_recc(genre_name)
+                notes = noteQuery()
+                labels = labelQuery()
+                return render(request, 'sound.html', {"notes":notes, "labels":labels, "recc":recc})
         return redirect('sound')
     else:
         notes = noteQuery()

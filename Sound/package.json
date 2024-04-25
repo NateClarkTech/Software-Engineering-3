@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "dotenv": "^16.4.5"
+  },
+  "dependencies": {
+    "requirements": "^2.0.0"
+  }
+}

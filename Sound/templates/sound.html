@@ -153,6 +153,13 @@
                 </div>
                 <button type="note-button" name="soundNoteSubmit" >Note</button>
             </form>
+            <form class="note-form" method="POST" action="">
+                {% csrf_token %} <!-- CSRF verification, security satisfaction -->
+                <input type=text name="get_recc" method="POST" action="" placeholder="Type in Genre name to get recommendations">
+            </form>
+            {% if recc %}
+                <h3>{{recc}}</h3>
+            {% endif %}
             <div class="note-pad">
                 {% for sound in notes %}
                 <div class="note-box">
