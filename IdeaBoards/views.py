@@ -51,7 +51,7 @@ def IdeaBoards_Home(request):
         return render(request, 'ideaboard.html', {'boards': boards, 'form': form})
     #If the user is not logged in redirect to landing page
     else:
-        return redirect('/')
+        return redirect('home')
     
 
 """
@@ -104,4 +104,4 @@ def IdeaBoard_Detail(request, id):
     
     #If the user is not the owner of the board redirect to them to their boards
     else:
-        return render('IdeaBoards_Home')
+        return redirect('IdeaBoards_Home')

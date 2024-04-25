@@ -1,0 +1,20 @@
+
+@media (min-width: 768px) {
+    .login-container {
+        text-align: end;
+    }
+
+    .register-container{
+        text-align: start;
+    }
+}
+
+@media (max-width: 768px) {
+    .login-container {
+        text-align: center;
+    }
+
+    .register-container{
+        text-align: center;
+    }
+}

@@ -1,22 +1,45 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
+{% block title %}MediaBook - Home{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+
 {% block content %}
-    <style>
-        .button{
-            display:inline-block;
-            padding: 2px;
-            border: 2px;
-            border-color:black;
-            border-style: solid;
-            border-radius:5px;
-        }
-    </style>
-    <h1 style="text-align:center">Create Your Next Masterpiece</header>
-    <a href="mediabook/"><h3 style="text-align:center">What is Media Book?</h3></a>
-    <div class="button">
-        <a href="login/"><h3 style="text-align:center">Login</h3></a>
-    </div>
-    <div class="button">
-        <a href="register/"><h3 style="text-align:center">Register</h3></a>
-    </div>
+    <h1 class="text-center pt-4 fs-1">Create Your Next Masterpiece</h1>
+
+    <div class="mx-auto pt-4 text-center">
+        <a href="mediabook/" role='button' class="btn btn-outline-primary mx-auto">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class='card-title'>What is Media Book?</h2>
+                </div>
+            </div>
+        </a>
+    </div>  
+    <div class="row justify-content-center">
+        <div class="px-2 pt-5 col-md-4 login-container">
+            <a href="login/" role='button' class="btn btn-outline-primary" style="width: 200px;">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class='card-title'>Login</h2>
+                    </div>
+                </div>
+            </a>
+        </div>  
+
+        <div class="px-3 pt-5 col-md-4 register-container">
+            <a href="register/" role='button' class="btn btn-outline-primary" style="width: 200px;">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class='card-title'>Register</h2>
+                    </div>
+                </div>
+            </a>
+        </div>  
+    </div>    
+    
 {% endblock %}
