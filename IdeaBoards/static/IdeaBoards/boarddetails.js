@@ -324,7 +324,7 @@ document.getElementById("save-board-button").addEventListener("click", function(
     fetch(window.location.pathname, {
         method: "POST",
         headers: {
-            "Content-changeType": "application/json",
+            "Content-Type": "application/json",
             "X-CSRFToken": csrftoken,  // Include the CSRF token in the headers
         },
         body: JSON.stringify(changesToBoard),
