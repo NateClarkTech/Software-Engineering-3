@@ -5,7 +5,7 @@
 
 {% block content %}
 <style>
-    sound {
+    visual {
         display: flex;
     }
     .sidebar {
@@ -19,7 +19,7 @@
         display: block;
         text-align: left;
         margin-bottom: 20px;
-        color: #333;
+        color: white;
         text-decoration: none;
         font-size: 20px;
     }
@@ -27,6 +27,7 @@
         width: 40px;
         height: 30px;
         margin-right: 7px;
+        label-color:black;
     }
     .note {
         flex: 2.5;
@@ -95,10 +96,10 @@
 
 
 </style>
-<sound>
+<visual>
     <div class="sidebar">
-        <a href="{% url 'sound' %}"><img src="{% static 'icons/music-sound.png' %}" alt="Sound Notes">Sound Notes</a>
-        <button onclick="createLabel()"><img src="{% static 'icons/edit-label-sound.png' %}" alt="create label">Create Label</button>
+        <a href="{% url 'visual' %}"><img src="{% static 'icons/camera-visual.png' %}" alt="Visual Notes">Visual Notes</a>
+        <button onclick="createLabel()"><img src="{% static 'icons/edit-label-visual.png' %}" alt="create label">Create Label</button>
         <script>
             function createLabel() {
                 var T = document.getElementById("CreateLabel");
@@ -110,7 +111,7 @@
             }
         </script>
         {% for label in labels %}
-        <a href="{% url 'label_sort' label.label_name %}"><img src="{% static 'icons/label-sound.png' %}" alt="Labels">{{label.label_name}}</a>
+        <a href="{% url 'visual_label_sort' label.label_name %}"><img src="{% static 'icons/label-visual.png' %}" alt="Labels">{{label.label_name}}</a>
         {% endfor %}
     </div>
     <div id="CreateLabel" style="display: none;">
@@ -118,17 +119,17 @@
         <form class="note-form" method="POST" action="">
             {% csrf_token %} <!-- CSRF verification, security satisfaction -->
             <input type="text" name="createLabel" placeholder="Label Name"><p></p>
-            <button type="note-button" name="soundCreateLabel" >Create Label</button>
+            <button type="note-button" name="visualCreateLabel" >Create Label</button>
         </form>
     </div>
     <div class="note">
-        <!-- To add Note to Sound Database -->
+        <!-- To add Note to Visual Database -->
         <form class="note-form" method="POST" action="">
             {% csrf_token %} <!-- CSRF verification, security satisfaction -->
-            <input type="text" name="title" placeholder="Song Title"><p></p>
+            <input type="text" name="title" placeholder="Title"><p></p>
             <input type="text" name="description" placeholder="Take Note">
             <div id="AddLabel" class="addLabel">
-                <img style="display:block;" onclick="selectLabel()" src="{% static 'icons/label-sound.png' %}" alt="select label"><span style="color:black">Add Label</span></img>
+                <img style="display:block;" onclick="selectLabel()" src="{% static 'icons/label-visual.png' %}" alt="select label"><span style="color:black">Add Label</span></img>
             </div>
             <script>
                 function selectLabel() {
@@ -150,23 +151,23 @@
                     {% endfor %}
                 </select>
             </div>
-            <button type="note-button" name="soundNoteSubmit" >Note</button>
+            <button type="note-button" name="visualNoteSubmit" >Note</button>
         </form>
         <div class="note-pad">
-            {% for sound in notes %}
-            {% if sound.note_label == label %}
+            {% for visual in notes %}
+            {% if visual.note_label == label %}
             <div class="note-box">
                 <div class="note-title">
-                <h2 name="title">{{sound.note_title}}</h2>
+                <h2 name="title">{{visual.note_title}}</h2>
                 </div>
                 <div class="note-description">
-                <h3 name="description">{{sound.note_description}}</h3>
+                <h3 name="description">{{visual.note_description}}</h3>
                 </div>
             </div>
             {% endif %}
             {% endfor %}
         </div>
     </div>
-</sound>
+</visual>
 
 {% endblock %}

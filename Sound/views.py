@@ -48,4 +48,4 @@ def label_sort(request, label_name):
     notes = noteQuery()
     labels = labelQuery()
     label = SoundLabel.objects.get(label_name=label_name)
-    return render(request, 'label_sort.html', {'label': label, "notes":notes, "labels":labels})
+    return render(request, 'sound_label_sort.html', {'label': label, "notes":notes, "labels":labels})

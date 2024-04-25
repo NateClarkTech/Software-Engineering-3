@@ -10,7 +10,7 @@
         }
         .sidebar {
             flex: 0.5;
-            color: #333;
+            color: white;
             width: 80px;
             padding: 20px 0;
             margin-right:10px;
@@ -75,7 +75,7 @@
             padding: 10px 20px;
             background-color: #003087;
             border: none;
-            color: white;
+            color: black;
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease;
@@ -111,7 +111,7 @@
                 }
             </script>
             {% for label in labels %}
-            <a href="{% url 'label_sort' label.label_name %}"><img src="{% static 'icons/label-sound.png' %}" alt="Labels">{{label.label_name}}</a>
+            <a href="{% url 'sound_label_sort' label.label_name %}"><img src="{% static 'icons/label-sound.png' %}" alt="Labels">{{label.label_name}}</a>
             {% endfor %}
         </div>
         <div id="CreateLabel" style="display: none;">
