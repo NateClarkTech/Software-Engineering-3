@@ -19,7 +19,7 @@ def sound(request):
             labelselect = request.POST.get("labelselect")
             label = get_object_or_404(SoundLabel, label_name=labelselect)
             if title or description:  
-                SoundNote.objects.create(note_title=title, note_description=description, note_label=label)
+                SoundNote.objects.create(note_title=title, note_description=description, note_label=label, note_author=request.user)
         if "soundCreateLabel" in request.POST:
             label = request.POST.get('createLabel', "").strip()
             if label:

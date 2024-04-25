@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-
 # Create your models here.
 
 class VisualLabel(models.Model):
@@ -15,3 +14,4 @@ class VisualNote(models.Model):
     note_label = models.ForeignKey(VisualLabel, on_delete=models.CASCADE, blank=True, null=True) # many-to-one relationship: categorizing notes by user defined labels.
     note_image = models.ImageField(upload_to="Visual/static/images", default=None, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    note_author = models.ForeignKey(User, on_delete=models.CASCADE)
