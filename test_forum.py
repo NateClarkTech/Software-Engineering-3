@@ -6,6 +6,7 @@ from django.urls import reverse
 
 
 class ForumTestCase(TestCase):
+    
     def setUp(self):
         # Setting up users
         self.user = User.objects.create_user(username='john', password='doepass')
