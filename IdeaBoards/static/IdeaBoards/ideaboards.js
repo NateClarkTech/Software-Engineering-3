@@ -207,42 +207,28 @@ function getCookie(name) {
     return cookieValue;
 }
 
-
 // JavaScript to handle form submission and displaying result
-document.getElementById('get-recc-button').addEventListener('click', function(event) {
-    console.log("Form submitted");
+document.getElementById('getRecc').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent default form submission
       
     // Get input value
-    var inputData = document.getElementById('genreName').value;
-      
-    // Send input data to Django view using AJAX
-    $.ajax({
-        url: '/get_recc/',
-        method: 'POST',
-        dataType: 'json',
-        data: {
-        input_data: inputData,
-        csrfmiddlewaretoken: '{{ csrf_token }}' // Adding CSRF token for security
+    var inputData = document.getElementById('genreNameInput').value;
+    console.log(inputData)
+    fetch(window.location.pathname, {
+        method: "GETRECC",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrftoken  // Include the CSRF token in the headers
         },
-        success: function(data) {
-            var recommendations = data.result;
-            var recommendationsList = $('#recommendationsList');
-            recommendationsList.empty(); // Clear previous recommendations
-
-            // Append each recommendation to the list
-            recommendations.forEach(function(recommendation) {
-                recommendationsList.append('<li>' + recommendation + '</li>');
-            });
-
-            // Show the recommendations modal
-            $('#recommendationsModal').modal('show');
-        console.log("success");
-        // Display the result from backend
-        document.getElementById('resultText').innerText = data.result;
-        document.getElementById('resultArea').style.display = 'block';
-        },
-        error: function(xhr, status, error) {
+        body: JSON.stringify([{genreName: inputData}]),
+    }).then(data => {
+        reccResult = document.getElementById("reccResult");
+        reccResult.textContent = data.data;
+        $('#displayReccResults').modal('show');
+        $('#getRecc').modal('hide');
+    })
+    /*
+    }).catch(error => {
         console.error('Error:', error);
-        }
-    });
+    });*/
 });
