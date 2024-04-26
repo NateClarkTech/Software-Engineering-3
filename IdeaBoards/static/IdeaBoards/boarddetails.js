@@ -49,6 +49,9 @@ function getCookie(name) {
  * WARNING - Made objects will not be saved to the surver if the
  * "Save Board" button is not clicked
  * 
+ * Accounts for the following cases:
+ * 1 - add new item to board (add details to changesToBoard array)
+ * 
  * Author: Nathaniel Clark
  * ********************************************************************/
 function addFormItem() {
@@ -61,12 +64,10 @@ function addFormItem() {
             {   
                 changeType: "add",
                 title: title,
-                description: description
+                description: description,
+                item_index: String(assignBoardId),
             }
         );
-        console.log(changesToBoard);
-        assignBoardId = assignBoardId + 1;
-        numberOfBoardItems = numberOfBoardItems + 1;
 
         // Create new elements
         let colDiv = document.createElement("div");
@@ -176,6 +177,10 @@ function addFormItem() {
         boardItems.appendChild(createNewItemButton);
         boardItems.appendChild(saveBoardButton);
 
+        // Increment the assignBoardId and numberOfBoardItems
+        assignBoardId = assignBoardId + 1;
+        numberOfBoardItems = numberOfBoardItems + 1;
+
         if (document.getElementById("no-items-found")) {
             document.getElementById("no-items-found").remove();
         }
@@ -201,6 +206,11 @@ function addFormItem() {
  * WARNING - Edited objects will not be saved to the board if the
  * "Save Board" button is not clicked
  * 
+ * Accounts for the following cases:
+ * 2 - edit existing item on board (add edit details to changesToBoard array)
+ * 4 - edit item that was added (replace add details with edited names and description)
+ * 6 - edited item was previously edited but not saved to database
+ * 
  * Author: Nathaniel Clark
  * ********************************************************************/
 document.getElementById("edit-item-button").addEventListener("click", function() {
@@ -210,15 +220,44 @@ document.getElementById("edit-item-button").addEventListener("click", function()
     let newTitle = document.getElementById("editItemTitleInput").value;
     let newDescription = document.getElementById("editItemDescriptionInput").value;
 
+    /*************************************
+    * case 4 - edit item that was added  *
+    **************************************/
+    let isCase2 = true;
+    for (item in changesToBoard) {
+        if (changesToBoard[item].changeType === "add" && changesToBoard[item].item_index === itemIndex){
+            changesToBoard[item].title = newTitle;
+            changesToBoard[item].description = newDescription;
+            return;
+        }
+        /*************************************
+        * case 6 - edit past edit request  *
+        **************************************/
+        if (changesToBoard[item].changeType === "edit" && changesToBoard[item].item_index === itemIndex){
+            changesToBoard[item].title = newTitle;
+            changesToBoard[item].description = newDescription;
+            isCase2 = false;
+            break;
+        }
+    }
+    
+    // Make sure input is valid, else give error modal
     if (newTitle !== "" && newTitle.length <= 64) {
-        changesToBoard.push(
-            {
-                changeType: "edit",
-                item_id: itemToEdit,
-                title: newTitle,
-                description: newDescription
-            }
-        );
+
+        /********************************************
+        * case 2 - edit item exisiting on the board *
+        *********************************************/
+        if (isCase2){
+            changesToBoard.push(
+                {
+                    changeType: "edit",
+                    item_id: itemToEdit,
+                    title: newTitle,
+                    description: newDescription,
+                    item_index: itemIndex
+                }
+            );
+        }
 
         // Update the title and description of the item
         document.getElementById("board-item-" + itemIndex + "-title").textContent = newTitle;
@@ -250,6 +289,10 @@ document.getElementById("edit-item-button").addEventListener("click", function()
  * WARNING - Deleted objects will not be removed from the board if the
  * "Save Board" button is not clicked
  * 
+ * Accounts for the following cases:
+ * 3 - delete existing item on board (add delete details to changesToBoard array)
+ * 5 - delete item that was added (remove add details from changesToBoard array)
+ * 
  * Author: Nathaniel Clark
  * ********************************************************************/
 
@@ -259,25 +302,37 @@ document.getElementById("delete-item-button").addEventListener("click", function
     let itemTitle = document.getElementById("deleteModalWarning").getAttribute("data-delete-item-name");
     let itemDescription = document.getElementById("deleteModalWarning").getAttribute("data-delete-item-description");
 
-    //duct changeType solution to delete items that were added before being saved to the database
-    let itemIsSavedLocally = false;
+    /******************************************
+    * case 5 - delete item that was added      *
+    *******************************************/
+    let isCase3 = true;
     for (item in changesToBoard) {
-        if (changesToBoard[item].changeType === "add" && changesToBoard[item].title === itemTitle && changesToBoard[item].description === itemDescription){
-            itemIsSavedLocally = true;
+        //delete item that was added but not saved to the database
+        if (changesToBoard[item].changeType === "add" && changesToBoard[item].item_index === itemIndex && changesToBoard[item].title === itemTitle && changesToBoard[item].description === itemDescription){
+            changesToBoard.pop(item);
+            isCase3 = false;
+            break;
+        }
+        //remove edit to an item being deleted
+        if (changesToBoard[item].changeType === "edit" && changesToBoard[item].item_index === itemIndex){
+            changesToBoard.pop(item);
+            break;
         }
     }
-        
-    if (itemIsSavedLocally){
-        changesToBoard.pop(item);
-    }
-    else{
+
+    /******************************************
+    * case 3 - delete existing item on board  *
+    *******************************************/
+    if (isCase3){
         changesToBoard.push(
             {
                 changeType: "delete",
-                item_id: itemToDelete
+                item_id: itemToDelete,
+                item_index: itemIndex,
             }
         );
     }
+
 
     // Remove the item from the board
     document.getElementById("board-item-container-" + itemIndex).remove();
@@ -374,6 +429,14 @@ document.getElementById("modes").addEventListener("change", function() {
  * - edit: brings up modal to edit the name and description of the item
  * - delete: brings up modal to confirm deletion
  * 
+ * Cases:  formate: case number, explanation of case, solution (not saved unless Save Board button pressed)
+ *  1 - add new item to board (add details to changesToBoard array)
+ *  2 - edit existing item on board (add edit details to changesToBoard array)
+ *  3 - delete existing item on board (add delete details to changesToBoard array)
+ *  4 - edit item that was added (replace add details with edited names and description)
+ *  5 - delete item that was added (remove add details from changesToBoard array)
+ *  6 - edited item was previously edited but not saved to database (replace edit details with new edit details)
+ * 
  * Author: Nathaniel Clark
  **********************************************************************/
 let i = 1;
@@ -429,6 +492,7 @@ while (document.getElementById("board-item-" + i)) {
 
                 $('#deleteItem').modal('show');
             }
+            console.log(changesToBoard);
         });
     })(i);
     //keep track of the number of items
