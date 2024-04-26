@@ -6,5 +6,5 @@ from . import views
 urlpatterns = [
     path('', views.IdeaBoards_Home, name='IdeaBoards_Home'),
     path('<int:id>/', views.IdeaBoard_Detail, name='IdeaBoard_Detail'),
-    path('recc_result/', views.IdeaBoards_Home, name='recc_result'),
+    path('get_recc/', views.IdeaBoards_Home, name='get_recc'),
     ]

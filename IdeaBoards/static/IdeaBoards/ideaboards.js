@@ -209,15 +209,15 @@ function getCookie(name) {
 
 
 // JavaScript to handle form submission and displaying result
-document.getElementById('getRecc').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent default form submission
+document.getElementById('get-recc-button').addEventListener('click', function(event) {
+    console.log("Form submitted");
       
     // Get input value
     var inputData = document.getElementById('genreName').value;
       
     // Send input data to Django view using AJAX
     $.ajax({
-        url: '/recc_result/',
+        url: '/get_recc/',
         method: 'POST',
         dataType: 'json',
         data: {
@@ -225,6 +225,18 @@ document.getElementById('getRecc').addEventListener('submit', function(event) {
         csrfmiddlewaretoken: '{{ csrf_token }}' // Adding CSRF token for security
         },
         success: function(data) {
+            var recommendations = data.result;
+            var recommendationsList = $('#recommendationsList');
+            recommendationsList.empty(); // Clear previous recommendations
+
+            // Append each recommendation to the list
+            recommendations.forEach(function(recommendation) {
+                recommendationsList.append('<li>' + recommendation + '</li>');
+            });
+
+            // Show the recommendations modal
+            $('#recommendationsModal').modal('show');
+        console.log("success");
         // Display the result from backend
         document.getElementById('resultText').innerText = data.result;
         document.getElementById('resultArea').style.display = 'block';

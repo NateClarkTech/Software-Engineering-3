@@ -50,5 +50,3 @@ def get_recc(genre_name):
     else:
         print("Error:", result.status_code, result.text)
         return None
-
-###################################################

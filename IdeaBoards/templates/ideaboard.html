@@ -8,32 +8,57 @@
     <link rel="stylesheet" href="{% static 'css/ideaboard.css' %}">
 {% endblock %}
 
+<!-- Including Jquery in HTML -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
 {% block content %}
     <!-- Source: https: //getbootstrap.com/docs/5.3/components/modal/ -->
-    <!-- Spotify API Song Reccommendation -->
-    <div class="modal fade" id="getRecc" tabindex="-1" role="dialog" aria-labelledby="GetRecc" aria-hidden="true">
+    <!-- Spotify API Song Reccommendation Request -->
+    <div class="modal fade" id="getRecc" tabindex="-1" role="dialog" aria-labelledby="spotifyAPI" aria-hidden="true">
         <div class="modal-dialog" role="form">
             <div class="modal-content">
-                <form id='getRecc' method="POST">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="CreateItemModalLabel">Get A Song Recommendation by Genre</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        {% csrf_token %} <!-- CSRF verification, security satisfaction -->
-                        <input type="text" class="form-control" id="genreName" placeholder="Genre Name" required>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button id='getReccButton' type="submit" class="btn btn-primary">Get Reccommendation</button>
-                    </div>
-                </form>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="getReccInput">Get A Song Recommendation by Genre</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {% csrf_token %} <!-- CSRF verification, security satisfaction -->
+                    <input type="text" class="form-control" id="genreName" placeholder="Genre Name" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button id='get-rec-button' type="submit" class="btn btn-primary">Get Reccommendation</button>
+                </div>
             </div>
         </div>
     </div>
-
+    <!-- Spotify API Song Reccommendation Results -->
+    <div class="modal fade" id="getReccResults" tabindex="-1" role="dialog" aria-labelledby="spotifyAPI" aria-hidden="true">
+        <div class="modal-dialog" role="form">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="getReccInput">Get A Song Recommendation by Genre</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {% csrf_token %} <!-- CSRF verification, security satisfaction -->
+                    <input type="text" class="form-control" id="genreName" placeholder="Genre Name" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button id='get-rec-button' type="submit" class="btn btn-primary">Get Reccommendation</button>
+                </div>
+                <div class="modal-footer" id="resultArea" style="display: none;">
+                    <span id="resultText"></span>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Make Board Modal -->
     <div class="modal fade" id="createBoard" tabindex="-1" role="dialog" aria-labelledby="CreateItemModalLabel" aria-hidden="true">

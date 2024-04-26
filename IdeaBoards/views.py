@@ -18,20 +18,22 @@ def IdeaBoards_Home(request):
         print(request.POST, request.method)
 
         #If the request is a POST request
+        if request.method == 'POST' and request.is_ajax():
+            genre_name = request.POST.get('genreName')
+            print("1")
+            if genre_name:
+                print("2")
+                recc = get_recc(genre_name)
+                print(recc)
+                return JsonResponse({'result': recc})
+            else:
+                return JsonResponse({'error': 'Invalid request method'})
         if request.method == 'POST':
-            if "createBoard" in request.POST:
-                form = NewIdeaBoardForm(request.POST)
-                if form.is_valid():
-                    new_board = form.save(commit=False)
-                    new_board.user = request.user
-                    new_board.save()
-            if "get_recc" in request.POST:
-                genre_name = request.POST.get('genreName')
-                if genre_name:
-                    recc = get_recc(genre_name)
-                    return JsonResponse({'result': recc})
-                else:
-                    return JsonResponse({'error': 'Invalid request method'})
+            form = NewIdeaBoardForm(request.POST)
+            if form.is_valid():
+                new_board = form.save(commit=False)
+                new_board.user = request.user
+                new_board.save()
                 
         if request.method == 'PATCH':
             data = json.loads(request.body.decode('utf-8'))
