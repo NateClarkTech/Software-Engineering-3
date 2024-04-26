@@ -18,8 +18,8 @@ def sound(request):
             description = request.POST.get('description', '').strip()
             labelselect = request.POST.get("labelselect")
             label = get_object_or_404(SoundLabel, label_name=labelselect)
-            if title or description or label:  
-                SoundNote.objects.create(note_title=title, note_description=description, note_label=label)
+            if title or description:  
+                SoundNote.objects.create(note_title=title, note_description=description, note_label=label, note_author=request.user)
         if "soundCreateLabel" in request.POST:
             label = request.POST.get('createLabel', "").strip()
             if label:
@@ -48,4 +48,4 @@ def label_sort(request, label_name):
     notes = noteQuery()
     labels = labelQuery()
     label = SoundLabel.objects.get(label_name=label_name)
-    return render(request, 'label_sort.html', {'label': label, "notes":notes, "labels":labels})
+    return render(request, 'sound_label_sort.html', {'label': label, "notes":notes, "labels":labels})

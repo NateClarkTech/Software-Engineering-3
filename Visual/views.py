@@ -16,7 +16,7 @@ def visual(request):
             description = request.POST.get('description', '').strip() 
             image = request.POST.get('image', '').strip()
             if title or description or image: 
-                VisualNote.objects.create(note_title=title, note_description=description, note_image=image)
+                VisualNote.objects.create(note_title=title, note_description=description, note_image=image, note_author=request.user)
         if "visualCreateLabel" in request.POST:
             label = request.POST.get('createLabel', "").strip()
             if label: # check if label exists
@@ -38,4 +38,4 @@ def label_sort(request, label_name):
     notes = noteQuery()
     labels = labelQuery()
     label = VisualLabel.objects.get(label_name=label_name)
-    return render(request, 'label_sort.html', {'label': label, "notes":notes, "labels":labels})
+    return render(request, 'visual_label_sort.html', {'label': label, "notes":notes, "labels":labels})

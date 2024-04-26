@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -14,4 +15,5 @@ class SoundNote(models.Model):
     note_title = models.CharField(max_length=30)
     note_description = models.CharField(max_length=1200) # around 500-600 words
     note_label = models.ForeignKey(SoundLabel, on_delete=models.CASCADE, blank=True, null=True) # many-to-one relationship: categorizing notes by user defined labels.
+    note_author = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
