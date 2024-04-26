@@ -15,9 +15,15 @@ class Thread(models.Model):
     subscribers = models.ManyToManyField(User, related_name='subscribed_threads', blank=True)
     
     created_at = models.DateTimeField(auto_now_add=True)
+    
+    # redundant code for performence, and so VS code doesnt yell at me
+    latest_comment_time = models.DateTimeField(null=True, blank=True)
+    latest_comment_username = models.CharField(max_length=100, null=True, blank=True)
+    
     # Add other fields
     @property
     def comment_count(self):
+        # This works
         return self.comment.count()
 
 
