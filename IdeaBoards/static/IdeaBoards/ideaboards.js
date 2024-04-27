@@ -212,20 +212,39 @@ document.getElementById('getRecc').addEventListener('submit', function(event) {
     event.preventDefault(); // Prevent default form submission
       
     // Get input value
-    var inputData = document.getElementById('genreNameInput').value;
-    console.log(inputData)
+    var genreName = document.getElementById('genreNameInput').value;
+    console.log(genreName)
     fetch(window.location.pathname, {
         method: "GETRECC",
         headers: {
             "Content-Type": "application/json",
             "X-CSRFToken": csrftoken  // Include the CSRF token in the headers
         },
-        body: JSON.stringify([{genreName: inputData}]),
-    }).then(data => {
+        body: JSON.stringify([{genreName: genreName}]),
+    }).then(response => response.json())
+    .then(data => {
         reccResult = document.getElementById("reccResult");
-        reccResult.textContent = data.data;
-        $('#displayReccResults').modal('show');
+        reccResult.textContent = data.message;
         $('#getRecc').modal('hide');
+        $('#displayReccResults').modal('show');
+    })
+    
+    /*.then(data => {
+        console.log("1")
+        $('#getRecc').modal('hide');
+        console.log(data)
+        console.log("1")
+        reccResult = document.getElementById("reccResult");
+        reccResult.textContent = data;
+        $('#displayReccResults').modal('show');
+    });
+    console.log("fetching done")
+    /*
+    .then(data => {
+        reccResult = document.getElementById("reccResult");
+        reccResult.textContent = data;
+        $('#getRecc').modal('hide');
+        $('#displayReccResults').modal('show');
     })
     /*
     }).catch(error => {

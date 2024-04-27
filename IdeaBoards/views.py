@@ -28,6 +28,8 @@ def IdeaBoards_Home(request):
             genre_name = json.loads(request.body.decode('utf-8'))[0]["genreName"]
             if genre_name:
                 data = get_recc(genre_name)
+                response_data = {'message': data}
+                return JsonResponse(response_data)
                 
         if request.method == 'PATCH':
             data = json.loads(request.body.decode('utf-8'))
