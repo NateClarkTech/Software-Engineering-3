@@ -115,22 +115,19 @@
     </div>
 
     <div class="row justify-content-between">
-        <h1 class="col-4">Your IdeaBoards</h1>
-        <div class="row">
-            <div class="col">
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <label class="input-group-text" for="modes">Mode:</label>
-                    </div>
-                    <select class="custom-select" id="modes">
-                        <option selected value="view">View</option>
-                        <option value="edit">Edit</option>
-                        <option value="delete">Delete</option>
-                    </select>
-                </div>
+        <h1 class="col-md-4 page-title">Your IdeaBoards</h1>
+        <div class="col-md-8 row pr-4 justify-content-end mode-radio">
+            <div class="btn-group d-flex align-items-center" role="group" aria-label="Board Actions">
+                <label for="view-board" class="my-0 pr-auto">View</label>
+                <input type="radio" class="mx-2" id="view-board" name="board-action" value="view" >
+                <label for="edit-board" class="my-0">Edit</label>
+                <input type="radio" class="mx-2" id="edit-board" name="board-action" value="edit">
+                <label for="delete-board" class="my-0">Delete</label>
+                <input type="radio" class="mx-2" id="delete-board" name="board-action" value="delete">
             </div>
         </div>
     </div>
+
 
     <hr>
 

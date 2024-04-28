@@ -47,6 +47,17 @@
         font-size: 1.5em;
     }
 
+    .page-title {
+        width: 100%;
+        text-align: center;
+    }
+
+    .mode-radio{
+        justify-content: center !important;
+        width: 100%;
+        text-align: center;
+    }
+
 }
 
 .card-body {

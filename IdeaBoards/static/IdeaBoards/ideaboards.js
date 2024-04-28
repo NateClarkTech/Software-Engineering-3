@@ -1,6 +1,6 @@
 /**
- * Date Created: 4/24/2024
- * Date Modified: 4/24/2024
+ * Date Created: 4/09/2024
+ * Date Modified: 4/27/2024
  * 
  * Author: Nathaniel Clark
 * Purpose: This script is used to handle the functionality of the idea board page.
@@ -11,7 +11,7 @@ console.log('script loaded');
 
 // Set the initial state to "view"
 let state = "view";
-document.getElementById("modes").value = "view";
+document.getElementById('view-board').checked = true;
 
 const csrftoken = getCookie('csrftoken');
 
@@ -77,24 +77,24 @@ while (document.getElementById("board-" + i)) {
  * 
  * Author: Nathaniel Clark
  **********************************************************************/
-document.getElementById("modes").addEventListener("change", function() {
-    // Get the selected value
-    var selectedValue = this.value;
-    
-    //change state to view
-    if (selectedValue === "view"){
-        state = "view";
-    }
+// Get all radio buttons
+const radioButtons = document.querySelectorAll('input[name="board-action"]');
 
-    //change state to delete
-    if (selectedValue === "delete"){
-        state = "delete";
-    }
-
-    //change state to edit
-    if (selectedValue === "edit"){
-        state = "edit";
-    }
+// Add event listener to each radio button
+radioButtons.forEach(radioButton => {
+    radioButton.addEventListener('change', function() {
+        // Get the selected value
+        var selectedValue = this.value;
+        
+        // Change state based on the selected value
+        if (selectedValue === "view") {
+            state = "view";
+        } else if (selectedValue === "delete") {
+            state = "delete";
+        } else if (selectedValue === "edit") {
+            state = "edit";
+        }
+    });
 });
 
 /**********************************************************************
