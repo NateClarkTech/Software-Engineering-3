@@ -55,7 +55,7 @@ function addFormItem() {
     // Example: Get the title and description values from the form
     let title = document.getElementById("title").value;
     let description = document.getElementById("description").value;
-    let board_image = document.getElementById("board_image").value;
+    let board_image = document.getElementById("board_image").files;
 
     if (title !== "" && description !== "" && title.length <= 64) {
         changesToBoard.push(
@@ -63,7 +63,7 @@ function addFormItem() {
                 changeType: "add",
                 title: title,
                 description: description,
-                board_image:board_image
+                board_image:board_image,
             }
         );
         console.log(changesToBoard);
@@ -116,11 +116,11 @@ function addFormItem() {
                 if (state === "view"){
                     let itemTitle = document.getElementById("board-item-" + index + "-title").textContent;
                     let itemDescription = document.getElementById("board-item-" + index + "-description").textContent;
-                    let itemImage = document.getElementById("board-item-" + index + "-image").imageContent;
+                    let itemImage = document.getElementById("board-item-" + index + "-image").files[0];
                     
                     document.getElementById("view-item-title").textContent = itemTitle;
                     document.getElementById("view-item-text").textContent = itemDescription;
-                    document.getElementById("view-item-image").imageContent = itemImage;
+                    //document.getElementById("view-item-image").imageContent = itemImage;
                     
                     $('#viewBoardItem').modal('show');
                 }
