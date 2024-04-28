@@ -55,13 +55,15 @@ function addFormItem() {
     // Example: Get the title and description values from the form
     let title = document.getElementById("title").value;
     let description = document.getElementById("description").value;
+    let board_image = document.getElementById("board_image").value;
 
     if (title !== "" && description !== "" && title.length <= 64) {
         changesToBoard.push(
             {   
                 changeType: "add",
                 title: title,
-                description: description
+                description: description,
+                board_image:board_image
             }
         );
         console.log(changesToBoard);
@@ -93,9 +95,15 @@ function addFormItem() {
         cardDescription.classList.add("card-description", "pb-2");
         cardDescription.textContent = description;
 
+        let cardBoardImage = document.createElement("p");
+        cardBoardImage.id = "board-item-" + assignBoardId + "-board_image";
+        cardBoardImage.classList.add("card-description", "pb-2");
+        cardBoardImage.imageContent = board_image;
+
         // Build the hierarchy
         cardBody.appendChild(cardTitle);
         cardBody.appendChild(cardDescription);
+        cardBody.appendChild(cardBoardImage);
         card.appendChild(cardBody);
         button.appendChild(card);
         colDiv.appendChild(button);
@@ -108,9 +116,11 @@ function addFormItem() {
                 if (state === "view"){
                     let itemTitle = document.getElementById("board-item-" + index + "-title").textContent;
                     let itemDescription = document.getElementById("board-item-" + index + "-description").textContent;
+                    let itemImage = document.getElementById("board-item-" + index + "-image").imageContent;
                     
                     document.getElementById("view-item-title").textContent = itemTitle;
                     document.getElementById("view-item-text").textContent = itemDescription;
+                    document.getElementById("view-item-image").imageContent = itemImage;
                     
                     $('#viewBoardItem').modal('show');
                 }

@@ -15,6 +15,7 @@ class NewIdeaBoardItemForm(forms.ModelForm):
         model = IdeaBoardItem
         fields = [
             'title', 
-            'description'
+            'description',
+            'board_image',
             ]
         
