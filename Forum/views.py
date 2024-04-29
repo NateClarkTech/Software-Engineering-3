@@ -18,6 +18,7 @@ def thread_list(request, page_id):
     threads = Thread.objects.filter(page=page).distinct()
 
     for thread in threads:
+        # This does produce an error, but it is dynamically adding these fields to the thread, so it works, but I havent added it to the mo
         latest_comment = Comment.objects.filter(thread=thread).order_by('-created_at').first()
         if latest_comment:
             thread.latest_comment_time = latest_comment.created_at
@@ -26,7 +27,7 @@ def thread_list(request, page_id):
             thread.latest_comment_time = None
             thread.latest_comment_username = "No comments"
             
-    # now order them
+    # now order them, This works, even though it errors, it still orders them
     threads = sorted(threads, key=lambda x: x.latest_comment_time, reverse=True)
     # Pagination
     paginator = Paginator(threads, 10)  # Shows 10 threads per page
@@ -94,6 +95,9 @@ def mark_notification_as_read(request, notification_id):
 
 # forum/views.py
 from django.db.models import Max, F
+from django.db.models import OuterRef, Subquery, Max
+from django.contrib.auth.models import User
+from ProfileApp.models import Profile
 # ... (the rest of your imports)
 
 def forum_home(request):
@@ -101,7 +105,16 @@ def forum_home(request):
     
     # Get all threads without distinct, as we want to manually add latest comment information
     threads = Thread.objects.all()
-
+    
+    # Subquery to fetch the most recent comment date per user
+    latest_comments = Comment.objects.filter(user=OuterRef('user')).order_by('-created_at')
+    
+    # Fetch profiles with latest comment dates, ordered by those dates
+    profiles_with_latest_comment_dates = Profile.objects.select_related('user').annotate(
+        latest_comment_date=Subquery(latest_comments.values('created_at')[:1])
+    ).filter(
+        latest_comment_date__isnull=False  # Ensure the profile has at least one comment
+    ).order_by('-latest_comment_date')[:10]  # Get the top 10
     # Get the time and username of the latest comment for each thread
     for thread in threads:
         latest_comment = Comment.objects.filter(thread=thread).order_by('-created_at').first()
@@ -121,7 +134,8 @@ def forum_home(request):
     return render(request, 'forum_home.html', {
         'pages': pages,
         'latest_threads': latest_threads,
-        'top_threads': top_threads
+        'top_threads': top_threads,
+        'recent_commenter_profiles': profiles_with_latest_comment_dates,
     })
 
 
@@ -186,6 +200,11 @@ def create_comment(request, thread_id):
         comment.user = request.user
         comment.thread = thread
         comment.save()
+        
+        # Update the latest comment info for the thread
+        thread.latest_comment_time = comment.created_at
+        thread.latest_comment_username = comment.user.username
+        thread.save()
 
         # Create a set to collect unique recipients
         recipients = set(thread.subscribers.all())  # Start with all subscribers
@@ -330,6 +349,11 @@ def reply_to_comment(request, thread_id, parent_comment_id):
             comment.user = request.user
             comment.parent = parent_comment  # Set the parent comment
             comment.save()
+            
+            # Update the latest comment info for the thread
+            thread.latest_comment_time = comment.created_at
+            thread.latest_comment_username = comment.user.username
+            thread.save()
             
             return redirect('thread_detail_comment' , thread_id=thread.id, comment_id=comment.id)
     return render(request, 'reply_to_comment.html', {'form': form, 'thread': thread, 'parent_comment': parent_comment})

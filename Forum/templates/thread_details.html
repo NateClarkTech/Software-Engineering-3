@@ -22,7 +22,6 @@
     border-bottom-left-radius: 6px; /* Rounded corners for the bottom */
     border-bottom-right-radius: 6px;
   }
-
   .comment-wrapper {
     margin-bottom: 20px; /* Space between comments */
     border-radius: 6px; /* If the comment-wrapper is used */
@@ -32,7 +31,7 @@
     height: 60px;
     border-radius: 50%;
     margin-right: 10px;
-    border: 3px solid #ecf0f1; /* Border color for the profile picture */
+    border: 3px solid #365486; /* Border color for the profile picture */
     object-fit: cover;
   }
   .comment-details {
@@ -43,6 +42,11 @@
     color: #f1c40f; /* Highlight color for the author's name */
     font-weight: bold;
     margin-right: 5px;
+  }
+  /* comment author hover color */
+  .comment-author:hover {
+    color: #acafb5;
+    text-decoration: underline;
   }
   .comment-metadata {
     font-size: 0.85rem;
@@ -59,12 +63,18 @@
     justify-content: flex-end; /* Align action buttons to the right */
     padding-top: 10px; /* Space between comment content and buttons */
   }
+
   .comment-action-btn {
     background: none;
     border: none;
-    color: #ecf0f1; /* Same as comment text color */
+    color: white; /* Same as comment text color */
     cursor: pointer;
   }
+  .comment-action-btn:hover {
+    text-decoration: underline;
+    color: #acafb5;
+  }
+
   .reply-section {
     margin-top: 10px;
     padding-left: 20px; /* Indent replies */
@@ -145,7 +155,7 @@
     white-space: pre-wrap;
     color: #ecf0f1;
   }
-
+  /* styling for the embedded videos and stuff */
   .responsive-iframe {
     position: relative;
     overflow: hidden;
@@ -160,6 +170,8 @@
     height: 100%;
     border: 0;
   }
+
+
   
 
 </style>
@@ -188,15 +200,20 @@
         <div class="comment-header">
           <!-- Profile Picture -->
           {% if comment.user.profile.profile_picture %}
-            <img src="{{ comment.user.profile.profile_picture.url }}" alt="{{ comment.user.username }}'s profile picture" class="profile-picture">
+            <a href="{% url 'ProfileApp:public_profile' comment.user.username %}">
+              <img src="{{ comment.user.profile.profile_picture.url }}" alt="{{ comment.user.username }}'s profile picture" class="profile-picture">
+            </a>
           {% else %}
           {% load static %}
-
-            <img src="{% static 'default-profile-picture.png' %}" alt="Default profile picture" class="profile-picture">
+            <a href="{% url 'ProfileApp:public_profile' comment.user.username %}">
+              <img src="{% static 'default-profile-picture.png' %}" alt="Default profile picture" class="profile-picture">
+            </a>
           {% endif %}
           <!-- Comment Details -->
           <div class="comment-details">
-            <span class="comment-author">{{ comment.user.username }}</span>
+            <a href="{% url 'ProfileApp:public_profile' comment.user.username %}">
+              <span class="comment-author">{{ comment.user.username }}</span>
+            </a>
             <!-- Include any badges or awards here -->
             <div class="comment-metadata">
               <span>{{ comment.created_at|date:"M d, Y H:i" }}</span> <!-- Timestamp -->
