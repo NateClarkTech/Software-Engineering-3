@@ -1,158 +1,438 @@
 {% extends "base.html" %}
 
-{% block title %}Profile{% endblock %}
-<!-- This is the template for the profile page, both for current user and for others -->
-{% block extendHeader %}
+{% block title %}{{ user_profile.username }}'s Profile{% endblock %}
+
+{% block stylesheets %}
 <style>
-    @media (max-width: 992px) {
-        .navbar {
-            padding: 0.5rem 1rem;
-            body, html {        
-                height: 100%;
-                
-            
-            }
-        }
-    }
-   
-    .navbar, .nav-section, .fixed-bottom.bg-primary, .modal-content {
-        border-color: #dee2e6;
-    }
-    .profile-container, .profile-info {
-        border-radius: 0.25rem;
+    .profile-container {
+        background-color: #211951;
+        color: white;
         padding: 20px;
         margin-bottom: 20px;
+        border-radius: 5px;
+        border: 1px solid #365486;
+    }
+    .profile-header {
+        margin-bottom: 30px;
+    }
+    .profile-stats {
+        margin-bottom: 20px;
+    }
+    .profile-stats strong {
+        display: block;
+        font-size: 1.2rem;
+    }
+    .recent-activity {
+        margin-top: 20px;
+    }
+    .list-group-item {
+        background-color: #211951;
+        color: white;
+        border: 1px solid #365486;
+    }
+    .btn-primary {
+        background-color: #211951;
+        border-color: #365486;
+    }
+    .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+        background-color: #365486;
+        color: white;
+    }
+    .container {
+        margin-top: 20px;
+      }
+    
+      .comment-header {
+        background-color: #211951; /* Darker header background */
+        color: #ecf0f1; /* Light text for contrast */
+        padding: 10px;
+        border-top-left-radius: 6px; /* Rounded corners for the top */
+        border-top-right-radius: 6px;
         display: flex;
-        flex-direction: column;
+        align-items: center;
+        justify-content: space-between; /* Space out items */
+      }
+    
+      .comment-body {
+        background-color: #365486; /* Lighter than the header but still dark */
+        padding: 15px;
+        border-bottom-left-radius: 6px; /* Rounded corners for the bottom */
+        border-bottom-right-radius: 6px;
+      }
+    
+      .comment-wrapper {
+        margin-bottom: 20px; /* Space between comments */
+        border-radius: 6px; /* If the comment-wrapper is used */
+        border: 2px solid #34495e; /* Border color for the comment */
+      }
+      .profile-picture {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        margin-right: 10px;
+        border: 3px solid #ecf0f1; /* Border color for the profile picture */
+        object-fit: cover;
+      }
+      .comment-details {
+        flex-grow: 1;
+      }
+      .comment-author {
+        font-size: 1.2rem; /* Larger font size for the author */
+        color: #f1c40f; /* Highlight color for the author's name */
+        font-weight: bold;
+        margin-right: 5px;
+      }
+      .comment-metadata {
+        font-size: 0.85rem;
+        color: #bdc3c7; /* Subdued color for metadata */
+      }
+      .comment-body {
+        font-size: 1rem;
+        color: #ecf0f1 !important; /* Light text color for main comment body */
+        /* padding-left: 70px; */
+      }
+      .comment-actions {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end; /* Align action buttons to the right */
+        padding-top: 10px; /* Space between comment content and buttons */
+      }
+      .comment-action-btn {
+        background: none;
+        border: none;
+        color: #ecf0f1; /* Same as comment text color */
+        cursor: pointer;
+      }
+      .reply-section {
+        margin-top: 10px;
+        padding-left: 20px; /* Indent replies */
+        border-left: 3px solid #7f8c8d; /* Vertical line for replies */
+        background: #34495e; /* different background color for replies */
+      }
+    
+      .reply-header {
+        display: flex;
+        align-items: center;
+        font-size: 0.9rem;
+        color: #95a5a6; /* Subtle color for reply header */
+      }
+    
+      .reply-to {
+        font-style: italic;
+      }
+    
+      .btn-reply {
+        font-size: 0.8rem;
+        padding: 0.2rem 0.6rem;
+        margin: 0; /* Override default margins */
+        color: white;
+        background-color: #211951;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+    
+      .btn-reply:hover {
+        color: black;
+        
+      }
+      .comment-form-wrapper {
+        background-color: #34495e; 
+        padding: 20px;
+        border-radius: 8px;
+        margin-top: 30px; /* Space from the last comment */
+      }
+      .comment-form-wrapper h5 {
+        color: #ecf0f1; /* Light color for the form title */
+        margin-bottom: 15px;
+      }
+    
+      
+      .comment-form-textarea {
+        width: 100%;
+        padding: 10px;
+        border-radius: 4px;
+        border: 1px solid #7f8c8d; /* Subtle border color */
+        min-height: 100px; /* Larger text area for comments */
+        background-color: #365486; /* Slightly lighter than form background for contrast */
+        color: white; /* Light text color */
+      }
+      .profile-container {
+        background-color: #211951; /* Darker theme for the profile */
+        color: white;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+        border: 1px solid #365486;
+    }
+    .profile-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between; /* Provides spacing between elements */
+        margin-bottom: 30px;
     }
     .profile-image {
-        max-width: 100% !important;
-        border: 4px solid #007bff;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        border: 3px solid #ecf0f1;
     }
-    a, a:hover {
-        text-decoration: none;
-        color: #007bff;
+    .user-details {
+        flex-grow: 1;
+        padding-left: 20px;
     }
-    .modal-header, .modal-footer {
-        border-bottom: 1px solid #dee2e6;
-        border-top: 1px solid #dee2e6;
+    .user-stats {
+        display: flex;
+        justify-content: space-around;
+        font-size: 1.2rem;
+        margin-top: 10px;
     }
-    @media (max-width: 992px) {
-        body, html {        
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-
-        }
-
+    .stat-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
-
-    /* profile badge coloring, yellow for returning students, and blue for current. */
-    {% if profile.new_student %}
-        .badge-spec {
-            /* round out the bottom border cornors */
-            border-bottom-left-radius: 0 !important;
-            border-bottom-right-radius: 0 !important;
-            
-        }
-        .badge.bg-primary {
-            background-color: #007bff !important;
-        }
-        .badge.bg-secondary {
-            background-color: #007bff !important;
-            display: inline-block;
-        }
-        .profile-image {
-            border: 4px solid #007bff;
-            display: flex;
-
-
-        }
-        .btn-primary {
-            background-color: #007bff;
-            border-color: #007bff;
-        }
-    {% else %}
-        /* special radius controls for the top header. */
-        .badge-spec {
-            border-bottom-left-radius: 0 !important;
-            border-bottom-right-radius: 0 !important;
-        }
-        .badge.bg-primary {
-            background-color: #7C2855 !important;
-        }
-        .badge.bg-secondary {
-            background-color: #7C2855 !important;
-            display: inline-block;
-        }
-        .profile-image {
-            border: 4px solid #7C2855;
-            display: flex;
-        }
-        .btn-primary {
-            background-color: #7C2855;
-            border-color: #7C2855;
-        }
-    {% endif %}
-
-
+    .stat-count {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+    
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="container profile-container">
-    <div class="row">
-        <!-- Left Column for Profile Image and Contact Information -->
-        <div class="col-md-5">
-            <div class="profile-info bg-white border rounded p-3 shadow-sm">
-                <!-- Profile Image -->
-                {% if profile.profile_picture %}
-                    <div>
-                        <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" class="profile-image">
-                        <h2 class="mt-2">{{ profile.user.username }}
-                        </h2>
+<div class="container mt-4">
+    <div class="profile-container">
+        <div class="profile-header">
+            <img src="{{ profile.profile_picture.url }}" alt="{{ user_profile.username }}'s Profile Image" class="profile-image">
+            <div class="user-details">
+                <h2>{{ user_profile.username }}</h2>
+                <div class="user-stats">
+                    <div class="stat-item">
+                        <div class="stat-count">{{ thread_count }}</div>
+                        <div>Threads</div>
                     </div>
-                {% endif %}
+                    <div class="stat-item">
+                        <div class="stat-count">{{ comment_count }}</div>
+                        <div>Comments</div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                <!-- Contact Information -->
-                <div class="contact-info">
-                    {% if profile.firstName and profile.displayName or profile.lastName and profile.displayName %}
-                        <h3>Name:</h3>
-                        {% if profile.firstName %}
-                            <p>First Name: {{ profile.firstName }}</p>
+
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" id="profileTabs">
+            <li class="nav-item">
+                <a class="nav-link" id="comments-tab" data-toggle="tab" href="#comments" role="tab" aria-controls="comments" aria-selected="false">Comments on Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="threads-tab" data-toggle="tab" href="#threads" role="tab" aria-controls="threads" aria-selected="false">Threads</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="user-comments-tab" data-toggle="tab" href="#user-comments" role="tab" aria-controls="user-comments" aria-selected="false">Comments</a>
+            </li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="comments" role="tabpanel" aria-labelledby="comments-tab">
+                {% for comment in comments %}
+                    <div class="comment-wrapper">
+                      <div class="comment-header">
+                        <!-- Profile Picture -->
+                        {% if comment.user.profile.profile_picture %}
+                          <img src="{{ comment.user.profile.profile_picture.url }}" alt="{{ comment.user.username }}'s profile picture" class="profile-picture">
+                        {% else %}
+                        {% load static %}
+
+                          <img src="{% static 'default-profile-picture.png' %}" alt="Default profile picture" class="profile-picture">
                         {% endif %}
-                        {% if profile.lastName %}
-                            <p>Last Name: {{ profile.lastName }}</p>
+                        <!-- Comment Details -->
+                        <div class="comment-details">
+                          <span class="comment-author">{{ comment.user.username }}</span>
+                          <!-- Include any badges or awards here -->
+                          <div class="comment-metadata">
+                            <span>{{ comment.created_at|date:"M d, Y H:i" }}</span> <!-- Timestamp -->
+                            {% if comment.last_edited %}
+                              <span>(edited)</span> <!-- Show if edited -->
+                            {% endif %}
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Comment Body -->
+                      <div class="comment-body">
+                        <!-- If it's a reply to another comment, show this -->
+                        {% if comment.parent %}
+                        <div class="reply-section">
+                          <div class="reply-wrapper">
+                            <div class="reply-header">
+                              <span class="text-muted">{{comment.parent.user }} wrote on {{ comment.parent.created_at|date:"F j, Y, g:i a" }}</span>
+                            </div>
+                            <!-- Reply Content -->
+                            <div class="comment-content">
+                              "{{ comment.parent.content|truncatewords:20 }}"
+                            </div>
+                          </div>
+                        </div>
                         {% endif %}
+                    
+                        <!-- Print the comment, and allow for the urls to apply -->
+                        {% autoescape off %}
+                          <pre>{{ comment.content }}</pre>
+                        {% endautoescape %}
+                    
+                    
+                    </div>
+                </div>
+
+                {% endfor %}
+      
+                <div class="pagination">
+                  {% if comments.has_previous %}
+                  <a href="?profile_comments_page=1">&laquo; First</a>
+                  <a href="?profile_comments_page={{ comments.previous_page_number }}">&lsaquo; Previous</a>
+                  {% endif %}
+                  <span>Page {{ comments.number }} of {{ comments.paginator.num_pages }}</span>
+                  {% if comments.has_next %}
+                  <a href="?profile_comments_page={{ comments.next_page_number }}">Next &rsaquo;</a>
+                  <a href="?profile_comments_page={{ comments.paginator.num_pages }}">Last &raquo;</a>
+                  {% endif %}
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="threads" role="tabpanel" aria-labelledby="threads-tab">
+                <ul class="list-group">
+                    {% for thread in threads %}
+                    <li class="list-group-item">
+                        <a href="{% url 'thread_detail' thread.id %}">{{ thread.title }}</a>
+                        <small class="float-right text-muted">{{ thread.created_at|date:"M d, Y" }}</small>
+                    </li>
+                    {% empty %}
+                    <li class="list-group-item">No threads found.</li>
+                    {% endfor %}
+                </ul>
+                <div class="pagination">
+                    {% if threads.has_previous %}
+                    <a href="?threads_page=1">&laquo; First</a>
+                    <a href="?threads_page={{ threads.previous_page_number }}">&lsaquo; Previous</a>
                     {% endif %}
-                    <h3>Contact Information</h3>
-                    {% if profile.email and profile.displayEmail %}
-                        <p>Email: {{ profile.email }}</p>
-                    {% endif %}
-                    {% if profile.phoneNumber and profile.displayNumber %}
-                        <p>Phone: {{ profile.phoneNumber }}</p>
+                    <span>Page {{ threads.number }} of {{ threads.paginator.num_pages }}</span>
+                    {% if threads.has_next %}
+                    <a href="?threads_page={{ threads.next_page_number }}">Next &rsaquo;</a>
+                    <a href="?threads_page={{ threads.paginator.num_pages }}">Last &raquo;</a>
                     {% endif %}
                 </div>
-                <!-- Button to link to the edit profile page -->
-                {% if user.is_authenticated and user == profile.user %}
-                    <a href="{% url 'ProfileApp:edit_profile' %}" class="btn btn-primary">Edit Profile</a>
-                {% endif %}
+                <!-- Add pagination if necessary -->
+            </div>
+            <div class="tab-pane fade" id="user-comments" role="tabpanel" aria-labelledby="user-comments-tab">
+                <ul class="list-group">
+                    {% for comment in user_comments %}
+                    <div class="comment-wrapper">
+                      <div class="comment-header">
+                        <!-- Profile Picture -->
+                        {% if comment.user.profile.profile_picture %}
+                          <img src="{{ comment.user.profile.profile_picture.url }}" alt="{{ comment.user.username }}'s profile picture" class="profile-picture">
+                        {% else %}
+                        {% load static %}
+              
+                          <img src="{% static 'default-profile-picture.png' %}" alt="Default profile picture" class="profile-picture">
+                        {% endif %}
+                        <!-- Comment Details -->
+                        <div class="comment-details">
+                          <span class="comment-author">{{ comment.user.username }}</span>
+                          <!-- Include any badges or awards here -->
+                          <div class="comment-metadata">
+                            <span>{{ comment.created_at|date:"M d, Y H:i" }}</span> <!-- Timestamp -->
+                            {% if comment.last_edited %}
+                              <span>(edited)</span> <!-- Show if edited -->
+                            {% endif %}
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Comment Body -->
+                      <div class="comment-body">
+                        <!-- If it's a reply to another comment, show this -->
+                        {% if comment.parent %}
+                        <div class="reply-section">
+                          <div class="reply-wrapper">
+                            <div class="reply-header">
+                              <span class="text-muted">{{comment.parent.user }} wrote on {{ comment.parent.created_at|date:"F j, Y, g:i a" }}</span>
+                            </div>
+                            <!-- Reply Content -->
+                            <div class="comment-content">
+                              "{{ comment.parent.content|truncatewords:20 }}"
+                            </div>
+                          </div>
+                        </div>
+                        {% endif %}
+              
+                        <!-- Print the comment, and allow for the urls to apply -->
+                        {% autoescape off %}
+                          <pre>{{ comment.content }}</pre>
+                        {% endautoescape %}
+              
+
+                    </div>
+              
+                    </div>
+                    {% endfor %}
+                </ul>
+                <!-- Add pagination if necessary -->
+                <div class="pagination">
+                    {% if user_comments.has_previous %}
+                    <a href="?user_comments_page=1">&laquo; First</a>
+                    <a href="?user_comments_page={{ user_comments.previous_page_number }}">&lsaquo; Previous</a>
+                    {% endif %}
+                    <span>Page {{ user_comments.number }} of {{ user_comments.paginator.num_pages }}</span>
+                    {% if user_comments.has_next %}
+                    <a href="?user_comments_page={{ user_comments.next_page_number }}">Next &rsaquo;</a>
+                    <a href="?user_comments_page={{ user_comments.paginator.num_pages }}">Last &raquo;</a>
+                    {% endif %}
+                </div>
+                
             </div>
         </div>
 
-        <!-- Right Column for About and Quick Info -->
-        <div class="col-md-7">
-            <div class="profile-info bg-white border rounded p-3 shadow-sm">
-                <p>{{ profile.personal_info }}</p>
-            </div>
-            <!-- Show the back to search button if needed applicable-->
-            {% if request.GET.search %}
-            <a href="{% url 'ProfileApp:search_profiles' %}?query={{ request.GET.search }}" class="btn btn-primary">Back to Search</a>
-            {% endif %}
+        {% if user.is_authenticated and user == profile.user %}
+        <div class="mt-3 text-center">
+            <a href="{% url 'ProfileApp:edit_profile' %}" class="btn btn-primary">Edit Profile</a>
         </div>
+        {% endif %}
     </div>
+    
+    {% if user.is_authenticated %}
+  <div class="comment-form-wrapper">
+    <h5>Leave a Comment</h5>
+    <form method="post">
+      {% csrf_token %}
+      <textarea name="content" class="comment-form-textarea" placeholder="Write your comment here..."></textarea>
+      <button type="submit" class="btn">Post Comment</button>
+    </form>
+    
+  </div>
+  {% else %}
+  <p class="mt-4">Please <a href="{% url 'login' %}">log in</a> to post a comment.</p>
+  {% endif %}
 </div>
+{% endblock %}
 
-<!-- Edit Profile Modal -->
-<!-- Modal code remains the same as before -->
+{% block scripts %}
+<script>
+    // Store and retrieve the active tab using local storage
+    $(document).ready(function() {
+        var activeTab = localStorage.getItem('activeTab');
+        if (activeTab) {
+            $('#profileTabs a[href="' + activeTab + '"]').tab('show');
+        } else {
+            $('#profileTabs a:first').tab('show');
+        }
+
+        $('#profileTabs a').on('shown.bs.tab', function(e) {
+            var href = $(e.target).attr('href');
+            localStorage.setItem('activeTab', href);
+        });
+    });
+</script>
 {% endblock %}

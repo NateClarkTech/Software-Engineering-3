@@ -9,8 +9,12 @@ class Page(models.Model):
 class Thread(models.Model):
     page = models.ForeignKey(Page, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
+    original_poster = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='created_threads')
+
     # A list of users who have "subscribed" to the thread
     subscribers = models.ManyToManyField(User, related_name='subscribed_threads', blank=True)
+    
+    created_at = models.DateTimeField(auto_now_add=True)
     # Add other fields
     @property
     def comment_count(self):

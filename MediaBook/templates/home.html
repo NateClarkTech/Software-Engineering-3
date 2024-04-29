@@ -1,22 +1,92 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
+{% block title %}MediaBook - Home{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+
 {% block content %}
-    <style>
-        .button{
-            display:inline-block;
-            padding: 2px;
-            border: 2px;
-            border-color:black;
-            border-style: solid;
-            border-radius:5px;
-        }
-    </style>
-    <h1 style="text-align:center">Create Your Next Masterpiece</header>
-    <a href="mediabook/"><h3 style="text-align:center">What is Media Book?</h3></a>
-    <div class="button">
-        <a href="login/"><h3 style="text-align:center">Login</h3></a>
-    </div>
-    <div class="button">
-        <a href="register/"><h3 style="text-align:center">Register</h3></a>
-    </div>
+    <h1 class="text-center pt-4 fs-1">Create Your Next Masterpiece</h1>
+
+    <div class="mx-auto pt-4 text-center">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="text-md-center">What is MediaBook?</h1>
+
+                    <h3 class="text-md-center py-2">MediaBook is a platform to store your ideas for multimedia projects</h3>
+                    <div class="row">
+                        <div class="mx-auto">
+                            <h1 class="text-md-center px-2 py-2">Once you register you can:</h1>
+                            <h3 class="text-md-start px-2 py-2">- Create project boards to store all your ideas for a project on project boards</h3>
+                            <h3 class="text-md-start px-2 py-2">- Talk with other professionals on the forums on the fourms page</h3>
+                            <h3 class="text-md-start px-2 py-2">- Make lists on songs and visual media with notes on the sound and visual pages</h3>
+                        </div>
+                    </div>
+
+                    <h1 class="text-md-center px-2 py-2">Getting Started</h1>
+
+                    <div class="row">
+                        <div class="mx-auto">
+                            <h3 class="text-md-center px-2 py-2">Project Boards: </h3>
+                            <h3 class="text-md-start px-2 py-2">- Users are automatically redirected to their project boards page where users can see all their project boards</h3>
+                            <h3 class="text-md-start px-2 py-2">- From there you can create a new project board or click on a board to go to your project board</h3>
+                            <h3 class="text-md-start px-2 py-2">- Once you are on a project board you can add, edit, or remove notes on the board</h3>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="mx-auto">
+                            <h3 class="text-md-center px-2 py-2">Visual page: </h3>
+                            <h3 class="text-md-start px-2 py-2">- Makes a list of visual media</h3>
+                            <h3 class="text-md-start px-2 py-2">- Leave notes on the visual media</h3>
+                            <h3 class="text-md-start px-2 py-2">- Organize your notes by topic</h3>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="mx-auto">
+                            <h3 class="text-md-center px-2 py-2">Sound page: </h3>
+                            <h3 class="text-md-start px-2 py-2">- Make a list of audio media</h3>
+                            <h3 class="text-md-start px-2 py-2">- Leave notes on the audio media</h3>
+                            <h3 class="text-md-start px-2 py-2">- Organize your notes by topic</h3>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="mx-auto">
+                            <h3 class="text-md-center px-2 py-2">Forums page: </h3>
+                            <h3 class="text-md-start px-2 py-2">- Go onto the fourm topic relevant to what you want to talk about</h3>
+                            <h3 class="text-md-start px-2 py-2">- View, reply, and like other people's posts</h3>
+                            <h3 class="text-md-start px-2 py-2">- Gain inspiration through talking with others</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>  
+
+    <div class="row justify-content-center">
+        <div class="px-2 pt-5 col-12 login-container">
+            <a href="login/" role='button' class="btn btn-outline-primary" style="width: 100%;">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class='card-title'>Login</h2>
+                    </div>
+                </div>
+            </a>
+        </div>  
+
+        <div class="px-3 pt-5 col-12 register-container">
+            <a href="register/" role='button' class="btn btn-outline-primary" style="width: 100%;">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class='card-title'>Register</h2>
+                    </div>
+                </div>
+            </a>
+        </div>  
+    </div>    
+    
 {% endblock %}

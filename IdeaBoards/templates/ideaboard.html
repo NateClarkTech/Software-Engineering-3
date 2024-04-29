@@ -10,7 +10,7 @@
 
 {% block content %}
     <!-- Source: https: //getbootstrap.com/docs/5.3/components/modal/ -->
-    <!-- Modal -->
+    <!-- Make Board Modal -->
     <div class="modal fade" id="createBoard" tabindex="-1" role="dialog" aria-labelledby="CreateItemModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="form">
             <div class="modal-content">
@@ -22,10 +22,8 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form id='createBoard' method="POST">
-                            {{ form.as_p }}
-                            {% csrf_token %}
-                        </form>
+                        {{ form.as_p }}
+                        {% csrf_token %}
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -36,31 +34,41 @@
         </div>
     </div>
 
-    <h1>Your IdeaBoards</h1>
-    <div class="row">
-        {% if boards %}
-            {% for board in boards %}
-                <div class="col-md-4 px-3 py-3">
-                    <a id="board-{{ forloop.counter }}"  href='{{ board.id }}/' role='button' class="btn btn-outline-primary">
-                        <div class="card card-custom">
-                            <div class="card-body">
-                                <h2 id="board-{{ forloop.counter }}-title" class='card-title'>{{ board.title }}</h2>
-                                <p id="board-{{ forloop.counter }}-description" class='card-description pb-2'>{{ board.description }}</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>        
-            {% endfor %}
-        {% else %}
-            <div class='card'>
-                <div class='card-body'>
-                    <p class='card-text'>You don't have any boards yet.</p>
-                </div>
+    <div>
+        <div class="row justify-content-between">
+            <h1 class="col-md-4 page-title">Your IdeaBoards</h1>
+            <div class="col-md-8 row pr-4 justify-content-end mode-radio">
+                <button  type="button" class="btn btn-primary" id="create-new-board" data-toggle="modal" data-target="#createBoard">
+                    Create New Project Board
+                </button>
             </div>
-        {% endif %}
-        <button  type="button" class="btn btn-primary" id="create-new-board" data-toggle="modal" data-target="#createBoard">
-            Create New Project Board
-        </button>
+        </div>
+
+
+        <hr>
+
+        <div class="row">
+            {% if boards %}
+                {% for board in boards %}
+                    <div class="col-md-4 px-3 py-3">
+                        <button id="board-{{ forloop.counter }}"  data-url="{{ board.id }}" role='button' class="btn btn-outline-primary btn-size">
+                            <div class="card card-custom">
+                                <div class="card-body">
+                                    <h2 id="board-{{ forloop.counter }}-title" class='card-title'>{{ board.title }}</h2>
+                                    <p id="board-{{ forloop.counter }}-description" class='card-description pb-2'>{{ board.description }}</p>
+                                </div>
+                            </div>
+                        </button>
+                    </div>        
+                {% endfor %}
+            {% else %}
+                <div class='card mx-auto'>
+                    <div class='card-body'>
+                        <h1 class='card-text text-center'>You don't have any boards yet.</h1>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
     </div>
 {% endblock %}
 

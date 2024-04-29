@@ -5,4 +5,5 @@ from . import views
 
 urlpatterns = [
     path('', views.visual, name='visual'),
+    path('<str:label_name>/', views.label_sort, name='visual_label_sort'),
     ]

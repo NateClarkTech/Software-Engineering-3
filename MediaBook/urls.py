@@ -22,6 +22,7 @@ from django.conf import settings
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
+from Forum import views as forum
 
 
 urlpatterns = [
@@ -29,12 +30,14 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
     path('logout/', views.logout_view, name='logout'),
     path('register/', views.register, name='register'),
-    path('forum/', include('Forum.urls')),
+    path('forum/', include('Forum.urls'), name='Forum'),
     path('boards/', include('IdeaBoards.urls')),
     path('profile/', include('ProfileApp.urls')),
     path('visual/' , include('Visual.urls')),
     path('sound/' , include('Sound.urls')),
     path('mediabook/', views.media_book, name='mediabook'),
+    path('notifications/mark_as_read/<int:notification_id>/', forum.mark_notification_as_read, name='mark_notification_as_read'),
+
     path('' , views.home, name='home'),
 
     ]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

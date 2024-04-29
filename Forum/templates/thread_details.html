@@ -4,70 +4,163 @@
   .container {
     margin-top: 20px;
   }
+
+  .comment-header {
+    background-color: #211951; /* Darker header background */
+    color: #ecf0f1; /* Light text for contrast */
+    padding: 10px;
+    border-top-left-radius: 6px; /* Rounded corners for the top */
+    border-top-right-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Space out items */
+  }
+
+  .comment-body {
+    background-color: #365486; /* Lighter than the header but still dark */
+    padding: 15px;
+    border-bottom-left-radius: 6px; /* Rounded corners for the bottom */
+    border-bottom-right-radius: 6px;
+  }
+
+  .comment-wrapper {
+    margin-bottom: 20px; /* Space between comments */
+    border-radius: 6px; /* If the comment-wrapper is used */
+  }
   .profile-picture {
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
-    margin-right: 15px;
+    margin-right: 10px;
+    border: 3px solid #ecf0f1; /* Border color for the profile picture */
     object-fit: cover;
   }
-  .comment-info {
-    margin-bottom: 10px;
+  .comment-details {
+    flex-grow: 1;
   }
-  .comment-info strong {
-    margin-right: 10px;
+  .comment-author {
+    font-size: 1.2rem; /* Larger font size for the author */
+    color: #f1c40f; /* Highlight color for the author's name */
+    font-weight: bold;
+    margin-right: 5px;
   }
-  .comment-likes {
-    font-size: 0.9em;
-    margin-bottom: 10px;
+  .comment-metadata {
+    font-size: 0.85rem;
+    color: #bdc3c7; /* Subdued color for metadata */
   }
-  .card-body {
-    position: relative;
-  }
-
-  .reply-info {
-    background-color: #f7f7f7;
-    border-left: 3px solid #007bff;
-    padding: 5px 10px;
-    margin-bottom: 10px;
-  }
-  .reply-content {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    padding-left: 20px;
-    border-left: 2px solid #ddd;
-    color: #666;
-  }
-  .comment-section h3 {
-    border-bottom: 2px solid #eee;
-    padding-bottom: 5px;
-    margin-bottom: 20px;
-  }
-  .user-profile-card {
-    border: 1px solid #ddd
-
+  .comment-body {
+    font-size: 1rem;
+    color: #ecf0f1 !important; /* Light text color for main comment body */
+    /* padding-left: 70px; */
   }
   .comment-actions {
-  display: flex;
-  align-items: center;
-  gap: 10px; /* Adjust gap between buttons */
-}
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end; /* Align action buttons to the right */
+    padding-top: 10px; /* Space between comment content and buttons */
+  }
+  .comment-action-btn {
+    background: none;
+    border: none;
+    color: #ecf0f1; /* Same as comment text color */
+    cursor: pointer;
+  }
+  .reply-section {
+    margin-top: 10px;
+    padding-left: 20px; /* Indent replies */
+    border-left: 3px solid #7f8c8d; /* Vertical line for replies */
+    background: #34495e; /* different background color for replies */
+  }
 
-.comment-actions > a,
-.comment-actions > button {
-  white-space: nowrap; /* Prevent text from wrapping */
-  text-align: center; /* Center text inside buttons */
-}
+  .reply-header {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    color: #95a5a6; /* Subtle color for reply header */
+  }
 
-/* Override default Bootstrap styles if necessary */
-.comment-actions > a.btn,
-.comment-actions > button.btn {
-  padding: .375rem .75rem; /* Bootstrap's default padding for small buttons */
-}
+  .reply-to {
+    font-style: italic;
+  }
 
-.likes-info {
-  margin-right: 10px; /* Adjust space between likes info and buttons */
-}
+  .btn-reply {
+    font-size: 0.8rem;
+    padding: 0.2rem 0.6rem;
+    margin: 0; /* Override default margins */
+    color: white;
+    background-color: #211951;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+
+  .btn-reply:hover {
+    color: black;
+    
+  }
+  /* Style for the 'Post Comment' form */
+  .comment-form-wrapper {
+    background-color: #34495e; 
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 30px; /* Space from the last comment */
+  }
+  .comment-form-wrapper h5 {
+    color: #ecf0f1; /* Light color for the form title */
+    margin-bottom: 15px;
+  }
+
+  
+  .comment-form-textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #7f8c8d; /* Subtle border color */
+    min-height: 100px; /* Larger text area for comments */
+    background-color: #365486; /* Slightly lighter than form background for contrast */
+    color: white; /* Light text color */
+  }
+
+  /* move the likes over to the left */
+  .likes {
+    color: #aea7d6 !important;
+  }
+
+  /* like button move to the left */
+  .likes-btn {
+    margin-right: auto;
+  }
+
+  /* move the subscribe button to the right */
+  .subscribe-btn {
+    margin-left: auto;
+    float: right;
+    background-color: #211951;
+
+  }
+
+  /* make sure the pre will wrap arround when it reaches the end of the line */
+  pre {
+    white-space: pre-wrap;
+    color: #ecf0f1;
+  }
+
+  .responsive-iframe {
+    position: relative;
+    overflow: hidden;
+    padding-top: 56.25%; /* Aspect ratio of 16:9 */
+  }
+  
+  .responsive-iframe iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+  
 
 </style>
 {% endblock %}
@@ -75,100 +168,155 @@
 {% block content %}
 <div class="container">
   <div class="row">
-    <div class="col-md-8 comment-section">
-      <h3>{{ thread.title }}:</h3>
-      {% for comment in comments %}
-      <div class="card mb-4">
-        <div class="card-body">
-          <img src="pic.jpg" alt="Profile Picture" class="profile-picture">
-          
-          {% if comment.parent %}
-            <div class="reply-info">
-              <strong>{{ comment.parent.user.username }}</strong>
-              <span class="text-muted">wrote on {{ comment.parent.created_at|date:"F j, Y, g:i a" }}</span>
-              <div class="reply-content">
-                <p>{{ comment.parent.content|truncatewords:20 }}</p>
-              </div>
-            </div>
-          {% endif %}
-          
-          <div class="comment-info">
-            <strong>{{ comment.user.username }}</strong>
-            {% if comment.parent %}
-              <span class="text-muted"> replied on {{ comment.created_at }}</span>
+    <div class="col-md-12 comment-section">
+      <h2 class="text-white">{{ thread.title }}
+        <span> 
+          {% if user.is_authenticated %}
+            {% if user in thread.subscribers.all %}
+              <a href="{% url 'unsubscribe_from_thread' thread.id %}" class="btn btn-danger subscribe-btn">Unsubscribe</a>
             {% else %}
-            <span class="text-muted"> commented on {{ comment.created_at }}</span>
-            {% endif %}            {% if comment.last_edited %}
-              <span class="text-muted"> (edited)</span>
+              <a href="{% url 'subscribe_to_thread' thread.id %}" class="btn btn-primary subscribe-btn">Subscribe</a>
             {% endif %}
+          {% endif %}
+        </span>
+      </h2> <!-- Title with adjusted color for visibility -->
+      <!-- Subscribe button -->
 
-            <!-- Dropdown Menu -->
-            <div class="comment-actions float-right">
-              <div class="btn-group">
-                  <button type="button" class="btn btn-sm btn-outline-secondary " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
-                      <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
-                    </svg>                  
-                  </button>
-                  <div class="dropdown-menu dropdown-menu-right">
-                      <!-- Reply action -->
-                      {% if user.is_authenticated %}
-                      <button class="dropdown-item reply-btn" data-commentid="{{ comment.id }}">Reply</button>
-                      {% endif %}
-                      <!-- Edit and Delete actions -->
-                      {% if comment.user == user or user.is_superuser %}
-                      <a class="dropdown-item" href="{% url 'edit_comment' comment.id %}">Edit</a>
-                      <a class="dropdown-item text-danger" href="{% url 'delete_comment' comment.id %}">Delete</a>
-                      {% endif %}
-                  </div>
-              </div>
-            </div>
+      <!-- Comment Loop -->
+      {% for comment in comments %}
+      <div class="comment-wrapper">
+        <div class="comment-header">
+          <!-- Profile Picture -->
+          {% if comment.user.profile.profile_picture %}
+            <img src="{{ comment.user.profile.profile_picture.url }}" alt="{{ comment.user.username }}'s profile picture" class="profile-picture">
+          {% else %}
+          {% load static %}
 
-            <div>
-              <span class="text-muted likes">Likes: {{ comment.likes.count }}</span>
-              {% if user.is_authenticated and comment.user != user %}
-                {% if user in comment.likes.all %}
-                <a href="{% url 'like_comment' comment.id %}" class="btn btn-sm  btn-outline-danger">Unlike</a>
-                {% else %}
-                <a href="{% url 'like_comment' comment.id %}" class="btn btn-sm btn-outline-primary">Like</a>
-                {% endif %}
+            <img src="{% static 'default-profile-picture.png' %}" alt="Default profile picture" class="profile-picture">
+          {% endif %}
+          <!-- Comment Details -->
+          <div class="comment-details">
+            <span class="comment-author">{{ comment.user.username }}</span>
+            <!-- Include any badges or awards here -->
+            <div class="comment-metadata">
+              <span>{{ comment.created_at|date:"M d, Y H:i" }}</span> <!-- Timestamp -->
+              {% if comment.last_edited %}
+                <span>(edited)</span> <!-- Show if edited -->
               {% endif %}
             </div>
           </div>
-          
-
-          <p class="card-text mt-2">{{ comment.content }}</p>
-          
-
-
         </div>
+        <!-- Comment Body -->
+        <div class="comment-body">
+          <!-- If it's a reply to another comment, show this -->
+          {% if comment.parent %}
+          <div class="reply-section">
+            <div class="reply-wrapper">
+              <div class="reply-header">
+                <span class="text-muted">{{comment.parent.user }} wrote on {{ comment.parent.created_at|date:"F j, Y, g:i a" }}</span>
+              </div>
+              <!-- Reply Content -->
+              <div class="comment-content">
+                "{{ comment.parent.content|truncatewords:20 }}"
+              </div>
+            </div>
+          </div>
+          {% endif %}
+
+          <!-- Print the comment, and allow for the urls to apply -->
+          {% autoescape off %}
+            <pre>{{ comment.content }}</pre>
+          {% endautoescape %}
+
+          <!-- If it's a reply to another comment, show this -->
+
+        <!-- Comment Actions -->
+        <div class="comment-actions">
+          <!-- Making it a little compleicated to fix the styling issues, but the likes text should be aligned to the left, and if logged in there should be a button for liking-->
+            {% if user.is_authenticated %}
+            {% if user.is_authenticated and comment.user != user %}
+              {% if user in comment.likes.all %}
+              <span class="text-muted likes">Likes: {{ comment.likes.count }}</span>
+              <a href="{% url 'like_comment' comment.id %}" class="comment-action-btn likes-btn">Unlike</a>
+              {% else %}
+              <span class="text-muted likes">Likes: {{ comment.likes.count }}</span>
+              <a href="{% url 'like_comment' comment.id %}" class="comment-action-btn likes-btn">Like</a>
+              {% endif %}
+            {% else %}
+              <span class="text-muted likes likes-btn">Likes: {{ comment.likes.count }}</span>
+            {% endif %}
+
+          {% if comment.user == user or user.is_superuser %}
+            <a href="{% url 'edit_comment' comment.id %}" class="comment-action-btn">Edit</a>
+            <a href="{% url 'delete_comment' comment.id %}" class="comment-action-btn">Delete</a>
+          {% endif %}
+          <button class="comment-action-btn btn-reply" data-commentid="{{ comment.id }}">Reply</button>
+
+          {% endif %}
+        </div>
+      </div>
+
       </div>
       {% endfor %}
-      
-      {% if user.is_authenticated %}
-        <form method="post" action="{% url 'create_comment' thread.id %}" class="mt-4">
-          {% csrf_token %}
-          <h5>Add a new comment:</h5>
-          {{ form.as_p }}
-          <button type="submit" class="btn btn-primary">Post Comment</button>
-        </form>
-      {% else %}
-        <p class="mt-4">Please <a href="{% url 'login' %}">log in</a> to post a comment.</p>
-      {% endif %}
+  <!-- Pagination Links -->
+  <div class="text-center">
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            {% if comments.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="{% url 'thread_detail' thread.id %}?page=1" aria-label="First">
+                        <span aria-hidden="true">&laquo;&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="{% url 'thread_detail' thread.id %}?page={{ comments.previous_page_number }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+              
+            {% for num in comments.paginator.page_range %}
+                {% if num >= comments.number|add:'-3' and num <= comments.number|add:'3' %}
+                    <li class="page-item {% if num == comments.number %}active{% endif %}">
+                        <a class="page-link" href="{% url 'thread_detail' thread.id %}?page={{ num }}">{{ num }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+                  
+            {% if comments.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="{% url 'thread_detail' thread.id %}?page={{ comments.next_page_number }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="{% url 'thread_detail' thread.id %}?page={{ comments.paginator.num_pages }}" aria-label="Last">
+                        <span aria-hidden="true">&raquo;&raquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+  </div>
 
-    </div>
+
+
+
+  {% if user.is_authenticated %}
+  <div class="comment-form-wrapper">
+    <h5>Leave a Comment</h5>
+    <form method="post" action="{% url 'create_comment' thread.id %}">
+      {% csrf_token %}
+      <textarea name="content" class="comment-form-textarea" placeholder="Write your comment here..."></textarea>
+      <button type="submit" class="btn">Post Comment</button>
+    </form>
     
-    {% if user.is_authenticated %}
-      <div class="col-md-4">
-        <div class="card user-profile-card">
-          <div class="card-body">
-            <h5 class="card-title">User Profile</h5>
-            <p class="card-text">Username: {{ user.username }}</p>
-            <!-- Additional user information -->
-          </div>
-        </div>
-      </div>
-    {% endif %}
+  </div>
+  {% else %}
+  <p class="mt-4">Please <a href="{% url 'login' %}">log in</a> to post a comment.</p>
+  {% endif %}
+
+    </div> 
   </div>
 </div>
 
@@ -196,14 +344,16 @@
         </div>
       </form>
     </div>
+    
   </div>
+  
 </div>
 {% endblock %}
 
 {% block scripts %}
 <script>
   $(document).ready(function() {
-    $('.reply-btn').click(function() {
+    $('.btn-reply').click(function() {
       var parentCommentId = $(this).data('commentid');
       var replyFormAction = "{% url 'reply_to_comment' thread.id 0 %}".replace('/0/', '/' + parentCommentId + '/');
       $('#replyForm').attr('action', replyFormAction);
