@@ -22,28 +22,7 @@ def IdeaBoards_Home(request):
                 new_board = form.save(commit=False)
                 new_board.user = request.user
                 new_board.save()
-                
-        if request.method == 'PATCH':
-            data = json.loads(request.body.decode('utf-8'))
-            
-            #update the board in the database
-            for item in data:
-                if item['type'] == 'edit':
-                    print(item)
-                    board = IdeaBoard.objects.get(id=item['board_id'])
-                    board.title = item['newTitle']
-                    board.description = item['newDescription']
-                    board.save()
-
-
-        #If the request is a DELETE request
-        if request.method == 'DELETE':
-            data = json.loads(request.body.decode('utf-8'))
-            
-            #Delete the board from the database
-            for item in data:
-                if item['type'] == 'delete':
-                    board = IdeaBoard.objects.get(id=item['board_id']).delete()
+                return redirect('IdeaBoards_Home')
 
         
         form = NewIdeaBoardForm(instance=request.user)
