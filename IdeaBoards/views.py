@@ -29,7 +29,12 @@ def IdeaBoards_Home(request):
         
         form = NewIdeaBoardForm(instance=request.user)
         boards = IdeaBoard.objects.filter(user=request.user)
-        return render(request, 'ideaboard.html', {'boards': boards, 'form': form})
+         # Retrieve error message from session if it exists
+        error_message = request.session.pop('error_messages', None)
+
+        print (error_message)
+
+        return render(request, 'ideaboard.html', {'boards': boards, 'form': form, 'error_message': error_message})
     #If the user is not logged in redirect to landing page
     else:
         return redirect('home')
@@ -43,7 +48,18 @@ IdeaBoard_Details:
 """
 @login_required
 def IdeaBoard_Detail(request, id):
-    board = IdeaBoard.objects.get(id=id)
+    #make sure the board exists, if not redirect to the boards page
+    try:
+        board = IdeaBoard.objects.get(id=id)
+    except:
+        # error implementation was based on GPT https://chat.openai.com/share/424d6891-b553-4829-b8fd-8eafd56f687c
+        error_messages = request.session.get('error_messages', [])
+        # Append the new error message
+        error_messages.append(str(id) + " is not a valid board ID.")
+        # Store the updated error messages list back into the session
+        request.session['error_messages'] = error_messages
+        return redirect('IdeaBoards_Home')
+    
     items = IdeaBoardItem.objects.filter(ideaboard=board)
 
     #If the user is the owner of the board
@@ -102,4 +118,10 @@ def IdeaBoard_Detail(request, id):
     
     #If the user is not the owner of the board redirect to them to their boards
     else:
+        # error implementation was based on GPT https://chat.openai.com/share/424d6891-b553-4829-b8fd-8eafd56f687c
+        error_messages = request.session.get('error_messages', [])
+        # Append the new error message
+        error_messages.append("You do not have permission to view this board.")
+        # Store the updated error messages list back into the session
+        request.session['error_messages'] = error_messages
         return redirect('IdeaBoards_Home')

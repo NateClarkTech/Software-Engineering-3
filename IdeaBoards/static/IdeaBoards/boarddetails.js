@@ -108,6 +108,7 @@ document.getElementById("edit-board-button").addEventListener("click", function(
  * ********************************************************************/
 document.getElementById("delete-board-button").addEventListener("click", function() {
     changesToBoard = [];
+    boardSaved = true;
     changesToBoard.push(
         {
             changeType: "deleteBoard",
