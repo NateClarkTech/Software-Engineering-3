@@ -34,6 +34,3 @@ def home(request):
     # Else display the landing page that has link to FAQ, Login, and Registration links
     else:
         return render(request, 'home.html')
-
-def media_book(request):
-    return render(request, 'mediabook.html')

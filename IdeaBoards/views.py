@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from .forms import *
 from django.contrib.auth.decorators import login_required
 import json
+from django.urls import reverse
+from django.http import HttpResponseRedirect
 
 """
 IdeaBoards_Home: 
@@ -14,6 +16,7 @@ def IdeaBoards_Home(request):
     if request.user.is_authenticated:
 
         print(request.POST, request.method)
+        print(request.body.decode('utf-8'))
 
         #If the request is a POST request
         if request.method == 'POST':
@@ -23,7 +26,6 @@ def IdeaBoards_Home(request):
                 new_board.user = request.user
                 new_board.save()
                 return redirect('IdeaBoards_Home')
-
         
         form = NewIdeaBoardForm(instance=request.user)
         boards = IdeaBoard.objects.filter(user=request.user)
@@ -68,15 +70,32 @@ def IdeaBoard_Detail(request, id):
                         new_item.save()
 
                 #if the changeType is edit, edit the item in the database
-                if item['changeType'] == 'edit':
+                elif item['changeType'] == 'edit':
                     editedIitem = IdeaBoardItem.objects.get(id=item['item_id'])
                     editedIitem.title = item['title']
                     editedIitem.description = item['description']
                     editedIitem.save()
 
                 #if the changeType is delete, delete the item from the database
-                if item['changeType'] == 'delete':
+                elif item['changeType'] == 'delete':
                     item = IdeaBoardItem.objects.get(id=item['item_id']).delete()
+
+                #if the changeType is editBoardDetails, edit the board title and description
+                elif item['changeType'] == 'editBoardDetails':
+                    board.title = item['title']
+                    board.description = item['description']
+                    board.save()
+            
+        if request.method == 'DELETE':
+            data = json.loads(request.body.decode('utf-8'))
+            data = data[0]
+            board = IdeaBoard.objects.get(id=data['board_id'])
+            if board.user == request.user:
+                board.delete()
+
+                print('deleted')
+                return redirect('IdeaBoards_Home')
+
     
         #give the HTML for the board with the board's items
         return render(request, 'boarddetail.html', {'board': board, 'items': items})

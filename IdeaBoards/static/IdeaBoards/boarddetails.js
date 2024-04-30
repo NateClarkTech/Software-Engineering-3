@@ -1,6 +1,6 @@
 /**
  * Date Created: 4/09/2024
- * Date Modified: 4/28/2024
+ * Date Modified: 4/29/2024
  * 
  * Author: Nathaniel Clark
  * Purpose: This file is used to handle the javascript for the board details page
@@ -40,6 +40,95 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+
+/**********************************************************************
+ * Allows the board to be edited by the user (changes must be saved)
+ * 
+ * Author: Nathaniel Clark
+ * ********************************************************************/
+document.getElementById("edit-board-button").addEventListener("click", function() {
+    let newTitle = document.getElementById("editBoardTitleInput").value;
+    let newDescription = document.getElementById("editBoardDescriptionInput").value;
+
+    //if the input is valid, update the board details
+    if (newTitle !== "" && newTitle.length <= 64 && newDescription.length <= 128) {
+        boardSaved = false;
+        changesToBoard.push(
+            {
+                changeType: "editBoardDetails",
+                title: newTitle,
+                description: newDescription,
+            }
+        );
+
+        document.getElementById("board-title").textContent = "Project Board: " + newTitle;
+        if (newDescription.length > 0) {
+            document.getElementById("board-description").textContent = "Description: " + newDescription;
+
+            if (document.getElementById("board-description").classList.contains("d-none")){
+                document.getElementById("board-description").classList.remove("d-none");
+            }
+        }
+        else {
+            document.getElementById("board-description").classList.add("d-none");
+        }
+        
+        $('#editBoard').modal('hide');       
+    }
+    //else show proper error modal
+    else if (newTitle.length > 64){
+        document.getElementById("error-modal-text").innerHTML = "Board title must be less than 64 characters";
+        $('#editBoard').modal('hide');
+        $('#errorModel').modal('show');
+    }
+    else if (newDescription.length > 128){
+        document.getElementById("error-modal-text").innerHTML = "Board description must be less than 128 characters";
+        $('#editBoard').modal('hide');
+        $('#errorModel').modal('show');
+    }
+    else if (newTitle.length <= 0){
+        document.getElementById("error-modal-text").innerHTML = "Board must have a title";
+        $('#editBoard').modal('hide');
+        $('#errorModel').modal('show');
+    }
+    else {
+        document.getElementById("error-modal-text").innerHTML = "Unknown error has occured, please contact the site administrator";
+        $('#editBoard').modal('hide');
+        $('#errorModel').modal('show');
+    }
+});
+
+
+/**********************************************************************
+ * Deletes the board and redirects the user to the boards page
+ * 
+ * WARNING - Board will be deleted as soon as the button is clicked and cannot be undone
+ * 
+ * Author: Nathaniel Clark
+ * ********************************************************************/
+document.getElementById("delete-board-button").addEventListener("click", function() {
+    changesToBoard = [];
+    changesToBoard.push(
+        {
+            changeType: "deleteBoard",
+            board_id: document.getElementById("delete-board-button").getAttribute("data-id"),
+        }
+    );
+
+
+    // Perform DELETE request
+    fetch(window.location.pathname, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken'),
+        },
+        body: JSON.stringify(changesToBoard)
+    }).then(data => {
+        console.log(data);
+        window.location.href = "/boards";
+    });
+});
 
 /**********************************************************************
  * Adds a new item to the board using javascript if the form is valid
@@ -86,7 +175,7 @@ function addFormItem() {
         
         let cardTitle = document.createElement("h2");
         cardTitle.id = "board-item-" + assignBoardId + "-title";
-        cardTitle.classList.add("card-title");
+        cardTitle.classList.add("card-title", "pb-2");
         cardTitle.textContent = title;
         
         let cardDescription = document.createElement("p");
@@ -111,7 +200,6 @@ function addFormItem() {
     
                 let modalTitle = document.getElementById("view-item-title");
                 modalTitle.textContent = itemTitle.textContent;
-                modalTitle.setAttribute("data-id", item_id);
                 modalTitle.setAttribute("data-index", index);
     
                 document.getElementById("view-item-description").textContent = itemDescription.textContent;
@@ -123,27 +211,6 @@ function addFormItem() {
 
         // Add the new card to the "row" div
         document.getElementById("boardItems").appendChild(colDiv);
-
-        // Create the "New Note" button
-        let createNewItemButton = document.createElement("button");
-        createNewItemButton.changeType = "button";
-        createNewItemButton.classList.add("btn", "btn-primary");
-        createNewItemButton.id = "create-new-item-button";
-        createNewItemButton.setAttribute("data-toggle", "modal");
-        createNewItemButton.setAttribute("data-target", "#createBoardItem");
-        createNewItemButton.textContent = "New Note";
-
-        // Create the "Save Board" button
-        let saveBoardButton = document.createElement("button");
-        saveBoardButton.changeType = "button";
-        saveBoardButton.classList.add("btn", "btn-primary");
-        saveBoardButton.id = "save-board-button";
-        saveBoardButton.textContent = "Save Board";
-
-        // Add the buttons to the document
-        boardItems = document.getElementById("boardItems");
-        boardItems.appendChild(createNewItemButton);
-        boardItems.appendChild(saveBoardButton);
 
         // Increment the assignBoardId and numberOfBoardItems
         assignBoardId = assignBoardId + 1;
@@ -199,6 +266,11 @@ document.getElementById("edit-item-button").addEventListener("click", function()
                 changesToBoard[item].title = newTitle;
                 changesToBoard[item].description = newDescription;
                 
+                document.getElementById("board-item-" + itemIndex + "-title").textContent = newTitle;
+                document.getElementById("board-item-" + itemIndex + "-description").textContent = newDescription;
+
+                $('#editBoardItem').modal('hide');
+
                 return;
             }
             /*************************************
@@ -270,6 +342,8 @@ document.getElementById("edit-item-button").addEventListener("click", function()
 document.getElementById("delete-item-button").addEventListener("click", function() {
     let itemToDelete = document.getElementById("view-item-title").getAttribute("data-id");
     let itemIndex = document.getElementById("view-item-title").getAttribute("data-index");
+    let itemTitle = document.getElementById("view-item-title").textContent;
+    let itemDescription = document.getElementById("view-item-description").textContent;
 
     /******************************************
     * case 5 - delete item that was added      *
@@ -311,10 +385,18 @@ document.getElementById("delete-item-button").addEventListener("click", function
         
     if (numberOfBoardItems === 0) {
         let noItemsFoundDiv = document.createElement("div");
+        noItemsFoundDiv.className = "card mx-auto";
         noItemsFoundDiv.id = "no-items-found";
-        noItemsFoundText = document.createElement("p");
-        noItemsFoundText.textContent = "No items found";
-        noItemsFoundDiv.appendChild(noItemsFoundText);
+
+        let cardBodyDiv = document.createElement("div");
+        cardBodyDiv.className = "card-body";
+
+        let cardTextH1 = document.createElement("h1");
+        cardTextH1.className = "card-text text-center";
+        cardTextH1.textContent = "You don't have any notes yet.";
+
+        cardBodyDiv.appendChild(cardTextH1);
+        noItemsFoundDiv.appendChild(cardBodyDiv);
         document.getElementById("boardItems").appendChild(noItemsFoundDiv);
     }
         
@@ -363,7 +445,7 @@ document.getElementById("save-board-button").addEventListener("click", function(
         console.log(data);
         changesToBoard = [];
         boardSaved = true;
-    })
+    });
 });
 
 
