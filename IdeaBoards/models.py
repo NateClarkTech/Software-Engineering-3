@@ -19,7 +19,7 @@ def user_directory_path(instance, filename):
     
 class IdeaBoardItem(models.Model):
     title = models.CharField(max_length=64)
-    description = models.TextField()
+    description = models.TextField(blank=True, default='')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     owner = models.ForeignKey('auth.User', related_name='ideaboarditems', on_delete=models.CASCADE)

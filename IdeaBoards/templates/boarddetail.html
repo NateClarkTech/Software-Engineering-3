@@ -10,6 +10,84 @@
 
 {% block content %}
     <!-- Source: https://getbootstrap.com/docs/5.3/components/modal/ -->
+
+    <!-- Board Settings Modal -->
+    <div class="modal fade" id="boardSettings" tabindex="-1" role="dialog" aria-labelledby="BoardSettingsModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="form">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="BoardSettingsModalLabel">Board Settings</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body row justify-content-center">
+                    <button type="button" class="btn btn-success col-10 m-2" data-dismiss="modal" data-toggle="modal" data-target="#editBoard">Edit Board Details</button>
+                    <button type="button" class="btn btn-danger col-10 m-2" data-dismiss="modal" data-toggle="modal" data-target="#deleteBoard">Delete Board</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Board Modal -->
+    <div class="modal fade" id="editBoard" tabindex="-1" role="dialog" aria-labelledby="EditBoardModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="form">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="EditBoardModalLabel">Edit Board</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <h5>New Board Title<p class="text-danger" style="display: inline; margin: 0;">*</p></h5>
+                    <input type="text" id="editBoardTitleInput" data-id='none' class="form-control" placeholder="{{ board.title }}">
+                    <h5 class="mt-2">New Board Description</h5>
+                    <input type="text" id="editBoardDescriptionInput" class="form-control" placeholder="{{ board.description }}">
+                    <p><p class="text-danger" style="display: inline; margin: 0;">*</p> required field</p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button id='edit-board-button' type="submit" class="btn btn-success">Confirm Changes</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Board Modal -->
+    <div class="modal fade" id="deleteBoard" tabindex="-1" role="dialog" aria-labelledby="DeleteBoardModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="form">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title text-danger" id="DeleteBoardModalLabel">Delete Board?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <h5>Are you sure you want to delete the board:</h5>
+                    <h3 class="my-2"><strong>{{ board.title }}</strong></h3>
+                    <h5>This action cannot be undone.</h5>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button id="delete-board-button" type="button" class="btn btn-danger" data-id="{{ board.id }}">Confirm Deletion</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
     <!-- New Item Modal -->
     <div class="modal fade" id="createBoardItem" tabindex="-1" role="dialog" aria-labelledby="CreateItemModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -55,12 +133,18 @@
     <div class="modal fade" id="viewBoardItem" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="modal-body break-text">
-                    <h1 id="view-item-title"></h1>
-                    <p id="view-item-text"></p>
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" data-dismiss="modal" class="btn btn-secondary">Close</button>
+                <div class="modal-body break-text">
+                    <h1 id="view-item-title" data-id='none' data-index="none"></h1>
+                    <p id="view-item-description"></p>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" id="edit-item-modal-button" class="btn btn-success">Edit</button>
+                    <button type="button" id="delete-item-modal-button" class="btn btn-danger">Delete</button>
                 </div>
             </div>
         </div>
@@ -86,7 +170,7 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary text-danger" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary text-danger" data-dismiss="modal">Cancel</button>
                     <button id="edit-item-button" type="button" class="btn btn-primary text-success">Confirm Change</button>
                 </div>
             </div>
@@ -106,7 +190,7 @@
                 </div>
 
                 <div class="modal-body">
-                    <h2 id="deleteModalWarning" data-id="none" data-index="none" data-delete-item-name="none" data-delete-item-description>
+                    <h2 id="deleteModalWarning">
                         Are you sure you want to delete this item?
                     </h2>
                     <h2>This action cannot be undone.</h2>
@@ -116,8 +200,9 @@
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     <button id='delete-item-button' type="submit" class="btn btn-primary btn-danger">Delete Item</button>
                 </div>
-
             </div>
+
+            
         </div>
     </div>
 
@@ -138,27 +223,26 @@
         </div>
     </div>
 
-    <div class="row justify-content-end text-start">
-        <h2 class="col-md-12 text-center text-wrap">Project Board: {{ board.title }}</h1>
-        <div id="board-title-and-description" class="text-center col-md-8 row justify-content-center text-wrap">
-            <h6 class="col-12 text-wrap">Description: {{ board.description }}</h5>
-            <h6 class="col-12 text-wrap">Created by: {{ board.user }}</h5>
-            <h6 class="col-12 text-wrap">Board Notes:</h5>
+    <div class="row text-start">
+        <div class="col-md-10 row">
+            <h3 class="col-12" id="board-title">Project Board: {{ board.title }}</h3>
+            {% if board.description %}
+                <h4 class="col-12" id="board-description">Description: {{ board.description }}</h4>
+            {% else %}
+                <h4 class="col-12 d-none" id="board-description">Description: none</h4>
+            {% endif %}
+            <h4 class="col-12">Created by: {{ board.user }}</h4>
         </div>
-        
-        <div class="row col-md-4 mt-auto px-0 mode-selector justify-content-end" style="max-width: 200px;">
-            <div class="col">
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <label class="input-group-text" for="modes">Mode:</label>
-                    </div>
-                    <select class="custom-select" id="modes">
-                        <option selected value="view">View</option>
-                        <option value="edit">Edit</option>
-                        <option value="delete">Delete</option>
-                    </select>
-                </div>
-            </div>
+        <div class="col-md-2 row justify-content-end">
+            <button type="button" class="btn btn-primary my-1 col-md-12" data-toggle="modal" data-target="#boardSettings">
+                Board Settings
+            </button>
+            <button type="button" class="btn btn-primary my-1 col-md-12" data-toggle="modal" data-target="#createBoardItem">
+                New Note
+            </button>
+            <button type="button" id="save-board-button" class="btn btn-primary my-1 col-md-12" >
+                Save Board
+            </button>
         </div>
     </div>
 
@@ -172,7 +256,7 @@
                         <button id="board-item-{{ forloop.counter }}" class="btn btn-outline-primary btn-size">
                             <div class="card card-custom"> 
                                 <div class="card-body">
-                                    <h2 id="board-item-{{ forloop.counter }}-title" data-id="{{ item.id }}" class='card-title'>{{ item.title }}</h2>
+                                    <h2 id="board-item-{{ forloop.counter }}-title" data-id="{{ item.id }}" class='card-title pb-2'>{{ item.title }}</h2>
                                     <p id="board-item-{{ forloop.counter }}-description" class='card-description pb-2'>{{ item.description }}</p>
                                     <p id="board-item-{{ forloop.counter }}-image" class='card-description pb-2'>{{ item.board_image }}</p>
                                 </div>
@@ -181,17 +265,13 @@
                     </div>            
                 {% endfor %}
             {% else %}
-                <div id='no-items-found'>
-                    <p>No items found</p>
+                <div class='card mx-auto' id='no-items-found'>
+                    <div class='card-body'>
+                        <h1 class='card-text text-center'>You don't have any notes yet.</h1>
+                    </div>
                 </div>
             {% endif %}
         </div>
-        <button type="button" class="btn btn-primary" id="create-new-item-button" data-toggle="modal" data-target="#createBoardItem">
-            New Note
-        </button>
-        <button type="button" class="btn btn-primary" id="save-board-button">
-            Save Board
-        </button>
     </div>
     {% endblock %}
 

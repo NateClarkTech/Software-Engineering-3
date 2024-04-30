@@ -35,7 +35,6 @@ urlpatterns = [
     path('profile/', include('ProfileApp.urls')),
     path('visual/' , include('Visual.urls')),
     path('sound/' , include('Sound.urls')),
-    path('mediabook/', views.media_book, name='mediabook'),
     path('notifications/mark_as_read/<int:notification_id>/', forum.mark_notification_as_read, name='mark_notification_as_read'),
 
     path('' , views.home, name='home'),

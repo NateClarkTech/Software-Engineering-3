@@ -16,6 +16,7 @@ def IdeaBoards_Home(request):
     if request.user.is_authenticated:
 
         print(request.POST, request.method)
+        print(request.body.decode('utf-8'))
 
         #If the request is a POST request
         if request.method == 'POST':
@@ -56,7 +57,12 @@ def IdeaBoards_Home(request):
         
         form = NewIdeaBoardForm(instance=request.user)
         boards = IdeaBoard.objects.filter(user=request.user)
-        return render(request, 'ideaboard.html', {'boards': boards, 'form': form})
+         # Retrieve error message from session if it exists
+        error_message = request.session.pop('error_messages', None)
+
+        print (error_message)
+
+        return render(request, 'ideaboard.html', {'boards': boards, 'form': form, 'error_message': error_message})
     #If the user is not logged in redirect to landing page
     else:
         return redirect('home')
@@ -85,7 +91,18 @@ def IdeaBoards_Create(request):
     
 @login_required
 def IdeaBoard_Detail(request, id):
-    board = IdeaBoard.objects.get(id=id)
+    #make sure the board exists, if not redirect to the boards page
+    try:
+        board = IdeaBoard.objects.get(id=id)
+    except:
+        # error implementation was based on GPT https://chat.openai.com/share/424d6891-b553-4829-b8fd-8eafd56f687c
+        error_messages = request.session.get('error_messages', [])
+        # Append the new error message
+        error_messages.append(str(id) + " is not a valid board ID.")
+        # Store the updated error messages list back into the session
+        request.session['error_messages'] = error_messages
+        return redirect('IdeaBoards_Home')
+    
     items = IdeaBoardItem.objects.filter(ideaboard=board)
 
     #If the user is the owner of the board
@@ -112,19 +129,42 @@ def IdeaBoard_Detail(request, id):
                         new_item.save()
 
                 #if the changeType is edit, edit the item in the database
-                if item['changeType'] == 'edit':
+                elif item['changeType'] == 'edit':
                     editedIitem = IdeaBoardItem.objects.get(id=item['item_id'])
                     editedIitem.title = item['title']
                     editedIitem.description = item['description']
                     editedIitem.save()
 
                 #if the changeType is delete, delete the item from the database
-                if item['changeType'] == 'delete':
+                elif item['changeType'] == 'delete':
                     item = IdeaBoardItem.objects.get(id=item['item_id']).delete()
+
+                #if the changeType is editBoardDetails, edit the board title and description
+                elif item['changeType'] == 'editBoardDetails':
+                    board.title = item['title']
+                    board.description = item['description']
+                    board.save()
+            
+        if request.method == 'DELETE':
+            data = json.loads(request.body.decode('utf-8'))
+            data = data[0]
+            board = IdeaBoard.objects.get(id=data['board_id'])
+            if board.user == request.user:
+                board.delete()
+
+                print('deleted')
+                return redirect('IdeaBoards_Home')
+
     
         #give the HTML for the board with the board's items
         return render(request, 'boarddetail.html', {'board': board, 'items': items})
     
     #If the user is not the owner of the board redirect to them to their boards
     else:
+        # error implementation was based on GPT https://chat.openai.com/share/424d6891-b553-4829-b8fd-8eafd56f687c
+        error_messages = request.session.get('error_messages', [])
+        # Append the new error message
+        error_messages.append("You do not have permission to view this board.")
+        # Store the updated error messages list back into the session
+        request.session['error_messages'] = error_messages
         return redirect('IdeaBoards_Home')
