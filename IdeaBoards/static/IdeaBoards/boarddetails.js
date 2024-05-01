@@ -116,12 +116,15 @@ function addFormItem() {
                 if (state === "view"){
                     let itemTitle = document.getElementById("board-item-" + index + "-title").textContent;
                     let itemDescription = document.getElementById("board-item-" + index + "-description").textContent;
-                    let itemImage = document.getElementById("board-item-" + index + "-image").files[0];
+                    let itemImage = document.getElementById("board-item-" + index + "-image");
                     
                     document.getElementById("view-item-title").textContent = itemTitle;
                     document.getElementById("view-item-text").textContent = itemDescription;
-                    //document.getElementById("view-item-image").imageContent = itemImage;
-                    
+                    if (itemImage && itemImage.getAttribute("src")) {
+                        let itemImageSrc = itemImage.getAttribute("src");
+                        // Set the src attribute of the img element to display the image
+                        document.getElementById("view-item-image").setAttribute("src", itemImageSrc);
+                    }
                     $('#viewBoardItem').modal('show');
                 }
         

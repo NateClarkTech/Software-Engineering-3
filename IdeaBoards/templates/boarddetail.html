@@ -58,6 +58,7 @@
                 <div class="modal-body break-text">
                     <h1 id="view-item-title"></h1>
                     <p id="view-item-text"></p>
+                    <image id="view-item-image" class='item-image' src=""></image>
                 </div>
                 <div class="modal-footer">
                     <button type="button" data-dismiss="modal" class="btn btn-secondary">Close</button>
@@ -174,7 +175,9 @@
                                 <div class="card-body">
                                     <h2 id="board-item-{{ forloop.counter }}-title" data-id="{{ item.id }}" class='card-title'>{{ item.title }}</h2>
                                     <p id="board-item-{{ forloop.counter }}-description" class='card-description pb-2'>{{ item.description }}</p>
-                                    <p id="board-item-{{ forloop.counter }}-image" class='card-description pb-2'>{{ item.board_image }}</p>
+                                    {% if item.board_image %}
+                                    <image id="board-item-{{ forloop.counter }}-image" class='card-image' src="{{ item.board_image.url }}"></image>
+                                    {% endif %}
                                 </div>
                             </div>
                         </button>
