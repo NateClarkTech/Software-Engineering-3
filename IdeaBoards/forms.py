@@ -17,5 +17,6 @@ class NewIdeaBoardItemForm(forms.ModelForm):
             'title', 
             'description',
             'board_image',
-            ]
+            'board_sound',
+        ]
         

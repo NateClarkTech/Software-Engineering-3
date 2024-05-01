@@ -24,7 +24,8 @@ class IdeaBoardItem(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     owner = models.ForeignKey('auth.User', related_name='ideaboarditems', on_delete=models.CASCADE)
     ideaboard = models.ForeignKey(IdeaBoard, related_name='ideaboarditems', on_delete=models.CASCADE)
-    board_image = models.ImageField(upload_to='board_image', max_length=100, blank=True)
+    board_image = models.ImageField(upload_to='board_image/', max_length=100, blank=True)
+    board_sound = models.FileField(upload_to='board_sounds/')
 
     def __str__(self):
         return 'Title: ' + self.ideaboard.title + ' Item: ' + self.title
