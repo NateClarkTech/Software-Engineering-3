@@ -59,6 +59,9 @@
                     <h1 id="view-item-title"></h1>
                     <p id="view-item-text"></p>
                     <image id="view-item-image" src=""></image>
+                    {% if item.board_sound %}
+                    <audio controls src="{{item.board_sound.url}}" ></audio>
+                    {% endif %}
                 </div>
                 <div class="modal-footer">
                     <button type="button" data-dismiss="modal" class="btn btn-secondary">Close</button>
@@ -177,6 +180,9 @@
                                     <p id="board-item-{{ forloop.counter }}-description" class='card-description pb-2'>{{ item.description }}</p>
                                     {% if item.board_image %}
                                     <image id="board-item-{{ forloop.counter }}-image" class='card-image' src="{{ item.board_image.url }}"></image>
+                                    {% endif %}
+                                    {% if item.board_sound %}
+                                    <audio controls src="{{item.board_sound.url}}" id="board-item-{{ forloop.counter }}-sound" ></audio>
                                     {% endif %}
                                 </div>
                             </div>
