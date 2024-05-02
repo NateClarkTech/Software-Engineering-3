@@ -263,13 +263,16 @@
                                         {% if item.board_image %}
                                         data-img-src="{{ item.board_image.url }}" 
                                         {% endif %}
+                                        {% if item.board_sound %}
+                                        data-sound-src="{{ item.board_sound.url }}"
+                                        {% endif %}
                                         class='card-title pb-2'>{{ item.title }}</h2>
                                     <p id="board-item-{{ forloop.counter }}-description" class='card-description pb-2'>{{ item.description }}</p>
                                     {% if item.board_image %}
-                                    <image id="board-item-{{ forloop.counter }}-image" class='card-image' data-id="{{ item.board_image.url }}" src="{{ item.board_image.url }}"></image>
+                                        <p>img</p>
                                     {% endif %}
                                     {% if item.board_sound %}
-                                    <audio controls src="{{item.board_sound.url}}" id="board-item-{{ forloop.counter }}-sound" ></audio>
+                                        <p>sound</p>
                                     {% endif %}
                                 </div>
                             </div>
