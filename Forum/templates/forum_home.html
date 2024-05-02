@@ -17,54 +17,63 @@
         border: 1px solid #365486;
     }
 
-
     .recent-commenters {
         background-color: #211951;
         border: 1px solid #365486; /* Slightly lighter border for visibility */
         color: white; /* Ensure text is white */
         padding: 15px;
         border-radius: 5px; /* Rounded corners */
-        /* make the content flex and wrap arround */
-
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around; /* Distribute space evenly around items */
     }
-
+    
     .recent-commenters h3 {
-        margin-bottom: 10px;
+        width: 100%; /* Full width to align it centered over the list */
+        text-align: center;
+        margin-bottom: 20px; /* More space between title and items */
     }
-
+    
     .recent-commenters ul {
         list-style-type: none;
         padding: 0;
         margin: 0;
+        width: 100%; /* Full width */
         display: flex;
         flex-wrap: wrap;
-        justify-content: space-between;
-    }
-
-    .name {
-        /* make the text a bit bigger and bold */
-        font-size: 1.4rem !important;
-        font-weight: bold;
-        color: white; /* Set text color */
+        justify-content: flex-start; /* Align items at the start */
     }
     
     .recent-commenters li {
-        flex: 0 1 18%; /* Flex grow, flex shrink, and basis */
+        flex: 1 1 20%; /* Adjust basis to 20% to fit 5 across on larger screens */
         margin-bottom: 10px;
-        display: flex; /* Makes sure the content inside the li is centered */
-        flex-direction: column; /* Makes sure the content inside the li is centered */
-
-        
-    }
-
-    .recent-commenters li a {
         display: flex;
         flex-direction: column;
         align-items: center;
         text-align: center;
+    }
+    
+    .recent-commenters li a {
         text-decoration: none;
         color: white; /* Set text color */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
+    
+    .profile-picture {
+        width: 80px; /* Optimal size for mobile and desktop */
+        height: 80px;
+        border-radius: 50%;
+        border: 3px solid #ecf0f1;
+    }
+    
+    .name {
+        font-size: 1.2rem; /* Adjust font size for readability */
+        font-weight: bold;
+        margin-top: 5px; /* Space between picture and name */
+    }
+    
     .profile-picture {
         width: 100px;
         height: 100px;
@@ -123,6 +132,65 @@
         align-items: center;
     }
 
+    @media (max-width: 768px) {
+        .page-item {
+            flex-direction: column;
+            align-items: flex-start; /* Align items to the start on small screens */
+        }
+    
+        .page-title, .comment-link {
+            width: 100%; /* Full width to prevent overflow */
+            text-align: left; /* Align text to the left */
+            margin-bottom: 5px; /* Add some space between the title and the comment link */
+        }
+    
+        .comment-link {
+            order: 3; /* Make the comment link appear last */
+            text-align: left; /* Align the text to the left */
+            white-space: normal; /* Allow wrapping */
+        }
+    
+        .page-description {
+            font-size: 0.85rem; /* Smaller font size on mobile devices */
+        }
+        .recent-commenters li {
+            flex: 1 1 33%; /* 3 items per row on tablet screens */
+            
+        }
+    
+        .recent-commenters li a {
+            flex-direction: column; 
+        }
+    
+        .profile-picture {
+            width: 60px; /* Smaller profile pictures on mobile */
+            height: 60px;
+        }
+    
+        .name {
+            font-size: 1rem; /* Smaller font size for names */
+            display: block;
+        }
+
+    }
+    
+    @media (max-width: 480px) {
+        .recent-commenters li {
+            flex: 1 1 50%; /* 2 items per row on mobile screens */
+        }
+    
+        .profile-picture {
+            width: 60px; /* Smaller pictures on mobile */
+            height: 60px;
+        }
+    
+        .name {
+            font-size: 1rem; /* Smaller font size for mobile */
+        }
+    }
+
+    
+    
 
 
 
