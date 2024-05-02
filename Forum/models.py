@@ -5,6 +5,12 @@ from django.contrib.auth.models import User
 
 class Page(models.Model):
     title = models.CharField(max_length=100)
+    def get_latest_comment(self):
+        # Import the Comment model here to avoid circular import issues
+        from .models import Comment
+        # Fetch the latest comment from any thread in this page
+        return Comment.objects.filter(thread__page=self).order_by('-created_at').first()
+
 
 class Thread(models.Model):
     page = models.ForeignKey(Page, on_delete=models.CASCADE)

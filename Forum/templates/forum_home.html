@@ -73,7 +73,55 @@
         display: block; /* This centers the img in the li */
         margin: auto; /* This also helps in centering the img in the li */
     }
+    .page-item {
+        display: flex;
+        justify-content: space-between; /* Keep items on the sides */
+        align-items: center; /* Align items vertically in the center */
+        padding: 10px 15px;
+        background-color: #211951;
+        border-bottom: 1px solid #365486;
+        color: white;
+    }
+    
+    .page-item:last-child {
+        border-bottom: none; /* No border at the bottom of the last item */
+    }
+    
+    .page-link {
+        color: #f0f0f0;
+        text-decoration: none; /* Remove underline from links */
+        font-weight: bold;
+    }
+    
+    .page-link:hover {
+        text-decoration: underline; /* Only underline on hover */
+        color: #c0c0f0;
+    }
+    
+    .page-description {
+        font-size: 0.95rem;
+        color: #cccccc; /* Lighter text color for description */
+    }
 
+    .page-title {
+        display: flex;
+    }
+
+    .page-title {
+        flex-grow: 1; /* Ensures the title and description take up the remaining space */
+        margin-right: 20px; /* Adds some spacing between the title/description and the latest comment link */
+    }
+    
+    .comment-link {
+        white-space: nowrap; /* Ensures the link doesn't break into multiple lines */
+        text-align: right;
+    }
+    
+    .page-item {
+        display: flex;
+        justify-content: space-between; /* This already ensures the content on both sides are pushed to the edge */
+        align-items: center;
+    }
 
 
 
@@ -83,16 +131,30 @@
 {% block content %}
 <div class="container mt-3">
     <div class="row">
-        {% for page in pages %}
-        <div class="col-md-6 mb-3">
-            <div class="card custom-border-wes">
-                <div class="card-body">
-                    <h5 class="card-title">{{ page.title }}</h5>
-                    <a href="{% url 'thread_list' page.id %}" class="btn btn-primary">View Page</a>
+        <div class="col-12">
+            <h3> Pages</h3>
+            <div class="list-group custom-border-wes">
+                {% for page in pages %}
+                <div class="page-item">
+                    <div class="page-title">
+                        <a href="{% url 'thread_list' page.id %}" class="page-link">{{ page.title }}</a>
+                        <p class="page-description">{{ page.description|truncatechars:150 }}</p>
+                    </div>
+                    <div class="comment-link">
+                        {% with latest_comment=page.get_latest_comment %}
+                        {% if latest_comment %}
+                            <a href="{% url 'thread_detail_comment' latest_comment.thread.id latest_comment.id %}">
+                                Last comment by <strong>{{ latest_comment.user.username }}</strong> on <strong>{{ latest_comment.created_at|date:"M d, Y H:i" }}</strong>
+                            </a>
+                        {% else %}
+                            <small>No comments yet.</small>
+                        {% endif %}
+                        {% endwith %}
+                    </div>
                 </div>
+                {% endfor %}
             </div>
         </div>
-        {% endfor %}
     </div>
     <div class="row mt-4">
 
