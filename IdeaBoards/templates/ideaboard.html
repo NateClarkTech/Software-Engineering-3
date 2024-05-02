@@ -20,7 +20,7 @@
             <form method="POST" name="getRecc">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="getReccInput">Get A Song Recommendation by Genre</h5>
+                        <h5 class="modal-title" >Get A Song Recommendation by Genre</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -172,8 +172,10 @@
         </div>
     </div>
 
+    <button  type="button" class="btn btn-primary" id="get-rec-modal" data-toggle="modal" data-target="#getRecc">
+        Spotify Recc
+    </button>
     <hr>
-
     <div class="row">
         {% if boards %}
             {% for board in boards %}
@@ -195,9 +197,6 @@
                 </div>
             </div>
         {% endif %}
-        <button  type="button" class="btn btn-primary" id="get-recc" data-toggle="modal" data-target="#getRecc">
-            Spotify Recc
-        </button>
         <button  type="button" class="btn btn-primary" id="create-new-board" data-toggle="modal" data-target="#createBoard">
             Create New Project Board
         </button>
