@@ -1,13 +1,19 @@
 {% extends 'base.html' %}
+{% block extra_css%}
+
+{% endblock %}
 {% block content %}
 <div class="container">
-    <h2>Create Thread on {{ page.title }}</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ thread_form.as_p }}
-        <h3>Initial Message</h3>
-        {{ comment_form.as_p }}
-        <button type="submit" class="btn btn-primary">Create Thread</button>
-    </form>
+    <!-- Center it all -->
+    <div class="col-md-6 offset-md-3 center">
+        <h2>Create Thread on {{ page.title }}</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ thread_form.as_p }}
+            <h3>Initial Message</h3>
+            {{ comment_form.as_p }}
+            <button type="submit" class="btn btn-primary">Create Thread</button>
+        </form>
+    </div>
 </div>
 {% endblock %}
