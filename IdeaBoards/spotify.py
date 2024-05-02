@@ -39,13 +39,13 @@ def get_recc(genre_name):
     params = {
         'seed_genres': genre_name,
         'market': 'US',
-        'limit': 5
+        'limit': 1
     }
     result = get(url, headers=headers, params=params)
     
     if result.status_code == 200:
         json_result = result.json()
-        song_names = [track['name'] for track in json_result['tracks']]
+        song_names = [track['external_urls']["spotify"] for track in json_result['tracks']]
         return song_names
     else:
         print("Error:", result.status_code, result.text)
