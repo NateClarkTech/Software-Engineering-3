@@ -483,11 +483,17 @@ while (document.getElementById("board-item-" + i)) {
             let itemTitle = document.getElementById("board-item-" + index + "-title");
             let itemDescription = document.getElementById("board-item-" + index + "-description");
             let item_id = document.getElementById("board-item-" + index + "-title").getAttribute("data-id");
+            let img_src = itemTitle.getAttribute("data-img-src");
+
+            console.log(img_src);
 
             let modalTitle = document.getElementById("view-item-title");
             modalTitle.textContent = itemTitle.textContent;
             modalTitle.setAttribute("data-id", item_id);
             modalTitle.setAttribute("data-index", index);
+
+            let modalImage = document.getElementById("view-item-image");
+            modalImage.setAttribute("src", img_src);
 
             document.getElementById("view-item-description").textContent = itemDescription.textContent;
             

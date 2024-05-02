@@ -258,7 +258,12 @@
                         <button id="board-item-{{ forloop.counter }}" class="btn btn-outline-primary btn-size">
                             <div class="card card-custom"> 
                                 <div class="card-body">
-                                    <h2 id="board-item-{{ forloop.counter }}-title" data-id="{{ item.id }}" class='card-title pb-2'>{{ item.title }}</h2>
+                                    <h2 id="board-item-{{ forloop.counter }}-title" 
+                                        data-id="{{ item.id }}" 
+                                        {% if item.board_image %}
+                                        data-img-src="{{ item.board_image.url }}" 
+                                        {% endif %}
+                                        class='card-title pb-2'>{{ item.title }}</h2>
                                     <p id="board-item-{{ forloop.counter }}-description" class='card-description pb-2'>{{ item.description }}</p>
                                     {% if item.board_image %}
                                     <image id="board-item-{{ forloop.counter }}-image" class='card-image' data-id="{{ item.board_image.url }}" src="{{ item.board_image.url }}"></image>
