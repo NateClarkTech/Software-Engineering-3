@@ -2,13 +2,10 @@ from django.shortcuts import render, redirect
 from .forms import *
 from django.contrib.auth.decorators import login_required
 import json
-<<<<<<< HEAD
 from django.urls import reverse
 from django.http import HttpResponseRedirect
-=======
 from IdeaBoards.spotify import *
 from django.http import JsonResponse
->>>>>>> bilge-old-ideaboard
 
 """
 IdeaBoards_Home: 
@@ -30,39 +27,14 @@ def IdeaBoards_Home(request):
                 new_board = form.save(commit=False)
                 new_board.user = request.user
                 new_board.save()
-<<<<<<< HEAD
                 return redirect('IdeaBoards_Home')
-=======
+
         if request.method == "GETRECC":
             genre_name = json.loads(request.body.decode('utf-8'))[0]["genreName"]
             if genre_name:
                 data = get_recc(genre_name)
                 response_data = {'message': data}
                 return JsonResponse(response_data)
-                
-        if request.method == 'PATCH':
-            data = json.loads(request.body.decode('utf-8'))
-            
-            #update the board in the database
-            for item in data:
-                if item['type'] == 'edit':
-                    print(item)
-                    board = IdeaBoard.objects.get(id=item['board_id'])
-                    board.title = item['newTitle']
-                    board.description = item['newDescription']
-                    board.save()
-
-
-        #If the request is a DELETE request
-        if request.method == 'DELETE':
-            data = json.loads(request.body.decode('utf-8'))
-            
-            #Delete the board from the database
-            for item in data:
-                if item['type'] == 'delete':
-                    board = IdeaBoard.objects.get(id=item['board_id']).delete()
-
->>>>>>> bilge-old-ideaboard
         
         form = NewIdeaBoardForm(instance=request.user)
         boards = IdeaBoard.objects.filter(user=request.user)

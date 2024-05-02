@@ -156,11 +156,8 @@ function addFormItem() {
                 changeType: "add",
                 title: title,
                 description: description,
-<<<<<<< HEAD
                 item_index: String(assignBoardId),
-=======
                 board_image:board_image,
->>>>>>> bilge-old-ideaboard
             }
         );
 
@@ -206,39 +203,11 @@ function addFormItem() {
         (function(index) {
             colDiv.addEventListener("click", function() {
                 //bring up modal to view item
-<<<<<<< HEAD
                 let itemTitle = document.getElementById("board-item-" + index + "-title");
                 let itemDescription = document.getElementById("board-item-" + index + "-description");
                 let item_id = document.getElementById("board-item-" + index + "-title").getAttribute("data-id");
-=======
-                if (state === "view"){
-                    let itemTitle = document.getElementById("board-item-" + index + "-title").textContent;
-                    let itemDescription = document.getElementById("board-item-" + index + "-description").textContent;
-                    let itemImage = document.getElementById("board-item-" + index + "-image");
-                    
-                    document.getElementById("view-item-title").textContent = itemTitle;
-                    document.getElementById("view-item-text").textContent = itemDescription;
-                    if (itemImage && itemImage.getAttribute("src")) {
-                        let itemImageSrc = itemImage.getAttribute("src");
-                        // Set the src attribute of the img element to display the image
-                        document.getElementById("view-item-image").setAttribute("src", itemImageSrc);
-                    }
-                    $('#viewBoardItem').modal('show');
-                }
-        
-                //bring up modal to edit item
-                else if (state === "edit"){
-                    let itemTitle = document.getElementById("board-item-" + index + "-title");
-                    let itemDescription = document.getElementById("board-item-" + index + "-description");
-                    let item_id = itemTitle.getAttribute("data-id");
-                    
-                    let editItemTitle = document.getElementById("editItemTitleInput");
-                    editItemTitle.placeholder = itemTitle.textContent;
-                    editItemTitle.value = itemTitle.textContent;
-                    editItemTitle.setAttribute("data-id", item_id)
-                    editItemTitle.setAttribute("data-index", index);
->>>>>>> bilge-old-ideaboard
-    
+                let itemImage = document.getElementById("board-item-" + index + "-image");
+
                 let modalTitle = document.getElementById("view-item-title");
                 modalTitle.textContent = itemTitle.textContent;
                 modalTitle.setAttribute("data-index", index);

@@ -107,14 +107,16 @@
                 <button  type="button" class="btn btn-primary" id="create-new-board" data-toggle="modal" data-target="#createBoard">
                     Create New Project Board
                 </button>
+
             </div>
         </div>
-
+        <button  type="button" class="btn btn-primary" id="get-rec-modal" data-toggle="modal" data-target="#getRecc">
+            Spotify Recc
+        </button>
 
         <hr>
 
         <div class="row">
-<<<<<<< HEAD
             {% if boards %}
                 {% for board in boards %}
                     <div class="col-md-4 px-3 py-3">
@@ -124,36 +126,6 @@
                                     <h2 id="board-{{ forloop.counter }}-title" class='card-title'>{{ board.title }}</h2>
                                     <p id="board-{{ forloop.counter }}-description" class='card-description pb-2'>{{ board.description }}</p>
                                 </div>
-=======
-            <div class="col">
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <label class="input-group-text" for="modes">Mode:</label>
-                    </div>
-                    <select class="custom-select" id="modes">
-                        <option selected value="view">View</option>
-                        <option value="edit">Edit</option>
-                        <option value="delete">Delete</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <button  type="button" class="btn btn-primary" id="get-rec-modal" data-toggle="modal" data-target="#getRecc">
-        Spotify Recc
-    </button>
-    <hr>
-    <div class="row">
-        {% if boards %}
-            {% for board in boards %}
-                <div class="col-md-4 px-3 py-3">
-                    <button id="board-{{ forloop.counter }}"  data-url="{{ board.id }}" role='button' class="btn btn-outline-primary btn-size">
-                        <div class="card card-custom">
-                            <div class="card-body">
-                                <h2 id="board-{{ forloop.counter }}-title" class='card-title'>{{ board.title }}</h2>
-                                <p id="board-{{ forloop.counter }}-description" class='card-description pb-2'>{{ board.description }}</p>
->>>>>>> bilge-old-ideaboard
                             </div>
                         </button>
                     </div>        
