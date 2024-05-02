@@ -14,7 +14,13 @@
     #create-new-board {
         max-height: 200px;
         overflow: hidden;
-        margin: 16px 16px;
+        margin: 4px 16px;
+    }
+
+    #get-rec-modal-button {
+        max-height: 200px;
+        overflow: hidden;
+        margin: 4px 16px;
     }
 
     .btn-size {
@@ -47,7 +53,13 @@
     #create-new-board {
         max-height: 200px;
         overflow: hidden;
-        margin: 16px 16px;
+        margin: 5px 16px;
+    }
+
+    #get-rec-modal-button {
+        max-height: 200px;
+        overflow: hidden;
+        margin: 5px 16px;
     }
 
     .page-title {
