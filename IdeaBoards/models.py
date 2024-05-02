@@ -17,6 +17,12 @@ def user_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT / user_<id>/<filename> 
     return 'user_{0}/{1}'.format(instance.user.id, filename) 
     
+class ItemLabel(models.Model):
+    label_name = models.CharField(max_length=15)
+    label_board = models.ForeignKey(IdeaBoard, on_delete=models.CASCADE)
+    def __str__(self): 
+         return self.label_name
+
 class IdeaBoardItem(models.Model):
     title = models.CharField(max_length=64)
     description = models.TextField(blank=True, default='')
@@ -26,6 +32,7 @@ class IdeaBoardItem(models.Model):
     ideaboard = models.ForeignKey(IdeaBoard, related_name='ideaboarditems', on_delete=models.CASCADE)
     board_image = models.ImageField(upload_to='board_image/', max_length=100, blank=True)
     board_sound = models.FileField(upload_to='board_sounds/', blank=True)
+    note_label = models.ForeignKey(ItemLabel, on_delete=models.CASCADE, blank=True, null=True) # many-to-one relationship: categorizing notes by user defined labels.
 
     def __str__(self):
         return 'Title: ' + self.ideaboard.title + ' Item: ' + self.title
