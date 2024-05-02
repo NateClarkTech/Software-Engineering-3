@@ -146,6 +146,7 @@ function addFormItem() {
     // Example: Get the title and description values from the form
     let title = document.getElementById("title").value;
     let description = document.getElementById("description").value;
+    let board_image = document.getElementById("board_image").files;
 
     if (title !== "" && description !== "" && title.length <= 64) {
         boardSaved = false;
@@ -155,7 +156,11 @@ function addFormItem() {
                 changeType: "add",
                 title: title,
                 description: description,
+<<<<<<< HEAD
                 item_index: String(assignBoardId),
+=======
+                board_image:board_image,
+>>>>>>> bilge-old-ideaboard
             }
         );
 
@@ -184,9 +189,15 @@ function addFormItem() {
         cardDescription.classList.add("card-description", "pb-2");
         cardDescription.textContent = description;
 
+        let cardBoardImage = document.createElement("p");
+        cardBoardImage.id = "board-item-" + assignBoardId + "-board_image";
+        cardBoardImage.classList.add("card-description", "pb-2");
+        cardBoardImage.imageContent = board_image;
+
         // Build the hierarchy
         cardBody.appendChild(cardTitle);
         cardBody.appendChild(cardDescription);
+        cardBody.appendChild(cardBoardImage);
         card.appendChild(cardBody);
         button.appendChild(card);
         colDiv.appendChild(button);
@@ -195,9 +206,38 @@ function addFormItem() {
         (function(index) {
             colDiv.addEventListener("click", function() {
                 //bring up modal to view item
+<<<<<<< HEAD
                 let itemTitle = document.getElementById("board-item-" + index + "-title");
                 let itemDescription = document.getElementById("board-item-" + index + "-description");
                 let item_id = document.getElementById("board-item-" + index + "-title").getAttribute("data-id");
+=======
+                if (state === "view"){
+                    let itemTitle = document.getElementById("board-item-" + index + "-title").textContent;
+                    let itemDescription = document.getElementById("board-item-" + index + "-description").textContent;
+                    let itemImage = document.getElementById("board-item-" + index + "-image");
+                    
+                    document.getElementById("view-item-title").textContent = itemTitle;
+                    document.getElementById("view-item-text").textContent = itemDescription;
+                    if (itemImage && itemImage.getAttribute("src")) {
+                        let itemImageSrc = itemImage.getAttribute("src");
+                        // Set the src attribute of the img element to display the image
+                        document.getElementById("view-item-image").setAttribute("src", itemImageSrc);
+                    }
+                    $('#viewBoardItem').modal('show');
+                }
+        
+                //bring up modal to edit item
+                else if (state === "edit"){
+                    let itemTitle = document.getElementById("board-item-" + index + "-title");
+                    let itemDescription = document.getElementById("board-item-" + index + "-description");
+                    let item_id = itemTitle.getAttribute("data-id");
+                    
+                    let editItemTitle = document.getElementById("editItemTitleInput");
+                    editItemTitle.placeholder = itemTitle.textContent;
+                    editItemTitle.value = itemTitle.textContent;
+                    editItemTitle.setAttribute("data-id", item_id)
+                    editItemTitle.setAttribute("data-index", index);
+>>>>>>> bilge-old-ideaboard
     
                 let modalTitle = document.getElementById("view-item-title");
                 modalTitle.textContent = itemTitle.textContent;
