@@ -6,7 +6,7 @@
   }
 
   .comment-header {
-    background-color: #211951; /* Darker header background */
+    background-color: var(--Section-Color); 
     color: #ecf0f1; /* Light text for contrast */
     padding: 10px;
     border-top-left-radius: 6px; /* Rounded corners for the top */
@@ -14,10 +14,13 @@
     display: flex;
     align-items: center;
     justify-content: space-between; /* Space out items */
+    /* border color */
+    border: 1px solid var(--Third-Color);
+
   }
 
   .comment-body {
-    background-color: #365486; /* Lighter than the header but still dark */
+    background-color: var(--Third-Color); /* Lighter than the header but still dark */
     padding: 15px;
     border-bottom-left-radius: 6px; /* Rounded corners for the bottom */
     border-bottom-right-radius: 6px;
@@ -31,7 +34,7 @@
     height: 60px;
     border-radius: 50%;
     margin-right: 10px;
-    border: 3px solid #365486; /* Border color for the profile picture */
+    border: 3px solid var(--Third-Color); /* Border color for the profile picture */
     object-fit: cover;
   }
   .comment-details {
@@ -109,28 +112,7 @@
     color: black;
     
   }
-  /* Style for the 'Post Comment' form */
-  .comment-form-wrapper {
-    background-color: #34495e; 
-    padding: 20px;
-    border-radius: 8px;
-    margin-top: 30px; /* Space from the last comment */
-  }
-  .comment-form-wrapper h5 {
-    color: #ecf0f1; /* Light color for the form title */
-    margin-bottom: 15px;
-  }
 
-  
-  .comment-form-textarea {
-    width: 100%;
-    padding: 10px;
-    border-radius: 4px;
-    border: 1px solid #7f8c8d; /* Subtle border color */
-    min-height: 100px; /* Larger text area for comments */
-    background-color: #365486; /* Slightly lighter than form background for contrast */
-    color: white; /* Light text color */
-  }
 
   /* move the likes over to the left */
   .likes {
