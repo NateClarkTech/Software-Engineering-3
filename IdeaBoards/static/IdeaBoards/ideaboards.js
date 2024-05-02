@@ -207,6 +207,10 @@ function getCookie(name) {
     return cookieValue;
 }
 
+
+/* 
+****** Spotify Song Reccommendation ********
+*/
 // JavaScript to handle form submission and displaying result
 document.getElementById('getRecc').addEventListener('submit', function(event) {
     event.preventDefault(); // Prevent default form submission
@@ -229,25 +233,4 @@ document.getElementById('getRecc').addEventListener('submit', function(event) {
         $('#displayReccResults').modal('show');
     })
     
-    /*.then(data => {
-        console.log("1")
-        $('#getRecc').modal('hide');
-        console.log(data)
-        console.log("1")
-        reccResult = document.getElementById("reccResult");
-        reccResult.textContent = data;
-        $('#displayReccResults').modal('show');
-    });
-    console.log("fetching done")
-    /*
-    .then(data => {
-        reccResult = document.getElementById("reccResult");
-        reccResult.textContent = data;
-        $('#getRecc').modal('hide');
-        $('#displayReccResults').modal('show');
-    })
-    /*
-    }).catch(error => {
-        console.error('Error:', error);
-    });*/
 });

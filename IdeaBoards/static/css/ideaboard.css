@@ -26,6 +26,7 @@
         border-radius: 5px;
         cursor: pointer;
     }
+    
     #get-recc {
         position: fixed;
         width: 150px;
@@ -58,7 +59,7 @@
         font-size: 1.5em;
     }
     
-    #c {
+    #get-recc {
         width: 100%;
         height: 200px;
         overflow: hidden;
