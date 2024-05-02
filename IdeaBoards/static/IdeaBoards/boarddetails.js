@@ -566,3 +566,8 @@ window.onbeforeunload = function() {
         return "Changes to the board have not been saved. Please save your changes before closing the page.";
     }
 };
+
+
+document.getElementById("sort-label").addEventListener("click", function() {
+    $.redirect('IdeaBoard_Detail_Label', {request, id, label});
+});

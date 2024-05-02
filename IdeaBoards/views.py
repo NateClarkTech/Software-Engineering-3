@@ -56,7 +56,7 @@ IdeaBoard_Details:
     Users can add, delete, and edit notes on the board
 """
 @login_required
-def IdeaBoard_Detail(request, id):
+def IdeaBoard_Detail(request, id, label=None):
     #make sure the board exists, if not redirect to the boards page
     try:
         board = IdeaBoard.objects.get(id=id)
@@ -69,8 +69,12 @@ def IdeaBoard_Detail(request, id):
         request.session['error_messages'] = error_messages
         return redirect('IdeaBoards_Home')
     
-    items = IdeaBoardItem.objects.filter(ideaboard=board)
-
+    labels = ItemLabel.objects.filter(label_board=board)
+    if(label==None):
+        items = IdeaBoardItem.objects.filter(ideaboard=board)
+    else:
+        items = IdeaBoardItem.objects.filter(ideaboard=board, note_label=label)
+        
     #If the user is the owner of the board
     if request.user == board.user:
 
@@ -123,7 +127,7 @@ def IdeaBoard_Detail(request, id):
 
     
         #give the HTML for the board with the board's items
-        return render(request, 'boarddetail.html', {'board': board, 'items': items})
+        return render(request, 'boarddetail.html', {'board': board, 'items': items, "labels": labels})
     
     #If the user is not the owner of the board redirect to them to their boards
     else:

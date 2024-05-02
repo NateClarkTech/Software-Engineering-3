@@ -141,8 +141,8 @@
                 <div class="modal-body break-text">
                     <h1 id="view-item-title" data-id='none' data-index="none"></h1>
                     <p id="view-item-description"></p>
-                    <image id="view-item-image" src=""></image>
-                    <audio controls src="" ></audio>
+                    <image id="view-item-image" src="" display="block"></image>
+                    <audio controls src="" display="block"></audio>
                 </div>
                 <div class="modal-footer justify-content-center">
                     <button type="button" id="edit-item-modal-button" class="btn btn-success">Edit</button>
@@ -249,12 +249,19 @@
     </div>
 
     <hr>
+    <div class="row">
+        {% for label in labels %}
+            <button type="button" class="btn btn-primary my-1 col-md-1.5" id="sort-label" data-toggle="modal" data-target="#sortLabel">{{label.label_name}}</button>
+        {% endfor %}
+    </div>
+
+    <hr>
 
     <div class='row'>
         <div id='boardItems' class='col-12 row px-0 mx-0'>
             {% if items %}
                 {% for item in items %}
-                    <div id="board-item-container-{{ forloop.counter }}" class="col-md-4 px-3 py-3 text-center">
+                    <div id="board-item-container-{{ forloop.counter }}" data-label="{{ item.board_label.label_name }}" class="col-md-4 px-3 py-3 text-center">
                         <button id="board-item-{{ forloop.counter }}" class="btn btn-outline-primary btn-size">
                             <div class="card card-custom"> 
                                 <div class="card-body">
