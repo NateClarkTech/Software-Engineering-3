@@ -73,8 +73,8 @@ def IdeaBoard_Detail(request, id, label=None):
     if(label==None):
         items = IdeaBoardItem.objects.filter(ideaboard=board)
     else:
-        items = IdeaBoardItem.objects.filter(ideaboard=board)
-        items = items.filter(note_label=label)
+        label_id = labels.get(label_name=label)
+        items = IdeaBoardItem.objects.filter(ideaboard=board, note_label=label_id)
         
     #If the user is the owner of the board
     if request.user == board.user:
