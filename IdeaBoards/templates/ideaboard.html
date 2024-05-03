@@ -46,9 +46,11 @@
                 <div class="modal-body">
                     <h5 class="modal-title" id="reccResult"></h5>
                 </div>
-                <div>
-                    <iframe id="iframe" style="border-radius:12px" src="https://open.spotify.com/oembed?url=2ixsaeFioXJmMgkkbd4uj1" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                {% for i in "01234" %}
+                <div name="result">
+                    <iframe id="iframe-{{i}}" style="border-radius:12px" src="" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
                 </div>
+                {% endfor %}
             </div>
         </div>
     </div>
