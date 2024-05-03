@@ -567,7 +567,48 @@ window.onbeforeunload = function() {
     }
 };
 
+src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"
 
 document.getElementById("sort-label").addEventListener("click", function() {
-    $.redirect('IdeaBoard_Detail_Label', {request, id, label});
+    label = document.getElementById('sort-label').textContent;
+    id = document.getElementById('sort-label').getAttribute("data-id");
+    request = "POST";
+    console.log(label);
+    url= label;
+    // Construct the data to be sent
+    var data = {
+        request: request,
+        id: id,
+        label: label
+    };
+
+    // Construct the request
+    var requestOptions = {
+        method: 'POST', // Or 'GET' depending on your server endpoint
+        headers: {
+            'Content-Type': 'application/json',
+            "X-CSRFToken": getCookie("csrfToken"),
+        },
+        body: JSON.stringify(data)
+    };
+
+    console.log(url);
+    window.location.href = url;
+    /*  Make the fetch request
+    fetch(url, requestOptions)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Handle success response from server
+            console.log('Success:', data);
+        })
+        .catch(error => {
+            // Handle error response from server
+            console.error('Error:', error);
+        });*/
+
 });

@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="{% static 'css/boarddetails.css' %}">
 {% endblock %}
 
+
 {% block content %}
     <!-- Source: https://getbootstrap.com/docs/5.3/components/modal/ -->
 
@@ -251,7 +252,7 @@
     <hr>
     <div class="row">
         {% for label in labels %}
-            <button type="button" class="btn btn-primary my-1 col-md-1.5" id="sort-label" data-toggle="modal" data-target="#sortLabel">{{label.label_name}}</button>
+            <button type="button" class="btn btn-primary my-1 col-md-1.5" id="sort-label" data-toggle="modal" data-target="#sortLabel" data-id="{{ board.id }}">{{label.label_name}}</button>
         {% endfor %}
     </div>
 
