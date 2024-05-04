@@ -185,7 +185,11 @@ function addFormItem() {
 
             if (board_image) {
                 let imgIcon = document.createElement("img");
-                imgIcon.classList.add("col-3", "img-icon", "px-1");
+                imgIcon.setAttribute("id", "board-item-" + assignBoardId + "-img-icon");
+                imgIcon.classList.add("col-3", "img-icon", "px-1", "mr-3");
+                if (board_sound){
+                    imgIcon.classList.remove("mr-3");
+                }
                 imgIcon.src = "/static/images/imageiconwhite.png";
                 imgIcon.alt = "img icon";
                 rowDiv.appendChild(imgIcon);
@@ -194,7 +198,7 @@ function addFormItem() {
             if (board_sound) {
                 let audioIcon = document.createElement("img");
                 audioIcon.src = "/static/images/audioiconwhite.png";
-                audioIcon.classList.add("audio-icon", "mr-3");
+                audioIcon.classList.add("audio-icon", "mr-3", "px-1");
                 rowDiv.appendChild(audioIcon);
             }
 
