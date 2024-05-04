@@ -177,6 +177,29 @@ function addFormItem() {
         card.classList.add("card", "card-custom");
         let cardBody = document.createElement("div");
         cardBody.classList.add("card-body");
+
+        //If there is an image/sound file, add the icon to show it
+        if (board_image || board_sound) {
+            let rowDiv = document.createElement("div");
+            rowDiv.classList.add("row", "justify-content-end", "mt-auto");
+
+            if (board_image) {
+                let imgIcon = document.createElement("img");
+                imgIcon.classList.add("col-3", "img-icon", "px-1");
+                imgIcon.src = "/static/images/imageiconwhite.png";
+                imgIcon.alt = "img icon";
+                rowDiv.appendChild(imgIcon);
+            }
+
+            if (board_sound) {
+                let audioIcon = document.createElement("img");
+                audioIcon.src = "/static/images/audioiconwhite.png";
+                audioIcon.classList.add("audio-icon", "mr-3");
+                rowDiv.appendChild(audioIcon);
+            }
+
+            cardBody.appendChild(rowDiv);
+        }
         
         // Add the title to the card
         let cardTitle = document.createElement("h2");
@@ -631,21 +654,6 @@ window.onbeforeunload = function() {
         return "Changes to the board have not been saved. Please save your changes before closing the page.";
     }
 };
-
-
-document.addEventListener("click", function() {
-    var audio = document.getElementById("myAudio");
-    var icon = document.querySelector(".audio-icon");
-
-    icon.addEventListener("click", function() {
-        if (audio.paused) {
-            audio.play();
-
-        } else {
-            audio.pause();
-        }
-    });
-});
 
 
 src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"

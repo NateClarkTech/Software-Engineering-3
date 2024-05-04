@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block content %}
-    <!-- Source: https://getbootstrap.com/docs/5.3/components/modal/ -->
+    <!----> Source: https://getbootstrap.com/docs/5.3/components/modal/ -->
 
     <!-- Board Settings Modal -->
     <div class="modal fade" id="boardSettings" tabindex="-1" role="dialog" aria-labelledby="BoardSettingsModalLabel" aria-hidden="true">
@@ -319,12 +319,7 @@
                 
                                     {% if item.board_sound %}
                                         <!-- HTML for the custom icon -->
-                                        <img src="{% static "images/audioiconwhite.png" %}" class="audio-icon mr-3" alt="Play Audio">
-                                        <!-- Hidden audio element -->
-                                        <audio id="myAudio" style="">
-                                            <source src="{{ item.board_sound.url }}" type="audio/mpeg">
-                                            Your browser does not support the audio element.
-                                        </audio>
+                                        <img src="{% static "images/audioiconwhite.png" %}" class="audio-icon mr-3" alt="audio icon">
                                     {% endif %}
                                 </div>
 
