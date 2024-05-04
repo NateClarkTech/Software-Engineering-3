@@ -56,7 +56,7 @@ IdeaBoard_Details:
     Users can add, delete, and edit notes on the board
 """
 @login_required
-def IdeaBoard_Detail(request, id):
+def IdeaBoard_Detail(request, id, label=None):
     #make sure the board exists, if not redirect to the boards page
     try:
         board = IdeaBoard.objects.get(id=id)
@@ -76,7 +76,11 @@ def IdeaBoard_Detail(request, id):
 
         #If the fetch request is a POST request, save the changes to the board to the database
         if request.method == 'POST':
-            print(request.body, request.POST, request.method)
+            print(request.body)  # Print raw HTTP request body
+            print(request.POST)  # Print form data
+            print(request.FILES)  # Print uploaded files
+            print(request.method)  # Print HTTP method (POST)
+
 
             #get the data from the body and decode it
             data = json.loads(request.body.decode('utf-8'))
@@ -109,6 +113,7 @@ def IdeaBoard_Detail(request, id):
                 elif item['changeType'] == 'editBoardDetails':
                     board.title = item['title']
                     board.description = item['description']
+                    board.is_public = item['privacy_setting']
                     board.save()
             
         if request.method == 'DELETE':
@@ -124,6 +129,9 @@ def IdeaBoard_Detail(request, id):
     
         #give the HTML for the board with the board's items
         return render(request, 'boarddetail.html', {'board': board, 'items': items})
+    
+    elif board.is_public:
+        return render(request, 'publicboarddetails.html', {'board': board, 'items': items})
     
     #If the user is not the owner of the board redirect to them to their boards
     else:

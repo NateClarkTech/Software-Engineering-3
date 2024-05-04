@@ -58,6 +58,7 @@ document.getElementById("edit-board-button").addEventListener("click", function(
                 changeType: "editBoardDetails",
                 title: newTitle,
                 description: newDescription,
+                privacy_setting: document.getElementById("privacy_setting").checked,
             }
         );
 
@@ -143,12 +144,13 @@ document.getElementById("delete-board-button").addEventListener("click", functio
  * Author: Nathaniel Clark
  * ********************************************************************/
 function addFormItem() {
-    // Example: Get the title and description values from the form
+    // Get title, description, and uploaded files from the form
     let title = document.getElementById("title").value;
     let description = document.getElementById("description").value;
-    let board_image = document.getElementById("board_image").files;
+    let board_image = document.getElementById("board_image").files[0];
+    let board_sound = document.getElementById("board_sound").files[0];
 
-    if (title !== "" && description !== "" && title.length <= 64) {
+    if (title !== "" && title.length <= 64) {
         boardSaved = false;
 
         changesToBoard.push(
@@ -157,67 +159,106 @@ function addFormItem() {
                 title: title,
                 description: description,
                 item_index: String(assignBoardId),
-                board_image:board_image,
+                board_image: board_image,
+                board_sound: board_sound,
             }
         );
 
-        // Create new elements
+        // Div for new card
         let colDiv = document.createElement("div");
         colDiv.classList.add("col-md-4", "px-3", "py-3", "text-center");
         colDiv.id = "board-item-container-" + assignBoardId;
         
+        //Add the card to contain everything
         let button = document.createElement("button");
         button.id = "board-item-" + assignBoardId;
         button.classList.add("btn", "btn-outline-primary", "btn-size");
-        
         let card = document.createElement("div");
-        card.classList.add("card", "card-custom"); // Add a custom class for the card
-        
+        card.classList.add("card", "card-custom");
         let cardBody = document.createElement("div");
         cardBody.classList.add("card-body");
         
+        // Add the title to the card
         let cardTitle = document.createElement("h2");
         cardTitle.id = "board-item-" + assignBoardId + "-title";
         cardTitle.classList.add("card-title", "pb-2");
         cardTitle.textContent = title;
         
+        // Add the description to the card
         let cardDescription = document.createElement("p");
         cardDescription.id = "board-item-" + assignBoardId + "-description";
         cardDescription.classList.add("card-description", "pb-2");
         cardDescription.textContent = description;
 
-        let cardBoardImage = document.createElement("p");
+        // Add the uploaded image to the card and hide it (so data can be retrieved if needed)
+        let cardBoardImage = document.createElement("img");
         cardBoardImage.id = "board-item-" + assignBoardId + "-board_image";
         cardBoardImage.classList.add("card-description", "pb-2");
-        cardBoardImage.imageContent = board_image;
+        if (board_image){
+            cardBoardImage.src = URL.createObjectURL(board_image);
+        }
+        cardBoardImage.classList.add("d-none");
 
-        // Build the hierarchy
+        // Add uploaded sound to the card
+        let cardBoardSound = document.createElement("audio");
+        cardBoardSound.id = "board-item-" + assignBoardId + "-board_sound";
+        cardBoardSound.controls = true; 
+        cardBoardSound.classList.add("card-description", "pb-2");
+        if (board_sound){
+            cardBoardSound.src = URL.createObjectURL(board_sound);
+        }
+        //cardBoardSound.classList.add("d-none");
+
+        // Add the new item via Javascript
         cardBody.appendChild(cardTitle);
         cardBody.appendChild(cardDescription);
         cardBody.appendChild(cardBoardImage);
+        cardBody.appendChild(cardBoardSound);
         card.appendChild(cardBody);
         button.appendChild(card);
         colDiv.appendChild(button);
         
-        // Add an event listener to the button
+        // Add an event listener to the new item
         (function(index) {
             colDiv.addEventListener("click", function() {
-                //bring up modal to view item
-                let itemTitle = document.getElementById("board-item-" + index + "-title");
-                let itemDescription = document.getElementById("board-item-" + index + "-description");
-                let item_id = document.getElementById("board-item-" + index + "-title").getAttribute("data-id");
-                let itemImage = document.getElementById("board-item-" + index + "-image");
+            
+            // Get all the items from the clicked item
+            let itemTitle = document.getElementById("board-item-" + index + "-title");
+            let itemDescription = document.getElementById("board-item-" + index + "-description");
+            let item_id = document.getElementById("board-item-" + index + "-title").getAttribute("data-id");
+            let img_src = document.getElementById("board-item-" + index + "-board_image");
+            let sound_src = document.getElementById("board-item-" + index + "-board_sound");
 
-                let modalTitle = document.getElementById("view-item-title");
-                modalTitle.textContent = itemTitle.textContent;
-                modalTitle.setAttribute("data-index", index);
-    
-                document.getElementById("view-item-description").textContent = itemDescription.textContent;
-                
-                $('#viewBoardItem').modal('show');
-                console.log(changesToBoard);
+            document.getElementById("view-item-description").textContent = itemDescription.textContent;
+
+            let modalTitle = document.getElementById("view-item-title");
+            modalTitle.textContent = itemTitle.textContent;
+            modalTitle.setAttribute("data-id", item_id);
+            modalTitle.setAttribute("data-index", index);
+
+            let modalImage = document.getElementById("view-item-image");
+            if (img_src.getAttribute('src')){
+                modalImage.classList.remove("d-none");
+                modalImage.setAttribute("src", img_src.getAttribute('src'));
+            }
+            else{
+                modalImage.classList.add("d-none");
+            }
+            
+            let modalSound = document.getElementById("view-item-sound");
+            if (sound_src.getAttribute("src")){
+                modalSound.classList.remove("d-none");
+                modalSound.setAttribute("src", sound_src.getAttribute("src"));
+            }
+            else{
+                modalSound.classList.add("d-none");
+            }
+            
+            // Show the modal
+            $('#viewBoardItem').modal('show');
+            console.log(changesToBoard);
             });
-        })(assignBoardId); // Pass assignBoardId as an argument to the IIFE
+        })(assignBoardId);
 
         // Add the new card to the "row" div
         document.getElementById("boardItems").appendChild(colDiv);
@@ -233,15 +274,23 @@ function addFormItem() {
         // Close the modal
         $('#createBoardItem').modal('hide');
     }
+    // Show error modal if the title is too long or empty
     else if (title.length > 64){  
         document.getElementById("error-modal-text").innerHTML = "Title must be less than 64 characters";
         $('#createBoardItem').modal('hide');
         $('#errorModel').modal('show');
     }
-    else {
-        document.getElementById("error-modal-text").innerHTML = "Please fill in all fields";
+    else if (title.length <= 0) {
+        document.getElementById("error-modal-text").innerHTML = "Item must have a title";
         $('#createBoardItem').modal('hide');
         $('#errorModel').modal('show');
+    }
+    //Fallback case, if this happens something went terribly wrong
+    else{
+        document.getElementById("error-modal-text").innerHTML = "Unknown error has occured, please contact the site administrator";
+        $('#createBoardItem').modal('hide');
+        $('#errorModel').modal('show');
+    
     }
 }
 
@@ -319,6 +368,7 @@ document.getElementById("edit-item-button").addEventListener("click", function()
         // Close the modal
         $('#editBoardItem').modal('hide');
     }
+    // Show error modal if the title is too long or empty
     else if (newTitle.length > 64){
         document.getElementById("error-modal-text").innerHTML = "Title must be less than 64 characters";
         $('#editBoardItem').modal('hide');
@@ -329,6 +379,7 @@ document.getElementById("edit-item-button").addEventListener("click", function()
         $('#editBoardItem').modal('hide');
         $('#errorModel').modal('show');
     }
+    //Fallback case, if this happens something went terribly wrong
     else {
         document.getElementById("error-modal-text").innerHTML = "Unknown error has occured, please contact the site administrator";
         $('#editBoardItem').modal('hide');
@@ -458,7 +509,6 @@ document.getElementById("save-board-button").addEventListener("click", function(
     });
 });
 
-
 /**********************************************************************
  * Adds an event listener to each item so when they are clicked they open up in the view modal
  * 
@@ -493,7 +543,22 @@ while (document.getElementById("board-item-" + i)) {
             modalTitle.setAttribute("data-index", index);
 
             let modalImage = document.getElementById("view-item-image");
-            modalImage.setAttribute("src", img_src);
+            if (itemTitle.getAttribute("data-img-src")){
+                modalImage.classList.remove("d-none");
+                modalImage.setAttribute("src", img_src);
+            }
+            else{
+                modalImage.classList.add("d-none");
+            }
+            
+            let modalSound = document.getElementById("view-item-sound");
+            if (itemTitle.getAttribute("data-sound-src")){
+                modalSound.classList.remove("d-none");
+                modalSound.setAttribute("src", itemTitle.getAttribute("data-sound-src"));
+            }
+            else{
+                modalSound.classList.add("d-none");
+            }
 
             document.getElementById("view-item-description").textContent = itemDescription.textContent;
             
@@ -566,3 +631,18 @@ window.onbeforeunload = function() {
         return "Changes to the board have not been saved. Please save your changes before closing the page.";
     }
 };
+
+
+document.addEventListener("click", function() {
+    var audio = document.getElementById("myAudio");
+    var icon = document.querySelector(".audio-icon");
+
+    icon.addEventListener("click", function() {
+        if (audio.paused) {
+            audio.play();
+
+        } else {
+            audio.pause();
+        }
+    });
+});
