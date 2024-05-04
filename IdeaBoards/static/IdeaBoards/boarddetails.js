@@ -569,12 +569,13 @@ window.onbeforeunload = function() {
 
 src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"
 
+/*
+        Sort Label
+*/
 document.getElementById("sort-label").addEventListener("click", function() {
     label = document.getElementById('sort-label').textContent;
     id = document.getElementById('sort-label').getAttribute("data-id");
     request = "POST";
-    console.log(label);
-    url= label;
     // Construct the data to be sent
     var data = {
         request: request,
@@ -592,23 +593,13 @@ document.getElementById("sort-label").addEventListener("click", function() {
         body: JSON.stringify(data)
     };
 
-    console.log(url);
-    window.location.href = url;
-    /*  Make the fetch request
-    fetch(url, requestOptions)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            // Handle success response from server
-            console.log('Success:', data);
-        })
-        .catch(error => {
-            // Handle error response from server
-            console.error('Error:', error);
-        });*/
+    window.location.href = label;
 
+});
+
+/*
+        Create Label
+*/ 
+document.getElementById("create-label").addEventListener("click", function() {
+    $('#createLabel').modal('show');
 });
