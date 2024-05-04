@@ -646,3 +646,41 @@ document.addEventListener("click", function() {
         }
     });
 });
+
+
+src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+
+/*
+        Sort Label
+*/
+document.getElementById("sort-label").addEventListener("click", function() {
+    label = document.getElementById('sort-label').textContent;
+    id = document.getElementById('sort-label').getAttribute("data-id");
+    request = "POST";
+    // Construct the data to be sent
+    var data = {
+        request: request,
+        id: id,
+        label: label
+    };
+
+    // Construct the request
+    var requestOptions = {
+        method: 'POST', // Or 'GET' depending on your server endpoint
+        headers: {
+            'Content-Type': 'application/json',
+            "X-CSRFToken": getCookie("csrfToken"),
+        },
+        body: JSON.stringify(data)
+    };
+
+    window.location.href = label;
+
+});
+
+/*
+        Create Label
+*/ 
+document.getElementById("create-label").addEventListener("click", function() {
+    $('#createLabel').modal('show');
+});

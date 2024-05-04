@@ -69,8 +69,13 @@ def IdeaBoard_Detail(request, id, label=None):
         request.session['error_messages'] = error_messages
         return redirect('IdeaBoards_Home')
     
-    items = IdeaBoardItem.objects.filter(ideaboard=board)
-
+    labels = ItemLabel.objects.filter(label_board=board)
+    if(label==None):
+        items = IdeaBoardItem.objects.filter(ideaboard=board)
+    else:
+        label_id = labels.get(label_name=label)
+        items = IdeaBoardItem.objects.filter(ideaboard=board, note_label=label_id)
+        
     #If the user is the owner of the board
     if request.user == board.user:
 
@@ -128,7 +133,7 @@ def IdeaBoard_Detail(request, id, label=None):
 
     
         #give the HTML for the board with the board's items
-        return render(request, 'boarddetail.html', {'board': board, 'items': items})
+        return render(request, 'boarddetail.html', {'board': board, 'items': items, "labels": labels})
     
     elif board.is_public:
         return render(request, 'publicboarddetails.html', {'board': board, 'items': items})
