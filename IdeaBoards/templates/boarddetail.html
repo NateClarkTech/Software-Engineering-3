@@ -314,12 +314,12 @@
                                 <!-- Move the row with images to the bottom of the card -->
                                 <div class="row justify-content-end mt-auto">
                                     {% if item.board_image %}
-                                        <img class="col-3 img-icon px-1" src="{% static "images/imageiconwhite.png" %}" alt="img icon"></img>
+                                        <img class="col-3 img-icon px-1 {% if not item.board_sound %}mr-3{% endif %}" src="{% static "images/imageiconwhite.png" %}" alt="img icon"></img>
                                     {% endif %}
                 
                                     {% if item.board_sound %}
                                         <!-- HTML for the custom icon -->
-                                        <img src="{% static "images/audioiconwhite.png" %}" class="audio-icon mr-3" alt="audio icon">
+                                        <img src="{% static "images/audioiconwhite.png" %}" class="audio-icon mr-3 px-1" alt="audio icon">
                                     {% endif %}
                                 </div>
 
