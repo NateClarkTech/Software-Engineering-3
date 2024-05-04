@@ -207,7 +207,7 @@ function addFormItem() {
         if (board_sound){
             cardBoardSound.src = URL.createObjectURL(board_sound);
         }
-        //cardBoardSound.classList.add("d-none");
+        cardBoardSound.classList.add("d-none");
 
         // Add the new item via Javascript
         cardBody.appendChild(cardTitle);
