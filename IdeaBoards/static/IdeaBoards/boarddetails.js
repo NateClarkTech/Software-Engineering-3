@@ -531,8 +531,8 @@ document.getElementById("save-board-button").addEventListener("click", function(
         body: JSON.stringify(changesToBoard),
     }).then(data => {
         console.log(data);
-        changesToBoard = [];
         boardSaved = true;
+        location.reload();
     });
 });
 
