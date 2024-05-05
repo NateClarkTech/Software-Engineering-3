@@ -520,7 +520,9 @@ document.getElementById("addItemForm").addEventListener("submit", function(event
  * ********************************************************************/
 document.getElementById("save-board-button").addEventListener("click", function() {
     // Send the POST request with the CSRF token included in the headers
-
+    if (changesToBoard.length === 0) {
+        return;
+    }
     let csrftoken = getCookie('csrftoken');
     fetch(window.location.pathname, {
         method: "POST",
