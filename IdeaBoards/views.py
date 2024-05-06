@@ -90,11 +90,12 @@ def IdeaBoard_Detail(request, id, label=None):
             #get the data from the body and decode it
             data = json.loads(request.body.decode('utf-8'))
 
-            if request.POST.get("action") == "create-label":
-                data = json.loads(request.body.decode('utf-8'))[0]["labelName"]
-                print("HEELLOO")
-                ItemLabel.objects.create(label_name=data, label_board=board)
-                return JsonResponse(data)
+            if data[0]["action"] == "create-label":
+                label_name = data[0]["labelName"]
+                if label_name:
+                    ItemLabel.objects.create(label_name=label_name, label_board=board)
+                    return JsonResponse("Label creation Successful")
+                return JsonResponse("Label creation not successfull")
 
             #for each item in the json update the database properly
             for item in data:
