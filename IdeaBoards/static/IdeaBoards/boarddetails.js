@@ -519,22 +519,63 @@ document.getElementById("addItemForm").addEventListener("submit", function(event
  * https://chat.openai.com/share/274e26c2-df74-4548-926b-cde8ff1216b0
  * ********************************************************************/
 document.getElementById("save-board-button").addEventListener("click", function() {
-    // Send the POST request with the CSRF token included in the headers
     if (changesToBoard.length === 0) {
         return;
     }
-    let csrftoken = getCookie('csrftoken');
+
+    // Create a new FormData object
+    let formData = new FormData();
+
+    formData.append("numChanges", changesToBoard.length);
+
+    // Iterate over each change to append file data
+    changesToBoard.forEach((change, index) => {
+        if (change.changeType === "add") {
+            // Append each change individually
+            formData.append(`${index}_change_type`, change.changeType);
+            formData.append(`${index}_title`, change.title);
+            formData.append(`${index}_description`, change.description);
+            formData.append(`${index}_item_index`, change.item_index);
+            formData.append(`${index}_board_image`, change.board_image || null);
+            formData.append(`${index}_board_sound`, change.board_sound || null);
+        }
+        
+        if (change.changeType === "edit") {
+            formData.append(`${index}_change_type`, change.changeType);
+            formData.append(`${index}_item_id`, change.item_id);
+            formData.append(`${index}_title`, change.title);
+            formData.append(`${index}_description`, change.description);
+            formData.append(`${index}_item_index`, change.item_index);
+        }
+
+        if (change.changeType === "delete") { 
+            formData.append(`${index}_change_type`, change.changeType);
+            formData.append(`${index}_item_id`, change.item_id);
+            formData.append(`${index}_item_index`, change.item_index);
+        }
+
+        if (change.changeType === "editBoardDetails") {
+            formData.append(`${index}_change_type`, change.changeType);
+            formData.append(`${index}_title`, change.title);
+            formData.append(`${index}_description`, change.description);
+            formData.append(`${index}_privacy_setting`, change.privacy_setting);
+        }
+    });
+
+    // Send the POST request
     fetch(window.location.pathname, {
         method: "POST",
         headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": csrftoken,  // Include the CSRF token in the headers
+            "X-CSRFToken": getCookie("csrftoken"),
         },
-        body: JSON.stringify(changesToBoard),
-    }).then(data => {
-        console.log(data);
+        body: formData,
+
+    }).then(response => {
+        console.log(response);
         boardSaved = true;
         location.reload();
+    }).catch(error => {
+        console.error('Error:', error);
     });
 });
 

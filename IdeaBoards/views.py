@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 from IdeaBoards.spotify import *
 from django.http import JsonResponse
+from django.core.files.uploadedfile import TemporaryUploadedFile
 
 """
 IdeaBoards_Home: 
@@ -56,10 +57,12 @@ IdeaBoard_Details:
     Users can add, delete, and edit notes on the board
 """
 @login_required
-def IdeaBoard_Detail(request, id, label=None):
+def IdeaBoard_Detail(request, id):
     #make sure the board exists, if not redirect to the boards page
     try:
         board = IdeaBoard.objects.get(id=id)
+        items = IdeaBoardItem.objects.filter(ideaboard=board)
+
     except:
         # error implementation was based on GPT https://chat.openai.com/share/424d6891-b553-4829-b8fd-8eafd56f687c
         error_messages = request.session.get('error_messages', [])
@@ -68,72 +71,129 @@ def IdeaBoard_Detail(request, id, label=None):
         # Store the updated error messages list back into the session
         request.session['error_messages'] = error_messages
         return redirect('IdeaBoards_Home')
-    
-    labels = ItemLabel.objects.filter(label_board=board)
-    if(label==None):
-        items = IdeaBoardItem.objects.filter(ideaboard=board)
-    else:
-        label_id = labels.get(label_name=label)
-        items = IdeaBoardItem.objects.filter(ideaboard=board, note_label=label_id)
         
+    print(request.method)
+
     #If the user is the owner of the board
-    if request.user == board.user:
-
-        #If the fetch request is a POST request, save the changes to the board to the database
+    if board.user == request.user:
         if request.method == 'POST':
-            print(request.body)  # Print raw HTTP request body
-            print(request.POST)  # Print form data
-            print(request.FILES)  # Print uploaded files
-            print(request.method)  # Print HTTP method (POST)
+            # Get form data
+            form_data = request.POST
+            # Get file data
+            file_data = request.FILES
 
+            print(form_data)
+            print(file_data)
 
-            #get the data from the body and decode it
-            data = json.loads(request.body.decode('utf-8'))
+            number_of_changes = form_data.get('numChanges')
+            print(number_of_changes)
 
-            #for each item in the json update the database properly
-            for item in data:
-                #print(item)
+            for x in range(int(number_of_changes)):
+                print("iteration:", x)
+                change_type = form_data.get(f'{x}_change_type')
+                print(change_type)
 
-                #if the changeType is add, add the item to the database pointing at the board
-                if (item['changeType'] == 'add'):
-                    form = NewIdeaBoardItemForm(item)
+                if change_type == 'add':
+                    formData = {
+                        "title": form_data.get(f'{x}_title'),
+                        "description": form_data.get(f'{x}_description'),
+                    }
+
+                    board_image_files = file_data.getlist(f'{x}_board_image')
+
+                    # Check if there are any uploaded files for '0_board_image'
+                    if board_image_files:
+                        board_image_file = board_image_files[0]
+                        
+                        # Create a TemporaryUploadedFile instance
+                        temporary_uploaded_image = TemporaryUploadedFile(
+                            name=board_image_file.name,  # Set the name of the file
+                            content_type=board_image_file.content_type,  # Set the content type of the file
+                            size=board_image_file.size,  # Set the size of the file
+                            charset=None  # Charset is not applicable for binary files
+                        )
+
+                        # Write the file content to the TemporaryUploadedFile
+                        temporary_uploaded_image.write(board_image_file.read())
+
+                        # Move the file pointer back to the beginning of the file
+                        temporary_uploaded_image.seek(0)
+
+                    board_sound_files = file_data.getlist(f'{x}_board_sound')
+
+                    # Check if there are any uploaded files for '0_board_sound'
+                    if board_sound_files:
+                        board_sound_file = board_sound_files[0]
+                        
+                        # Create a TemporaryUploadedFile instance for audio
+                        temporary_uploaded_audio = TemporaryUploadedFile(
+                            name=board_sound_file.name,  # Set the name of the file
+                            content_type=board_sound_file.content_type,  # Set the content type of the file
+                            size=board_sound_file.size,  # Set the size of the file
+                            charset=None  # Charset is not applicable for binary files
+                        )
+
+                        # Write the file content to the TemporaryUploadedFile
+                        temporary_uploaded_audio.write(board_sound_file.read())
+
+                        # Move the file pointer back to the beginning of the file
+                        temporary_uploaded_audio.seek(0)
+
+                    fileData = {
+                        "board_image": temporary_uploaded_image,
+                        "board_sound": temporary_uploaded_audio,
+                        }
+
+                    form = NewIdeaBoardItemForm(formData, fileData)  # Pass both form data and file data
+
                     if form.is_valid():
+                        print('form valid')
                         new_item = form.save(commit=False)
                         new_item.owner = request.user
                         new_item.ideaboard = board
                         new_item.save()
+                    else:
+                        print('form not valid')
+                        print(form.errors)
 
-                #if the changeType is edit, edit the item in the database
-                elif item['changeType'] == 'edit':
-                    editedIitem = IdeaBoardItem.objects.get(id=item['item_id'])
-                    editedIitem.title = item['title']
-                    editedIitem.description = item['description']
-                    editedIitem.save()
 
-                #if the changeType is delete, delete the item from the database
-                elif item['changeType'] == 'delete':
-                    item = IdeaBoardItem.objects.get(id=item['item_id']).delete()
+                elif change_type == 'edit':
+                    editedItem = IdeaBoardItem.objects.get(id=form_data.get(f'{x}_item_id'))
+                    editedItem.title = form_data.get(f'{x}_title')
+                    editedItem.description = form_data.get(f'{x}_description')
+                    editedItem.save()
 
-                #if the changeType is editBoardDetails, edit the board title and description
-                elif item['changeType'] == 'editBoardDetails':
-                    board.title = item['title']
-                    board.description = item['description']
-                    board.is_public = item['privacy_setting']
+                elif change_type == 'delete':
+                    item = IdeaBoardItem.objects.get(id=form_data.get(f'{x}_item_id'))
+                    item.delete()
+
+                elif change_type == 'editBoardDetails':
+                    board.title = form_data.get(f'{x}_title')
+                    board.description = form_data.get(f'{x}_description')
+                    if form_data.get(f'{x}_privacy_setting') == 'true':
+                        board.is_public = True
+                    else:
+                        board.is_public = False
                     board.save()
+                
+                else:
+                    print('not a valid change type')
             
         if request.method == 'DELETE':
             data = json.loads(request.body.decode('utf-8'))
             data = data[0]
             board = IdeaBoard.objects.get(id=data['board_id'])
+            print("this is printing")
+            print(board.user, request.user, data)
             if board.user == request.user:
                 board.delete()
 
                 print('deleted')
                 return redirect('IdeaBoards_Home')
 
-    
+        
         #give the HTML for the board with the board's items
-        return render(request, 'boarddetail.html', {'board': board, 'items': items, "labels": labels})
+        return render(request, 'boarddetail.html', {'board': board, 'items': items})
     
     elif board.is_public:
         return render(request, 'publicboarddetails.html', {'board': board, 'items': items})
