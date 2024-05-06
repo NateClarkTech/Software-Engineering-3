@@ -149,6 +149,7 @@ function addFormItem() {
     let description = document.getElementById("description").value;
     let board_image = document.getElementById("board_image").files[0];
     let board_sound = document.getElementById("board_sound").files[0];
+    let board_label = document.getElementById("labelSelect").value;
 
     if (title !== "" && title.length <= 64) {
         boardSaved = false;
@@ -179,7 +180,7 @@ function addFormItem() {
         cardBody.classList.add("card-body");
 
         //If there is an image/sound file, add the icon to show it
-        if (board_image || board_sound) {
+        if (board_image || board_sound || board_label) {
             let rowDiv = document.createElement("div");
             rowDiv.classList.add("row", "justify-content-end", "mt-auto");
 
@@ -200,6 +201,10 @@ function addFormItem() {
                 audioIcon.src = "/static/images/audioiconwhite.png";
                 audioIcon.classList.add("audio-icon", "mr-3", "px-1");
                 rowDiv.appendChild(audioIcon);
+            }
+
+            if (board_label) {
+                rowDiv.appendChild(board_label);
             }
 
             cardBody.appendChild(rowDiv);
@@ -235,6 +240,7 @@ function addFormItem() {
             cardBoardSound.src = URL.createObjectURL(board_sound);
         }
         cardBoardSound.classList.add("d-none");
+        
 
         // Add the new item via Javascript
         cardBody.appendChild(cardTitle);

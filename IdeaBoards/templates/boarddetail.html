@@ -128,7 +128,14 @@
                             <label for="board_sound">Add Sound File<p style="display: inline; margin: 0;"></p></label>
                             <input type="file" class="form-control" id="board_sound" name="board_image" accept="image/*">
                         </div>
-
+                        <div id="LabelSelect" class="label-selection">
+                            <select id="labelSelect" class="label-dropdown" >
+                                <option value="" disabled selected hidden>Choose Label</option>
+                                {% for label in labels %}
+                                    <option value="{{label}}">{{ label.label_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
                         <p><p class="text-danger" style="display: inline; margin: 0;">*</p> required field</p>
                     </div>
                     <div class="modal-footer">
