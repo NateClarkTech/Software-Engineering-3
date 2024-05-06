@@ -707,6 +707,7 @@ src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"
 
 /*
         Sort Label
+    @author: Bilge Akyol
 */
 document.getElementById("sort-label").addEventListener("click", function() {
     label = document.getElementById('sort-label').textContent;
@@ -735,7 +736,24 @@ document.getElementById("sort-label").addEventListener("click", function() {
 
 /*
         Create Label
+    @author: Bilge Akyol
 */ 
 document.getElementById("create-label").addEventListener("click", function() {
     $('#createLabel').modal('show');
+});
+
+document.getElementById("add-label-button").addEventListener("click", function() {
+    let csrftoken = getCookie('csrftoken');
+    new_label = document.getElementById("new-label-name").textContent;
+    fetch(window.location.pathname, {
+        method: "POST",
+        action: "create-label",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrftoken,  // Include the CSRF token in the headers
+        },
+        body: JSON.stringify([{labelName: new_label}]),
+    }).then(data => {
+        window.location.reload();
+    });
 });
