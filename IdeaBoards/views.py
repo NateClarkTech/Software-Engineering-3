@@ -72,7 +72,7 @@ def IdeaBoard_Detail(request, id):
         request.session['error_messages'] = error_messages
         return redirect('IdeaBoards_Home')
         
-    print(request.method)
+    #print(request.method)
 
     #If the user is the owner of the board
     if board.user == request.user:
@@ -82,16 +82,16 @@ def IdeaBoard_Detail(request, id):
             # Get file data
             file_data = request.FILES
 
-            print(form_data)
-            print(file_data)
+            #print(form_data)
+            #print(file_data)
 
             number_of_changes = form_data.get('numChanges')
-            print(number_of_changes)
+            #print(number_of_changes)
 
             for x in range(int(number_of_changes)):
-                print("iteration:", x)
+                #print("iteration:", x)
                 change_type = form_data.get(f'{x}_change_type')
-                print(change_type)
+                #print(change_type)
 
                 if change_type == 'add':
                     formData = {
@@ -140,20 +140,18 @@ def IdeaBoard_Detail(request, id):
                         temporary_uploaded_audio.seek(0)
 
                     fileData = {
-                        "board_image": temporary_uploaded_image,
-                        "board_sound": temporary_uploaded_audio,
-                        }
+                        "board_image": temporary_uploaded_image if board_image_files else None,
+                        "board_sound": temporary_uploaded_audio if board_sound_files else None,
+                    }
 
                     form = NewIdeaBoardItemForm(formData, fileData)  # Pass both form data and file data
 
                     if form.is_valid():
-                        print('form valid')
                         new_item = form.save(commit=False)
                         new_item.owner = request.user
                         new_item.ideaboard = board
                         new_item.save()
                     else:
-                        print('form not valid')
                         print(form.errors)
 
 
