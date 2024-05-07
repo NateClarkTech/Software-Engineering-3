@@ -293,12 +293,10 @@
 
     <hr>
 
-    <div class="row" style="display: flex; gap: 10px;">
-        <button type="button" class="btn btn-primary my-1 col-md-1.5" id="create-label" data-toggle="modal" data-target="#createLabel" data-id="{{ board.id }}"
-        >Create Label</button>
+    <div class="row">
+        <button type="button" class="btn btn-primary my-1 col-md-1.5" id="create-label" data-toggle="modal" data-target="#createLabel" data-id="{{ board.id }}">Create Label</button>
         {% for label in labels %}
-            <button type="button" class="btn btn-primary my-1 col-md-1.5" id="sort-label" data-toggle="modal" data-target="#sortLabel" data-id="{{ board.id }}"
-            >{{label.label_name}}</button>
+            <button type="button" class="btn btn-primary my-1 col-md-1.5" id="sort-label" data-toggle="modal" data-target="#sortLabel" data-id="{{ board.id }}">{{label.label_name}}</button>
         {% endfor %}
     </div>
     

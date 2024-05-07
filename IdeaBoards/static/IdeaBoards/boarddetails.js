@@ -744,7 +744,7 @@ document.getElementById("create-label").addEventListener("click", function() {
 
 document.getElementById("add-label-button").addEventListener("click", function() {
     let csrftoken = getCookie('csrftoken');
-    new_label = document.getElementById("new-label-name").value;
+    new_label = document.getElementById("new-label-name").textContent;
     fetch(window.location.pathname, {
         method: "POST",
         action: "create-label",
@@ -752,7 +752,7 @@ document.getElementById("add-label-button").addEventListener("click", function()
             "Content-Type": "application/json",
             "X-CSRFToken": csrftoken,  // Include the CSRF token in the headers
         },
-        body: JSON.stringify([{"labelName": new_label, "action": "create-label"}]),
+        body: JSON.stringify([{labelName: new_label}]),
     }).then(data => {
         window.location.reload();
     });
