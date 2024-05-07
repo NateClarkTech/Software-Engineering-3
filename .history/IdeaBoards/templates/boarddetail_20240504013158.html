@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="{% static 'css/boarddetails.css' %}">
 {% endblock %}
 
+
 {% block content %}
     <!-- Source: https://getbootstrap.com/docs/5.3/components/modal/ -->
 
@@ -122,11 +123,11 @@
                         </div>
                         <div class="form-group">
                             <label for="board_image">Add Image<p style="display: inline; margin: 0;"></p></label>
-                            <input type="file" class="form-control" id="board_image" name="board_image" accept="image/*">
+                            <input type="file" class="form-control" id="board_image" name="board_image">
                         </div>
                         <div class="form-group">
                             <label for="board_sound">Add Sound File<p style="display: inline; margin: 0;"></p></label>
-                            <input type="file" class="form-control" id="board_sound" name="board_image" accept="audio/*">
+                            <input type="file" class="form-control" id="board_sound" name="board_image" accept="image/*">
                         </div>
 
                         <p><p class="text-danger" style="display: inline; margin: 0;">*</p> required field</p>
@@ -149,11 +150,19 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
+<<<<<<< HEAD
                 <div class="modal-body break-text row">
                     <h1 class="col-12" id="view-item-title" data-id='none' data-index="none"></h1>
                     <p class="col-12" id="view-item-description"></p>
                     <image class="mt-3 col-12" id="view-item-image" src=""></image>
                     <audio class="mt-3 col-12" id="view-item-sound" controls src="" ></audio>
+=======
+                <div class="modal-body break-text">
+                    <h1 id="view-item-title" data-id='none' data-index="none"></h1>
+                    <p id="view-item-description"></p>
+                    <image id="view-item-image" src="" display="block"></image>
+                    <audio controls src="" display="block"></audio>
+>>>>>>> refs/remotes/origin/main
                 </div>
                 <div class="modal-footer justify-content-center">
                     <button type="button" id="edit-item-modal-button" class="btn btn-success">Edit</button>
@@ -219,8 +228,28 @@
         </div>
     </div>
 
-    <!-- Create Label Modal -->
-    <div class="modal fade" id="createLabel" tabindex="-1" role="dialog" aria-labelledby="CreateLabel" aria-hidden="true">
+    <!-- Error Modal -->
+    <div class="modal fade" id="errorModel" tabindex="-1" labelledby="error-modal-label" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-danger" id="error-modal-label">Error</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h1 id="error-modal-text" class="text-wrap text-danger"></h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<<<<<<< HEAD
+    <div class="row text-start justify-content-center">
+=======
+     <!-- Create Label Modal -->
+     <div class="modal fade" id="createLabel" tabindex="-1" role="dialog" aria-labelledby="CreateLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <form id="createLabel">
@@ -241,34 +270,16 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary text-danger" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary text-success" id="add-label-button">Add Label</button>
+                        <button type="submit" class="btn btn-primary text-success">Add Label</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- Error Modal -->
-    <div class="modal fade" id="errorModel" tabindex="-1" labelledby="error-modal-label" role="dialog" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title text-danger" id="error-modal-label">Error</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <h1 id="error-modal-text" class="text-wrap text-danger"></h1>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    
-
      <!-- Project Board -->
-     <div class="row text-start justify-content-center">
+    <div class="row text-start">
+>>>>>>> refs/remotes/origin/main
         <div class="col-md-10 row">
             <h3 class="col-12" id="board-title">Project Board: {{ board.title }}</h3>
             {% if board.description %}
@@ -292,16 +303,14 @@
     </div>
 
     <hr>
-
-    <div class="row" style="display: flex; gap: 10px;">
-        <button type="button" class="btn btn-primary my-1 col-md-1.5" id="create-label" data-toggle="modal" data-target="#createLabel" data-id="{{ board.id }}"
-        >Create Label</button>
+     <!-- Create Label and Display Labels -->
+    <div class="row">
+        <button type="button" class="btn btn-primary my-1 col-md-1.5" id="create-label" data-toggle="modal" data-target="#createLabel" data-id="{{ board.id }}">Create Label</button>
         {% for label in labels %}
-            <button type="button" class="btn btn-primary my-1 col-md-1.5" id="sort-label" data-toggle="modal" data-target="#sortLabel" data-id="{{ board.id }}"
-            >{{label.label_name}}</button>
+            <button type="button" class="btn btn-primary my-1 col-md-1.5" id="sort-label" data-toggle="modal" data-target="#sortLabel" data-id="{{ board.id }}">{{label.label_name}}</button>
         {% endfor %}
     </div>
-    
+
     <hr>
 
     <div class='row'>
@@ -316,12 +325,17 @@
                                 <!-- Move the row with images to the bottom of the card -->
                                 <div class="row justify-content-end mt-auto">
                                     {% if item.board_image %}
-                                        <img class="col-3 img-icon px-1 {% if not item.board_sound %}mr-3{% endif %}" src="{% static "images/imageiconwhite.png" %}" alt="img icon"></img>
+                                        <img class="col-3 img-icon px-1" src="{% static "images/imageiconwhite.png" %}" alt="img icon"></img>
                                     {% endif %}
                 
                                     {% if item.board_sound %}
                                         <!-- HTML for the custom icon -->
-                                        <img src="{% static "images/audioiconwhite.png" %}" class="audio-icon mr-3 px-1" alt="audio icon">
+                                        <img src="{% static "images/audioiconwhite.png" %}" class="audio-icon mr-3" alt="Play Audio">
+                                        <!-- Hidden audio element -->
+                                        <audio id="myAudio" style="">
+                                            <source src="{{ item.board_sound.url }}" type="audio/mpeg">
+                                            Your browser does not support the audio element.
+                                        </audio>
                                     {% endif %}
                                 </div>
 
@@ -343,6 +357,12 @@
                                 <!--h2 End-->
                 
                                 <p id="board-item-{{ forloop.counter }}-description" class='card-description pb-2'>{{ item.description }}</p>
+
+                                {% if item.board_sound %}
+                                    <div class="row">
+                                        <audio class="col-12" controls src="{{ item.board_sound.url }}" ></audio>        
+                                    </div>
+                                {% endif %}
                                 
                             </div>
                         </div>

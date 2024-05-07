@@ -63,6 +63,7 @@
 .card-body {
     height: 100%;
     overflow: hidden;
+    padding: 10px 10px;
 }
 
 .card-title, .card-description{
@@ -110,6 +111,18 @@
     color: #fff; /* Change this to your desired hover color */
 }
 
+.audio-icon {
+    cursor: pointer;
+    width: 25px; /* Adjust width and height as needed */
+    height: 25px;
+    object-fit: contain;
+}
+
+.img-icon{
+    max-width: 25px;
+    height: 25px;
+    object-fit: contain;
+}
 
 hr  {
     border-top: 1px solid #365486;

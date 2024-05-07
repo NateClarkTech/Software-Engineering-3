@@ -76,12 +76,11 @@ document.getElementById('getRecc').addEventListener('submit', function(event) {
         body: JSON.stringify([{genreName: genreName}]),
     }).then(response => response.json())
     .then(data => {
-        /*
-        reccResult = document.getElementById("reccResult");
-        reccResult.textContent = data.message;
-        */
-        url = 'https://open.spotify.com/oembed?url=' + data;
-        iframe.setAttribute("src", url);
+        for (let i = 0; i < 5; i++) {
+            console.log(data['message'][i]);
+            url = 'https://open.spotify.com/embed/track/' + data['message'][i];
+            document.getElementById("iframe-"+i).setAttribute("src", url)
+        }
         $('#getRecc').modal('hide');
         $('#displayReccResults').modal('show');
     })

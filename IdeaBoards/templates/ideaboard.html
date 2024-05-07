@@ -41,14 +41,19 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="reccTitle"> 5 Recommendations </h5>
+                    <h5 class="modal-title" id="reccTitle" > 5 Recommendations</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
                 <div class="modal-body">
                     <h5 class="modal-title" id="reccResult"></h5>
                 </div>
-                <div>
-                    <iframe id="iframe" style="border-radius:12px" src="https://open.spotify.com/oembed?url=2ixsaeFioXJmMgkkbd4uj1" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                {% for i in "01234" %}
+                <div name="result">
+                    <iframe id="iframe-{{i}}" style="border-radius:12px" src="" width="100%" style="margin-left:7px" height="100" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
                 </div>
+                {% endfor %}
             </div>
         </div>
     </div>
@@ -112,7 +117,7 @@
                 </button>
 
                 <button  type="button" class="btn btn-primary col-12" id="get-rec-modal-button" data-toggle="modal" data-target="#getRecc">
-                    Spotify Recc
+                    Get Song Recommendation
                 </button>
             </div>
         </div>

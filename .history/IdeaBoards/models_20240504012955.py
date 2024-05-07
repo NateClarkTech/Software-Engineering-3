@@ -29,8 +29,8 @@ class IdeaBoardItem(models.Model):
     title = models.CharField(max_length=64)
     label = models.TextField(blank=True, default='')
     description = models.TextField(blank=True, default='')
-    board_image = models.ImageField(upload_to='board_image/', max_length=100, null=True)
-    board_sound = models.FileField(upload_to='board_sounds/', null=True)
+    board_image = models.ImageField(upload_to='board_image/', max_length=100, blank=True)
+    board_sound = models.FileField(upload_to='board_sounds/', blank=True)
     note_label = models.ForeignKey(ItemLabel, on_delete=models.CASCADE, blank=True, null=True) # many-to-one relationship: categorizing notes by user defined labels.
     
     created_at = models.DateTimeField(auto_now_add=True)

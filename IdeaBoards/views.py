@@ -56,7 +56,7 @@ IdeaBoard_Details:
     Users can add, delete, and edit notes on the board
 """
 @login_required
-def IdeaBoard_Detail(request, id):
+def IdeaBoard_Detail(request, id, label=None):
     #make sure the board exists, if not redirect to the boards page
     try:
         board = IdeaBoard.objects.get(id=id)
@@ -69,17 +69,33 @@ def IdeaBoard_Detail(request, id):
         request.session['error_messages'] = error_messages
         return redirect('IdeaBoards_Home')
     
-    items = IdeaBoardItem.objects.filter(ideaboard=board)
-
+    labels = ItemLabel.objects.filter(label_board=board)
+    if(label==None):
+        items = IdeaBoardItem.objects.filter(ideaboard=board)
+    else:
+        label_id = labels.get(label_name=label)
+        items = IdeaBoardItem.objects.filter(ideaboard=board, note_label=label_id)
+        
     #If the user is the owner of the board
     if request.user == board.user:
 
         #If the fetch request is a POST request, save the changes to the board to the database
         if request.method == 'POST':
-            print(request.body, request.POST, request.method)
+            print(request.body)  # Print raw HTTP request body
+            print(request.POST)  # Print form data
+            print(request.FILES)  # Print uploaded files
+            print(request.method)  # Print HTTP method (POST)
+
 
             #get the data from the body and decode it
             data = json.loads(request.body.decode('utf-8'))
+
+            if data[0]["action"] == "create-label":
+                label_name = data[0]["labelName"]
+                if label_name:
+                    ItemLabel.objects.create(label_name=label_name, label_board=board)
+                    return JsonResponse("Label creation Successful")
+                return JsonResponse("Label creation not successfull")
 
             #for each item in the json update the database properly
             for item in data:
@@ -109,6 +125,7 @@ def IdeaBoard_Detail(request, id):
                 elif item['changeType'] == 'editBoardDetails':
                     board.title = item['title']
                     board.description = item['description']
+                    board.is_public = item['privacy_setting']
                     board.save()
             
         if request.method == 'DELETE':
@@ -123,7 +140,10 @@ def IdeaBoard_Detail(request, id):
 
     
         #give the HTML for the board with the board's items
-        return render(request, 'boarddetail.html', {'board': board, 'items': items})
+        return render(request, 'boarddetail.html', {'board': board, 'items': items, "labels": labels})
+    
+    elif board.is_public:
+        return render(request, 'publicboarddetails.html', {'board': board, 'items': items})
     
     #If the user is not the owner of the board redirect to them to their boards
     else:

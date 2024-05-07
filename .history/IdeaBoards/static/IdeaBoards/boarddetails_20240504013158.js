@@ -177,33 +177,6 @@ function addFormItem() {
         card.classList.add("card", "card-custom");
         let cardBody = document.createElement("div");
         cardBody.classList.add("card-body");
-
-        //If there is an image/sound file, add the icon to show it
-        if (board_image || board_sound) {
-            let rowDiv = document.createElement("div");
-            rowDiv.classList.add("row", "justify-content-end", "mt-auto");
-
-            if (board_image) {
-                let imgIcon = document.createElement("img");
-                imgIcon.setAttribute("id", "board-item-" + assignBoardId + "-img-icon");
-                imgIcon.classList.add("col-3", "img-icon", "px-1", "mr-3");
-                if (board_sound){
-                    imgIcon.classList.remove("mr-3");
-                }
-                imgIcon.src = "/static/images/imageiconwhite.png";
-                imgIcon.alt = "img icon";
-                rowDiv.appendChild(imgIcon);
-            }
-
-            if (board_sound) {
-                let audioIcon = document.createElement("img");
-                audioIcon.src = "/static/images/audioiconwhite.png";
-                audioIcon.classList.add("audio-icon", "mr-3", "px-1");
-                rowDiv.appendChild(audioIcon);
-            }
-
-            cardBody.appendChild(rowDiv);
-        }
         
         // Add the title to the card
         let cardTitle = document.createElement("h2");
@@ -234,7 +207,7 @@ function addFormItem() {
         if (board_sound){
             cardBoardSound.src = URL.createObjectURL(board_sound);
         }
-        cardBoardSound.classList.add("d-none");
+        //cardBoardSound.classList.add("d-none");
 
         // Add the new item via Javascript
         cardBody.appendChild(cardTitle);
@@ -519,63 +492,20 @@ document.getElementById("addItemForm").addEventListener("submit", function(event
  * https://chat.openai.com/share/274e26c2-df74-4548-926b-cde8ff1216b0
  * ********************************************************************/
 document.getElementById("save-board-button").addEventListener("click", function() {
-    if (changesToBoard.length === 0) {
-        return;
-    }
+    // Send the POST request with the CSRF token included in the headers
 
-    // Create a new FormData object
-    let formData = new FormData();
-
-    formData.append("numChanges", changesToBoard.length);
-
-    // Iterate over each change to append file data
-    changesToBoard.forEach((change, index) => {
-        if (change.changeType === "add") {
-            // Append each change individually
-            formData.append(`${index}_change_type`, change.changeType);
-            formData.append(`${index}_title`, change.title);
-            formData.append(`${index}_description`, change.description);
-            formData.append(`${index}_item_index`, change.item_index);
-            formData.append(`${index}_board_image`, change.board_image || null);
-            formData.append(`${index}_board_sound`, change.board_sound || null);
-        }
-        
-        if (change.changeType === "edit") {
-            formData.append(`${index}_change_type`, change.changeType);
-            formData.append(`${index}_item_id`, change.item_id);
-            formData.append(`${index}_title`, change.title);
-            formData.append(`${index}_description`, change.description);
-            formData.append(`${index}_item_index`, change.item_index);
-        }
-
-        if (change.changeType === "delete") { 
-            formData.append(`${index}_change_type`, change.changeType);
-            formData.append(`${index}_item_id`, change.item_id);
-            formData.append(`${index}_item_index`, change.item_index);
-        }
-
-        if (change.changeType === "editBoardDetails") {
-            formData.append(`${index}_change_type`, change.changeType);
-            formData.append(`${index}_title`, change.title);
-            formData.append(`${index}_description`, change.description);
-            formData.append(`${index}_privacy_setting`, change.privacy_setting);
-        }
-    });
-
-    // Send the POST request
+    let csrftoken = getCookie('csrftoken');
     fetch(window.location.pathname, {
         method: "POST",
         headers: {
-            "X-CSRFToken": getCookie("csrftoken"),
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrftoken,  // Include the CSRF token in the headers
         },
-        body: formData,
-
-    }).then(response => {
-        console.log(response);
+        body: JSON.stringify(changesToBoard),
+    }).then(data => {
+        console.log(data);
+        changesToBoard = [];
         boardSaved = true;
-        location.reload();
-    }).catch(error => {
-        console.error('Error:', error);
     });
 });
 
@@ -703,11 +633,25 @@ window.onbeforeunload = function() {
 };
 
 
+document.addEventListener("click", function() {
+    var audio = document.getElementById("myAudio");
+    var icon = document.querySelector(".audio-icon");
+
+    icon.addEventListener("click", function() {
+        if (audio.paused) {
+            audio.play();
+
+        } else {
+            audio.pause();
+        }
+    });
+});
+
+
 src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"
 
 /*
         Sort Label
-    @author: Bilge Akyol
 */
 document.getElementById("sort-label").addEventListener("click", function() {
     label = document.getElementById('sort-label').textContent;
@@ -736,24 +680,7 @@ document.getElementById("sort-label").addEventListener("click", function() {
 
 /*
         Create Label
-    @author: Bilge Akyol
 */ 
 document.getElementById("create-label").addEventListener("click", function() {
     $('#createLabel').modal('show');
-});
-
-document.getElementById("add-label-button").addEventListener("click", function() {
-    let csrftoken = getCookie('csrftoken');
-    new_label = document.getElementById("new-label-name").value;
-    fetch(window.location.pathname, {
-        method: "POST",
-        action: "create-label",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": csrftoken,  // Include the CSRF token in the headers
-        },
-        body: JSON.stringify([{"labelName": new_label, "action": "create-label"}]),
-    }).then(data => {
-        window.location.reload();
-    });
 });
