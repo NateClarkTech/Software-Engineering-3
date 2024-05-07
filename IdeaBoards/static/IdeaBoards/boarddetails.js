@@ -10,6 +10,7 @@ console.log('script loaded');
 
 //saves changes to be done to board
 let changesToBoard = [];
+let labelNames = [];
 
 //Used for assigning a unique id to each board item
 let assignBoardId = 1;
@@ -147,8 +148,8 @@ function addFormItem() {
     // Get title, description, and uploaded files from the form
     let title = document.getElementById("title").value;
     let description = document.getElementById("description").value;
-    let board_image = document.getElementById("board_image").files[0];
-    let board_sound = document.getElementById("board_sound").files[0];
+    let item_image = document.getElementById("item_image").files[0];
+    let item_sound = document.getElementById("item_sound").files[0];
 
     if (title !== "" && title.length <= 64) {
         boardSaved = false;
@@ -159,8 +160,8 @@ function addFormItem() {
                 title: title,
                 description: description,
                 item_index: String(assignBoardId),
-                board_image: board_image,
-                board_sound: board_sound,
+                item_image: item_image,
+                item_sound: item_sound,
             }
         );
 
@@ -179,15 +180,15 @@ function addFormItem() {
         cardBody.classList.add("card-body");
 
         //If there is an image/sound file, add the icon to show it
-        if (board_image || board_sound) {
+        if (item_image || item_sound) {
             let rowDiv = document.createElement("div");
             rowDiv.classList.add("row", "justify-content-end", "mt-auto");
 
-            if (board_image) {
+            if (item_image) {
                 let imgIcon = document.createElement("img");
                 imgIcon.setAttribute("id", "board-item-" + assignBoardId + "-img-icon");
                 imgIcon.classList.add("col-3", "img-icon", "px-1", "mr-3");
-                if (board_sound){
+                if (item_sound){
                     imgIcon.classList.remove("mr-3");
                 }
                 imgIcon.src = "/static/images/imageiconwhite.png";
@@ -195,7 +196,7 @@ function addFormItem() {
                 rowDiv.appendChild(imgIcon);
             }
 
-            if (board_sound) {
+            if (item_sound) {
                 let audioIcon = document.createElement("img");
                 audioIcon.src = "/static/images/audioiconwhite.png";
                 audioIcon.classList.add("audio-icon", "mr-3", "px-1");
@@ -219,20 +220,20 @@ function addFormItem() {
 
         // Add the uploaded image to the card and hide it (so data can be retrieved if needed)
         let cardBoardImage = document.createElement("img");
-        cardBoardImage.id = "board-item-" + assignBoardId + "-board_image";
+        cardBoardImage.id = "board-item-" + assignBoardId + "-item_image";
         cardBoardImage.classList.add("card-description", "pb-2");
-        if (board_image){
-            cardBoardImage.src = URL.createObjectURL(board_image);
+        if (item_image){
+            cardBoardImage.src = URL.createObjectURL(item_image);
         }
         cardBoardImage.classList.add("d-none");
 
         // Add uploaded sound to the card
         let cardBoardSound = document.createElement("audio");
-        cardBoardSound.id = "board-item-" + assignBoardId + "-board_sound";
+        cardBoardSound.id = "board-item-" + assignBoardId + "-item_sound";
         cardBoardSound.controls = true; 
         cardBoardSound.classList.add("card-description", "pb-2");
-        if (board_sound){
-            cardBoardSound.src = URL.createObjectURL(board_sound);
+        if (item_sound){
+            cardBoardSound.src = URL.createObjectURL(item_sound);
         }
         cardBoardSound.classList.add("d-none");
 
@@ -253,8 +254,8 @@ function addFormItem() {
             let itemTitle = document.getElementById("board-item-" + index + "-title");
             let itemDescription = document.getElementById("board-item-" + index + "-description");
             let item_id = document.getElementById("board-item-" + index + "-title").getAttribute("data-id");
-            let img_src = document.getElementById("board-item-" + index + "-board_image");
-            let sound_src = document.getElementById("board-item-" + index + "-board_sound");
+            let img_src = document.getElementById("board-item-" + index + "-item_image");
+            let sound_src = document.getElementById("board-item-" + index + "-item_sound");
 
             document.getElementById("view-item-description").textContent = itemDescription.textContent;
 
@@ -351,6 +352,12 @@ document.getElementById("edit-item-button").addEventListener("click", function()
             if (changesToBoard[item].changeType === "add" && changesToBoard[item].item_index === itemIndex){
                 changesToBoard[item].title = newTitle;
                 changesToBoard[item].description = newDescription;
+                if (document.getElementById("editItemImage").files[0]){
+                    changesToBoard[item].item_image = document.getElementById("editItemImage").files[0];
+                }
+                if (document.getElementById("editItemSound").files[0]){
+                    changesToBoard[item].item_sound = document.getElementById("editItemSound").files[0];
+                }
                 
                 document.getElementById("board-item-" + itemIndex + "-title").textContent = newTitle;
                 document.getElementById("board-item-" + itemIndex + "-description").textContent = newDescription;
@@ -365,6 +372,7 @@ document.getElementById("edit-item-button").addEventListener("click", function()
             if (changesToBoard[item].changeType === "edit" && changesToBoard[item].item_index === itemIndex){
                 changesToBoard[item].title = newTitle;
                 changesToBoard[item].description = newDescription;
+                changesToBoard[item].
                 isCase2 = false;
 
                 break;
@@ -536,8 +544,8 @@ document.getElementById("save-board-button").addEventListener("click", function(
             formData.append(`${index}_title`, change.title);
             formData.append(`${index}_description`, change.description);
             formData.append(`${index}_item_index`, change.item_index);
-            formData.append(`${index}_board_image`, change.board_image || null);
-            formData.append(`${index}_board_sound`, change.board_sound || null);
+            formData.append(`${index}_item_image`, change.item_image || null);
+            formData.append(`${index}_item_sound`, change.item_sound || null);
         }
         
         if (change.changeType === "edit") {
@@ -560,6 +568,12 @@ document.getElementById("save-board-button").addEventListener("click", function(
             formData.append(`${index}_description`, change.description);
             formData.append(`${index}_privacy_setting`, change.privacy_setting);
         }
+
+        if (change.changeType === "addLabel") {
+            formData.append(`${index}_change_type`, change.changeType);
+            formData.append(`${index}_labelName`, change.labelName);
+        }
+
     });
 
     // Send the POST request
@@ -654,17 +668,64 @@ document.getElementById("edit-item-modal-button").addEventListener("click", func
     let itemDescription = document.getElementById("view-item-description");
     let item_id = itemTitle.getAttribute("data-id");
     
+    //set the title input field to the current title
     let editItemTitle = document.getElementById("editItemTitleInput");
-    editItemTitle.placeholder = itemTitle.textContent;
-    editItemTitle.value = itemTitle.textContent;
+    editItemTitle.placeholder = itemTitle.textContent.trim();
+    editItemTitle.value = itemTitle.textContent.trim();
     editItemTitle.setAttribute("data-id", item_id);
 
+    //set the description input field to the current description
     let editItemDescription = document.getElementById("editItemDescriptionInput");
     editItemDescription.placeholder = itemDescription.textContent;
     editItemDescription.value = itemDescription.textContent;
+
+    //reset the remove image and sound checkboxes
+    document.getElementById("removeImage").checked = false;
+    document.getElementById("removeSound").checked = false;
+
+    //if there is no image or sound, disable the input fields
+    if (document.getElementById("view-item-image").classList.contains("d-none")){
+        document.getElementById("modal-item-remove-image").classList.add("d-none");
+    }
+    else{
+        document.getElementById("modal-item-remove-image").classList.remove("d-none");
+    }
+
+    if (document.getElementById("view-item-sound").classList.contains("d-none")){
+        document.getElementById("modal-item-remove-sound").classList.add("d-none");
+    }
+    else{
+        document.getElementById("modal-item-remove-sound").classList.remove("d-none");
+    }
+
+    //reset the image and sound inputs
+    document.getElementById("editItemImage").value = "";
+    document.getElementById("editItemSound").value = "";
     
     $('#viewBoardItem').modal('hide');
     $('#editBoardItem').modal('show');
+});
+
+document.getElementById("removeImage").addEventListener("click", function() {
+    let removeImageToggle = document.getElementById("removeImage");
+    if (removeImageToggle.checked === true){
+        document.getElementById("editItemImage").disabled = true;
+        document.getElementById("editItemImage").value = "";
+    }
+    else{
+        document.getElementById("editItemImage").disabled = false;
+    }
+});
+
+document.getElementById("removeSound").addEventListener("click", function() {
+    let removeImageToggle = document.getElementById("removeImage");
+    if (removeImageToggle.checked === true){
+        document.getElementById("editItemSound").disabled = true;
+        document.getElementById("editItemSound").value = "";
+    }
+    else{
+        document.getElementById("editItemSound").disabled = false;
+    }
 });
 
 /**********************************************************************
@@ -679,6 +740,7 @@ document.getElementById("delete-item-modal-button").addEventListener("click", fu
     let item_id = itemTitle.getAttribute("data-id");
     let deleteModalText = document.getElementById("deleteModalWarning");
 
+    //set the text of the delete modal to the item's title
     deleteModalText.textContent = "Are you sure you want to delete the item titled: " + itemTitle.textContent + "?";
     deleteModalText.setAttribute("data-id", item_id);
     deleteModalText.setAttribute("data-index", itemTitle.getAttribute("data-index"));
@@ -697,6 +759,7 @@ document.getElementById("delete-item-modal-button").addEventListener("click", fu
  * Resource Used: https://stackoverflow.com/questions/2229942/how-to-block-users-from-closing-a-window-in-javascript
  * ********************************************************************/
 window.onbeforeunload = function() {
+    //if the board has not been saved, ask the user to confirm they want to leave the page
     if (!boardSaved) {
         return "Changes to the board have not been saved. Please save your changes before closing the page.";
     }
@@ -705,34 +768,34 @@ window.onbeforeunload = function() {
 
 src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"
 
-/*
-        Sort Label
-    @author: Bilge Akyol
-*/
-document.getElementById("sort-label").addEventListener("click", function() {
-    label = document.getElementById('sort-label').textContent;
-    id = document.getElementById('sort-label').getAttribute("data-id");
-    request = "POST";
-    // Construct the data to be sent
-    var data = {
-        request: request,
-        id: id,
-        label: label
-    };
+// /*
+//         Sort Label
+//     @author: Bilge Akyol
+// */
+// document.getElementById("sort-label").addEventListener("click", function() {
+//     label = document.getElementById('sort-label').textContent;
+//     id = document.getElementById('sort-label').getAttribute("data-id");
+//     request = "POST";
+//     // Construct the data to be sent
+//     var data = {
+//         request: request,
+//         id: id,
+//         label: label
+//     };
 
-    // Construct the request
-    var requestOptions = {
-        method: 'POST', // Or 'GET' depending on your server endpoint
-        headers: {
-            'Content-Type': 'application/json',
-            "X-CSRFToken": getCookie("csrfToken"),
-        },
-        body: JSON.stringify(data)
-    };
+//     // Construct the request
+//     var requestOptions = {
+//         method: 'POST', // Or 'GET' depending on your server endpoint
+//         headers: {
+//             'Content-Type': 'application/json',
+//             "X-CSRFToken": getCookie("csrfToken"),
+//         },
+//         body: JSON.stringify(data)
+//     };
 
-    window.location.href = label;
+//     window.location.href = label;
 
-});
+// });
 
 /*
         Create Label
@@ -742,18 +805,26 @@ document.getElementById("create-label").addEventListener("click", function() {
     $('#createLabel').modal('show');
 });
 
-document.getElementById("add-label-button").addEventListener("click", function() {
-    let csrftoken = getCookie('csrftoken');
-    new_label = document.getElementById("new-label-name").textContent;
-    fetch(window.location.pathname, {
-        method: "POST",
-        action: "create-label",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": csrftoken,  // Include the CSRF token in the headers
-        },
-        body: JSON.stringify([{labelName: new_label}]),
-    }).then(data => {
-        window.location.reload();
-    });
+document.getElementById("add-label-button").addEventListener("click", function() {    
+
+    console.log("add label button clicked");    
+    new_label = document.getElementById("new-label-name").value;
+
+    changesToBoard.push(
+        {
+            changeType: "addLabel",
+            labelName: new_label,
+        }
+    );    
+    
+    let newLabelButton = document.createElement("button");
+    newLabelButton.type = "button";
+    newLabelButton.classList.add("btn", "btn-primary", "my-1", "col-md-1.5", "ml-1");
+    newLabelButton.textContent = new_label;   
+
+    let labelRow = document.getElementById("labelRow");
+    labelRow.appendChild(newLabelButton);
+
+    $('#createLabel').modal('hide');
+
 });

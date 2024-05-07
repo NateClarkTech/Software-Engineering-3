@@ -75,12 +75,12 @@
                                     <!-- h2 Start-->
                                     <h2 id="board-item-{{ forloop.counter }}-title" 
 
-                                        {% if item.board_image %}
-                                            data-img-src="{{ item.board_image.url }}" 
+                                        {% if item.item_image %}
+                                            data-img-src="{{ item.item_image.url }}" 
                                         {% endif %}
                                         
-                                        {% if item.board_sound %}
-                                            data-sound-src="{{ item.board_sound.url }}"
+                                        {% if item.item_sound %}
+                                            data-sound-src="{{ item.item_sound.url }}"
                                         {% endif %}
 
                                         class='card-title pb-2'> 
@@ -90,11 +90,11 @@
 
                                     <p id="board-item-{{ forloop.counter }}-description" class='card-description pb-2'>{{ item.description }}</p>
 
-                                    {% if item.board_image %}
+                                    {% if item.item_image %}
                                         <p>img icon</p>
                                     {% endif %}
 
-                                    {% if item.board_sound %}
+                                    {% if item.item_sound %}
                                         <p>sound icon</p>
                                     {% endif %}
                                 </div>
