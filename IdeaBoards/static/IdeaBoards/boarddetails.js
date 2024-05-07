@@ -674,29 +674,37 @@ src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"
         Sort Label
     @author: Bilge Akyol
 */
-document.getElementById("sort-label").addEventListener("click", function() {
-    label = document.getElementById('sort-label').textContent;
-    id = document.getElementById('sort-label').getAttribute("data-id");
-    request = "POST";
-    // Construct the data to be sent
-    var data = {
-        request: request,
-        id: id,
-        label: label
-    };
+var labels = document.querySelectorAll('[id^="sort-label-"]');
 
-    // Construct the request
-    var requestOptions = {
-        method: 'POST', // Or 'GET' depending on your server endpoint
-        headers: {
-            'Content-Type': 'application/json',
-            "X-CSRFToken": getCookie("csrfToken"),
-        },
-        body: JSON.stringify(data)
-    };
-
-    window.location.href = label;
-
+// Loop through each label element and attach a click event listener
+labels.forEach(function(label) {
+    label.addEventListener('click', function() {
+        var labelText = label.textContent;
+        var labelId = label.getAttribute('data-id');
+        var request = 'POST';
+        
+        // Construct the data to be sent
+        var data = {
+            request: request,
+            id: labelId,
+            label: labelText
+        };
+        
+        // Construct the request
+        var requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrfToken'),
+            },
+            body: JSON.stringify(data)
+        };
+        
+        // Perform any necessary action with the label data here
+        
+        // Redirect to the specified URL
+        window.location.href = labelText;
+    });
 });
 
 /*
@@ -707,6 +715,10 @@ document.getElementById("create-label").addEventListener("click", function() {
     $('#createLabel').modal('show');
 });
 
+/*
+        Add Label
+    @author: Bilge Akyol
+*/ 
 document.getElementById("add-label-button").addEventListener("click", function() {
     let csrftoken = getCookie('csrftoken');
     new_label = document.getElementById("new-label-name").value;
