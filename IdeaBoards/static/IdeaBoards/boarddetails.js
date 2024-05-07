@@ -149,7 +149,7 @@ function addFormItem() {
     let description = document.getElementById("description").value;
     let board_image = document.getElementById("board_image").files[0];
     let board_sound = document.getElementById("board_sound").files[0];
-    let board_label = document.getElementById("labelSelect").value;
+    let note_label = document.getElementById("labelSelect").value;
 
     if (title !== "" && title.length <= 64) {
         boardSaved = false;
@@ -162,6 +162,7 @@ function addFormItem() {
                 item_index: String(assignBoardId),
                 board_image: board_image,
                 board_sound: board_sound,
+                note_label: note_label,
             }
         );
 
@@ -180,7 +181,7 @@ function addFormItem() {
         cardBody.classList.add("card-body");
 
         //If there is an image/sound file, add the icon to show it
-        if (board_image || board_sound || board_label) {
+        if (board_image || board_sound || note_label) {
             let rowDiv = document.createElement("div");
             rowDiv.classList.add("row", "justify-content-end", "mt-auto");
 
@@ -203,8 +204,11 @@ function addFormItem() {
                 rowDiv.appendChild(audioIcon);
             }
 
-            if (board_label) {
-                rowDiv.appendChild(board_label);
+            if (note_label) {
+            /** FIX */
+                let label = rowDiv.createElement("p");
+                label.textContent(note_label);
+                rowDiv.appendChild(label);
             }
 
             cardBody.appendChild(rowDiv);
@@ -240,6 +244,11 @@ function addFormItem() {
             cardBoardSound.src = URL.createObjectURL(board_sound);
         }
         cardBoardSound.classList.add("d-none");
+
+        // Add label to the card
+        /**
+         * FIX
+         */
         
 
         // Add the new item via Javascript
@@ -247,6 +256,7 @@ function addFormItem() {
         cardBody.appendChild(cardDescription);
         cardBody.appendChild(cardBoardImage);
         cardBody.appendChild(cardBoardSound);
+        /* FIX */
         card.appendChild(cardBody);
         button.appendChild(card);
         colDiv.appendChild(button);
@@ -261,6 +271,7 @@ function addFormItem() {
             let item_id = document.getElementById("board-item-" + index + "-title").getAttribute("data-id");
             let img_src = document.getElementById("board-item-" + index + "-board_image");
             let sound_src = document.getElementById("board-item-" + index + "-board_sound");
+            let label_name = document.getElementById("board-item-" + index + "-label")
 
             document.getElementById("view-item-description").textContent = itemDescription.textContent;
 
@@ -715,22 +726,3 @@ document.getElementById("create-label").addEventListener("click", function() {
     $('#createLabel').modal('show');
 });
 
-/*
-        Add Label
-    @author: Bilge Akyol
-*/ 
-document.getElementById("add-label-button").addEventListener("click", function() {
-    let csrftoken = getCookie('csrftoken');
-    new_label = document.getElementById("new-label-name").value;
-    fetch(window.location.pathname, {
-        method: "POST",
-        action: "create-label",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": csrftoken,  // Include the CSRF token in the headers
-        },
-        body: JSON.stringify([{"labelName": new_label, "action": "create-label"}]),
-    }).then(data => {
-        window.location.reload();
-    });
-});

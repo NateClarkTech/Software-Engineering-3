@@ -343,6 +343,12 @@
                                         <!-- HTML for the custom icon -->
                                         <img src="{% static "images/audioiconwhite.png" %}" class="audio-icon mr-3 px-1" alt="audio icon">
                                     {% endif %}
+
+                                    {% if item.note_label %}
+                                        <!-- HTML for the custom icon -->
+                                        <p>label</p>
+                                    {% endif %}
+
                                 </div>
 
                                 <!-- h2 start -->
@@ -355,6 +361,10 @@
                                     
                                     {% if item.board_sound %}
                                         data-sound-src="{{ item.board_sound.url }}"
+                                    {% endif %}
+
+                                    {% if item.note_label %}
+                                        data-label-name="{{ item.note_label }}"
                                     {% endif %}
                 
                                     class='card-title pb-2'> 
