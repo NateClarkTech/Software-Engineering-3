@@ -282,6 +282,22 @@
             {% endfor %}
         </ul>
     </div>
+
+    <!-- New div for the most common labels Placeholder until it works-->
+    <div class="row mt-4">
+        <div class="col-12">
+            <h3>Most Common Labels</h3>
+            <ul class="list-group custom-border-wes">
+                {% for label in common_labels %}
+                <li class="list-group-item custom-border-wes">
+                    {{ label.label_name }}
+                    <span class="badge badge-primary badge-pill float-right">{{ label.thread.count }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+
+        </div>
+    </div>
     
 </div>
 {% endblock %}

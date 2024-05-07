@@ -10,6 +10,14 @@ from django.db.models import Max, F
 from django.utils import timezone
 # Learned this exists from ChatGPT and good god this makes my life easier lol
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import OuterRef, Subquery, Max
+from django.contrib.auth.models import User
+from ProfileApp.models import Profile
+from django.views.decorators.http import require_POST
+from django.http import JsonResponse
+
+# import the label from the idea board app
+from IdeaBoards.models import ItemLabel
 
 
 
@@ -79,8 +87,7 @@ def thread_detail(request, thread_id, comment_id=None):
     })
 
 
-from django.views.decorators.http import require_POST
-from django.http import JsonResponse
+
 
 @require_POST
 @login_required
@@ -94,11 +101,7 @@ def mark_notification_as_read(request, notification_id):
 
 
 # forum/views.py
-from django.db.models import Max, F
-from django.db.models import OuterRef, Subquery, Max
-from django.contrib.auth.models import User
-from ProfileApp.models import Profile
-# ... (the rest of your imports)
+
 
 def forum_home(request):
     pages = Page.objects.all()
@@ -124,6 +127,7 @@ def forum_home(request):
         else:
             thread.latest_comment_time = None
             thread.latest_comment_username = "No comments"
+            
 
     # Now order threads by the latest_comment_time in descending order
     latest_threads = sorted(threads, key=lambda x: (x.latest_comment_time is not None, x.latest_comment_time), reverse=True)[:5]
@@ -132,7 +136,8 @@ def forum_home(request):
     top_threads = Thread.objects.annotate(num_comments=Count('comment')).order_by('-num_comments')[:5]
     
     
-
+    # List of the 10 most common labels. 
+    labels = ItemLabel.objects.values('label_name').annotate(count=Count('label_name')).order_by('-count')[:10]
     
     
     return render(request, 'forum_home.html', {
@@ -140,6 +145,7 @@ def forum_home(request):
         'latest_threads': latest_threads,
         'top_threads': top_threads,
         'recent_commenter_profiles': profiles_with_latest_comment_dates,
+        'labels': labels,
     })
 
 
