@@ -205,10 +205,11 @@ function addFormItem() {
             }
 
             if (note_label) {
-            /** FIX */
+            /** FIX 
                 let label = rowDiv.createElement("p");
                 label.textContent(note_label);
                 rowDiv.appendChild(label);
+                */
             }
 
             cardBody.appendChild(rowDiv);
