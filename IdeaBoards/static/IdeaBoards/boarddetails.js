@@ -149,6 +149,7 @@ function addFormItem() {
     let description = document.getElementById("description").value;
     let board_image = document.getElementById("board_image").files[0];
     let board_sound = document.getElementById("board_sound").files[0];
+    let note_label = document.getElementById("labelSelect").value;
 
     if (title !== "" && title.length <= 64) {
         boardSaved = false;
@@ -161,6 +162,7 @@ function addFormItem() {
                 item_index: String(assignBoardId),
                 board_image: board_image,
                 board_sound: board_sound,
+                note_label: note_label,
             }
         );
 
@@ -179,7 +181,7 @@ function addFormItem() {
         cardBody.classList.add("card-body");
 
         //If there is an image/sound file, add the icon to show it
-        if (board_image || board_sound) {
+        if (board_image || board_sound || note_label) {
             let rowDiv = document.createElement("div");
             rowDiv.classList.add("row", "justify-content-end", "mt-auto");
 
@@ -200,6 +202,13 @@ function addFormItem() {
                 audioIcon.src = "/static/images/audioiconwhite.png";
                 audioIcon.classList.add("audio-icon", "mr-3", "px-1");
                 rowDiv.appendChild(audioIcon);
+            }
+
+            if (note_label) {
+            /** FIX */
+                let label = rowDiv.createElement("p");
+                label.textContent(note_label);
+                rowDiv.appendChild(label);
             }
 
             cardBody.appendChild(rowDiv);
@@ -236,11 +245,18 @@ function addFormItem() {
         }
         cardBoardSound.classList.add("d-none");
 
+        // Add label to the card
+        /**
+         * FIX
+         */
+        
+
         // Add the new item via Javascript
         cardBody.appendChild(cardTitle);
         cardBody.appendChild(cardDescription);
         cardBody.appendChild(cardBoardImage);
         cardBody.appendChild(cardBoardSound);
+        /* FIX */
         card.appendChild(cardBody);
         button.appendChild(card);
         colDiv.appendChild(button);
@@ -255,6 +271,7 @@ function addFormItem() {
             let item_id = document.getElementById("board-item-" + index + "-title").getAttribute("data-id");
             let img_src = document.getElementById("board-item-" + index + "-board_image");
             let sound_src = document.getElementById("board-item-" + index + "-board_sound");
+            let label_name = document.getElementById("board-item-" + index + "-label")
 
             document.getElementById("view-item-description").textContent = itemDescription.textContent;
 
@@ -709,29 +726,37 @@ src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"
         Sort Label
     @author: Bilge Akyol
 */
-document.getElementById("sort-label").addEventListener("click", function() {
-    label = document.getElementById('sort-label').textContent;
-    id = document.getElementById('sort-label').getAttribute("data-id");
-    request = "POST";
-    // Construct the data to be sent
-    var data = {
-        request: request,
-        id: id,
-        label: label
-    };
+var labels = document.querySelectorAll('[id^="sort-label-"]');
 
-    // Construct the request
-    var requestOptions = {
-        method: 'POST', // Or 'GET' depending on your server endpoint
-        headers: {
-            'Content-Type': 'application/json',
-            "X-CSRFToken": getCookie("csrfToken"),
-        },
-        body: JSON.stringify(data)
-    };
-
-    window.location.href = label;
-
+// Loop through each label element and attach a click event listener
+labels.forEach(function(label) {
+    label.addEventListener('click', function() {
+        var labelText = label.textContent;
+        var labelId = label.getAttribute('data-id');
+        var request = 'POST';
+        
+        // Construct the data to be sent
+        var data = {
+            request: request,
+            id: labelId,
+            label: labelText
+        };
+        
+        // Construct the request
+        var requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrfToken'),
+            },
+            body: JSON.stringify(data)
+        };
+        
+        // Perform any necessary action with the label data here
+        
+        // Redirect to the specified URL
+        window.location.href = labelText;
+    });
 });
 
 /*
@@ -742,18 +767,3 @@ document.getElementById("create-label").addEventListener("click", function() {
     $('#createLabel').modal('show');
 });
 
-document.getElementById("add-label-button").addEventListener("click", function() {
-    let csrftoken = getCookie('csrftoken');
-    new_label = document.getElementById("new-label-name").value;
-    fetch(window.location.pathname, {
-        method: "POST",
-        action: "create-label",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": csrftoken,  // Include the CSRF token in the headers
-        },
-        body: JSON.stringify([{"labelName": new_label, "action": "create-label"}]),
-    }).then(data => {
-        window.location.reload();
-    });
-});

@@ -128,7 +128,14 @@
                             <label for="board_sound">Add Sound File<p style="display: inline; margin: 0;"></p></label>
                             <input type="file" class="form-control" id="board_sound" name="board_image" accept="audio/*">
                         </div>
-
+                        <div id="LabelSelect" class="label-selection">
+                            <select id="labelSelect" class="label-dropdown" >
+                                <option value="" disabled selected hidden>Choose Label</option>
+                                {% for label in labels %}
+                                    <option value="{{label}}">{{ label.label_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
                         <p><p class="text-danger" style="display: inline; margin: 0;">*</p> required field</p>
                     </div>
                     <div class="modal-footer">
@@ -294,10 +301,23 @@
     <hr>
 
     <div class="row" style="display: flex; gap: 10px;">
+        <button type="button" class="btn btn-primary my-1 col-md-1.5" id="ideaBoardView" data-board-id="{{board.id}}"
+        >All Notes</button>
+        <script>
+            document.getElementById("ideaBoardView").addEventListener("click", function() {
+                var boardId = this.getAttribute("data-board-id");
+
+                // Construct the URL with the board ID
+                var url = "/boards/" + boardId + "/"; // Replace "/boards/" with your actual URL pattern
+
+                // Redirect to the URL
+                window.location.href = url;
+            });
+        </script>
         <button type="button" class="btn btn-primary my-1 col-md-1.5" id="create-label" data-toggle="modal" data-target="#createLabel" data-id="{{ board.id }}"
         >Create Label</button>
         {% for label in labels %}
-            <button type="button" class="btn btn-primary my-1 col-md-1.5" id="sort-label" data-toggle="modal" data-target="#sortLabel" data-id="{{ board.id }}"
+            <button type="button" class="btn btn-primary my-1 col-md-1.5" id="sort-label-{{ forloop.counter }}" data-toggle="modal" data-target="#sortLabel" data-id="{{ board.id }}"
             >{{label.label_name}}</button>
         {% endfor %}
     </div>
@@ -323,6 +343,12 @@
                                         <!-- HTML for the custom icon -->
                                         <img src="{% static "images/audioiconwhite.png" %}" class="audio-icon mr-3 px-1" alt="audio icon">
                                     {% endif %}
+
+                                    {% if item.note_label %}
+                                        <!-- HTML for the custom icon -->
+                                        <p>label</p>
+                                    {% endif %}
+
                                 </div>
 
                                 <!-- h2 start -->
@@ -335,6 +361,10 @@
                                     
                                     {% if item.board_sound %}
                                         data-sound-src="{{ item.board_sound.url }}"
+                                    {% endif %}
+
+                                    {% if item.note_label %}
+                                        data-label-name="{{ item.note_label }}"
                                     {% endif %}
                 
                                     class='card-title pb-2'> 
