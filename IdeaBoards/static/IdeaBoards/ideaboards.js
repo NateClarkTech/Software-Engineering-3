@@ -9,6 +9,28 @@
 
 console.log('script loaded');
 
+/**********************************************************************
+ * retrieves the value of the CSRF token from the cookie
+ * 
+ * Author: Nathaniel Clark (ChatGPT used to help)
+ * https://chat.openai.com/share/274e26c2-df74-4548-926b-cde8ff1216b0
+ * ********************************************************************/
+ function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Check if the cookie name matches the CSRF cookie name
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
 
 /**********************************************************************
  * Adds an event listener to each board to do a specified action when clicked
@@ -33,3 +55,34 @@ while (document.getElementById("board-" + i)) {
     })(i);
     i = i + 1;
 }
+
+
+/* 
+****** Spotify Song Reccommendation ********
+*/
+// JavaScript to handle form submission and displaying result
+document.getElementById('getRecc').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent default form submission
+      
+    // Get input value
+    var genreName = document.getElementById('genreNameInput').value;
+    console.log(genreName)
+    fetch(window.location.pathname, {
+        method: "GETRECC",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie("csrftoken")  // Include the CSRF token in the headers
+        },
+        body: JSON.stringify([{genreName: genreName}]),
+    }).then(response => response.json())
+    .then(data => {
+        for (let i = 0; i < 5; i++) {
+            console.log(data['message'][i]);
+            url = 'https://open.spotify.com/embed/track/' + data['message'][i];
+            document.getElementById("iframe-"+i).setAttribute("src", url)
+        }
+        $('#getRecc').modal('hide');
+        $('#displayReccResults').modal('show');
+    })
+    
+});

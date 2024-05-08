@@ -18,3 +18,4 @@ MediaBook/__pycache__/wsgi.cpython-310.pyc
 
 .env
 Sound/.env
+IdeaBoards/.env

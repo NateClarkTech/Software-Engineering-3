@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{% static 'css/boarddetails.css' %}">
+{% endblock %}
+
+{% block content %}
+    <!-- Source: https://getbootstrap.com/docs/5.3/components/modal/ -->
+
+    <!-- View Item Modal -->
+    <div class="modal fade" id="viewBoardItem" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body break-text">
+                    <h1 id="view-item-title" data-id='none' data-index="none"></h1>
+                    <p id="view-item-description"></p>
+                    <image class="mt-3" id="view-item-image" src=""></image>
+                    <audio class="mt-3" id="view-item-sound" controls src="" ></audio>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error Modal -->
+    <div class="modal fade" id="errorModel" tabindex="-1" labelledby="error-modal-label" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-danger" id="error-modal-label">Error</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h1 id="error-modal-text" class="text-wrap text-danger"></h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row text-center justify-content-center">
+        <h3 class="col-12" id="board-title">Project Board: {{ board.title }}</h3>
+        {% if board.description %}
+            <h4 class="col-12" id="board-description">Description: {{ board.description }}</h4>
+        {% else %}
+            <h4 class="col-12 d-none" id="board-description">Description: none</h4>
+        {% endif %}
+        <h4 class="col-12">Created by: {{ board.user }}</h4>
+    </div>
+
+    <hr>
+
+    <div class='row'>
+        <div id='boardItems' class='col-12 row px-0 mx-0'>
+            {% if items %}
+                {% for item in items %}
+                    <div id="board-item-container-{{ forloop.counter }}" class="col-md-4 px-3 py-3 text-center">
+                        <button id="board-item-{{ forloop.counter }}" class="btn btn-outline-primary btn-size">
+                            <div class="card card-custom"> 
+                                <div class="card-body">
+                                    
+                                    <!-- contains item model id, image/sound src if model contains one. -->
+                                    <!-- h2 Start-->
+                                    <h2 id="board-item-{{ forloop.counter }}-title" 
+
+                                        {% if item.item_image %}
+                                            data-img-src="{{ item.item_image.url }}" 
+                                        {% endif %}
+                                        
+                                        {% if item.item_sound %}
+                                            data-sound-src="{{ item.item_sound.url }}"
+                                        {% endif %}
+
+                                        class='card-title pb-2'> 
+                                        {{ item.title }}
+                                    </h2>
+                                    <!--h2 End-->
+
+                                    <p id="board-item-{{ forloop.counter }}-description" class='card-description pb-2'>{{ item.description }}</p>
+
+                                    {% if item.item_image %}
+                                        <p>img icon</p>
+                                    {% endif %}
+
+                                    {% if item.item_sound %}
+                                        <p>sound icon</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </button>
+                    </div>            
+                {% endfor %}
+            {% else %}
+                <div class='card mx-auto' id='no-items-found'>
+                    <div class='card-body'>
+                        <h1 class='card-text text-center'>This board has no notes yet.</h1>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'IdeaBoards/publicboarddetails.js' %}"></script>
+{% endblock %}

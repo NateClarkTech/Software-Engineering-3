@@ -18,6 +18,64 @@
     }
 
 
+    .recent-commenters {
+        background-color: #211951;
+        border: 1px solid #365486; /* Slightly lighter border for visibility */
+        color: white; /* Ensure text is white */
+        padding: 15px;
+        border-radius: 5px; /* Rounded corners */
+        /* make the content flex and wrap arround */
+
+    }
+
+    .recent-commenters h3 {
+        margin-bottom: 10px;
+    }
+
+    .recent-commenters ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .name {
+        /* make the text a bit bigger and bold */
+        font-size: 1.4rem !important;
+        font-weight: bold;
+        color: white; /* Set text color */
+    }
+    
+    .recent-commenters li {
+        flex: 0 1 18%; /* Flex grow, flex shrink, and basis */
+        margin-bottom: 10px;
+        display: flex; /* Makes sure the content inside the li is centered */
+        flex-direction: column; /* Makes sure the content inside the li is centered */
+
+        
+    }
+
+    .recent-commenters li a {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        text-decoration: none;
+        color: white; /* Set text color */
+    }
+    .profile-picture {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        border: 3px solid #ecf0f1;
+        display: block; /* This centers the img in the li */
+        margin: auto; /* This also helps in centering the img in the li */
+    }
+
+
+
 
 
 {% endblock %}
@@ -37,6 +95,8 @@
         {% endfor %}
     </div>
     <div class="row mt-4">
+
+        
         <div class="col-md-8">
             <h3>Latest Threads</h3>
             <ul class="list-group custom-border-wes">
@@ -66,5 +126,32 @@
             </ul>
         </div>
     </div>
+    <!-- Line, used this source  https://www.w3schools.com/tags/tag_hr.asp-->
+
+    <hr style="height:2px;border-width:0;background-color:#365486">
+    <!-- Recent Commenters -->
+    <h3>Recent Commenters</h3>
+
+    <div class="recent-commenters">
+        <ul>
+            {% for profile in recent_commenter_profiles %}
+            <!-- Username div, should be right under the image -->
+            <li>
+                <a href="{% url 'ProfileApp:public_profile' profile.user.username %}">
+                    <!-- Small profile picture by their username -->
+                    <img src="{{ profile.profile_picture.url }}" alt="{{ profile.user.username }}" class="profile-picture">
+                    <!-- Username div, should be right under the image -->
+                    <div class="name">
+                        {{ profile.user.username }}
+                    </div>
+                </a>
+            </li>
+
+            {% empty %}
+            <li>No recent comments</li>
+            {% endfor %}
+        </ul>
+    </div>
+    
 </div>
 {% endblock %}
