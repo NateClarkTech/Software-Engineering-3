@@ -121,12 +121,12 @@
                             <input type="text" class="form-control" id="description" name="description">
                         </div>
                         <div class="form-group">
-                            <label for="board_image">Add Image<p style="display: inline; margin: 0;"></p></label>
-                            <input type="file" class="form-control" id="board_image" name="board_image" accept="image/*">
+                            <label for="item_image">Add Image<p style="display: inline; margin: 0;"></p></label>
+                            <input type="file" class="form-control" id="item_image" name="item_image" accept="image/*">
                         </div>
                         <div class="form-group">
-                            <label for="board_sound">Add Sound File<p style="display: inline; margin: 0;"></p></label>
-                            <input type="file" class="form-control" id="board_sound" name="board_image" accept="audio/*">
+                            <label for="item_sound">Add Sound File<p style="display: inline; margin: 0;"></p></label>
+                            <input type="file" class="form-control" id="item_sound" name="item_image" accept="audio/*">
                         </div>
 
                         <p><p class="text-danger" style="display: inline; margin: 0;">*</p> required field</p>
@@ -156,8 +156,8 @@
                     <audio class="mt-3 col-12" id="view-item-sound" controls src="" ></audio>
                 </div>
                 <div class="modal-footer justify-content-center">
-                    <button type="button" id="edit-item-modal-button" class="btn btn-success">Edit</button>
-                    <button type="button" id="delete-item-modal-button" class="btn btn-danger">Delete</button>
+                    <button type="button" id="edit-item-modal-button" class="btn btn-success" accept="image/*">Edit</button>
+                    <button type="button" id="delete-item-modal-button" class="btn btn-danger" accept="audio/*">Delete</button>
                 </div>
             </div>
         </div>
@@ -174,12 +174,35 @@
                     </button>
                 </div>
 
-                <div class="modal-body">
+                <div class="modal-body text-start">
+
                     <h5>New Item Title<p class="text-danger" style="display: inline; margin: 0;">*</p></h5>
                     <input type="text" id="editItemTitleInput" data-id='none' data-index="none" class="form-control" placeholder="New Item Title">
+
                     <h5>New Item Description</h5>
                     <input type="text" id="editItemDescriptionInput" class="form-control" placeholder="New Item Description">
                     <p><p class="text-danger" style="display: inline; margin: 0;">*</p> required field</p>
+                    
+                    <h5>New Item Image</h5>
+                    <p>(Leave blank to keep current image)</p>
+                    <input type="file" class="form-control" id="editItemImage" name="editItemImage" accept="image/*">
+                    <div class="form-check pt-2" id="modal-item-remove-image">
+                        <input class="form-check-input" type="checkbox" id="removeImage">
+                        <label class="form-check-label" for="removeImage">
+                            Remove Image
+                        </label>
+                    </div>
+
+                    <h5 class="mt-2">New Item Sound</h5>
+                    <p>(Leave blank to keep current sound)</p>
+                    <input type="file" class="form-control" id="editItemSound" name="editItemSound" accept="audio/*">
+                    <div class="form-check pt-2" id="modal-item-remove-sound">
+                        <input class="form-check-input" type="checkbox" id="removeSound">
+                        <label class="form-check-label" for="removeSound">
+                            Remove Sound
+                        </label>
+                    </div>
+
                 </div>
 
                 <div class="modal-footer">
@@ -223,27 +246,24 @@
     <div class="modal fade" id="createLabel" tabindex="-1" role="dialog" aria-labelledby="CreateLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <form id="createLabel">
-                    {% csrf_token %}
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="CreateItemModalLabel">Create New Label</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="CreateItemModalLabel">Create New Label</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="new-label-name">Label Name<p class="text-danger" style="display: inline; margin: 0;">*</p></label>
+                        <input type="text" class="form-control" id="new-label-name" name="new-label-name">
                     </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="new-label-name">Label Name<p class="text-danger" style="display: inline; margin: 0;">*</p></label>
-                            <input type="text" class="form-control" id="new-label-name" name="new-label-name">
-                        </div>
 
-                        <p><p class="text-danger" style="display: inline; margin: 0;">*</p> required field</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary text-danger" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary text-success" id="add-label-button">Add Label</button>
-                    </div>
-                </form>
+                    <p><p class="text-danger" style="display: inline; margin: 0;">*</p> required field</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary text-danger" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary text-success" id="add-label-button">Add Label</button>
+                </div>
             </div>
         </div>
     </div>
@@ -293,10 +313,10 @@
 
     <hr>
 
-    <div class="row">
-        <button type="button" class="btn btn-primary my-1 col-md-1.5" id="create-label" data-toggle="modal" data-target="#createLabel" data-id="{{ board.id }}">Create Label</button>
+    <div class="row col-12" id="labelRow">
+        <button type="button" class="btn btn-primary my-1" id="create-label" data-toggle="modal" data-target="#createLabel" data-label-nate="{{ label.name }}">Create Label</button>
         {% for label in labels %}
-            <button type="button" class="btn btn-primary my-1 col-md-1.5" id="sort-label" data-toggle="modal" data-target="#sortLabel" data-id="{{ board.id }}">{{label.label_name}}</button>
+            <button type="button" class="btn btn-primary my-1 ml-1" id="sort-label-{{ forloop.counter }}" data-label-nate="{{ label.name }}">{{label.label_name}}</button>
         {% endfor %}
     </div>
     
@@ -313,26 +333,31 @@
 
                                 <!-- Move the row with images to the bottom of the card -->
                                 <div class="row justify-content-end mt-auto">
-                                    {% if item.board_image %}
-                                        <img class="col-3 img-icon px-1 {% if not item.board_sound %}mr-3{% endif %}" src="{% static "images/imageiconwhite.png" %}" alt="img icon"></img>
+                                    {% if item.item_image %}
+                                        <img class="col-3 img-icon px-1 {% if not item.item_sound %}mr-3{% endif %}" src="{% static "images/imageiconwhite.png" %}" alt="img icon"></img>
                                     {% endif %}
                 
-                                    {% if item.board_sound %}
+                                    {% if item.item_sound %}
                                         <!-- HTML for the custom icon -->
                                         <img src="{% static "images/audioiconwhite.png" %}" class="audio-icon mr-3 px-1" alt="audio icon">
                                     {% endif %}
+
                                 </div>
 
                                 <!-- h2 start -->
                                 <!-- contains item model id, image/sound src if model contains one. -->
                                 <h2 id="board-item-{{ forloop.counter }}-title" 
                                     data-id="{{ item.id }}" 
-                                    {% if item.board_image %}
-                                        data-img-src="{{ item.board_image.url }}" 
+                                    {% if item.item_image %}
+                                        data-img-src="{{ item.item_image.url }}" 
                                     {% endif %}
                                     
-                                    {% if item.board_sound %}
-                                        data-sound-src="{{ item.board_sound.url }}"
+                                    {% if item.item_sound %}
+                                        data-sound-src="{{ item.item_sound.url }}"
+                                    {% endif %}
+
+                                    {% if item.label %}
+                                        data-label="{{ item.label.label_name }}"
                                     {% endif %}
                 
                                     class='card-title pb-2'> 
