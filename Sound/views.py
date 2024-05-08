@@ -6,6 +6,7 @@ from django.contrib.auth import login, logout
 from Sound.models import *
 
 from django.shortcuts import render, redirect, get_object_or_404
+from Sound.spotify import *
 
 # Bilge implemented this application.
 
@@ -17,12 +18,19 @@ def sound(request):
             description = request.POST.get('description', '').strip()
             labelselect = request.POST.get("labelselect")
             label = get_object_or_404(SoundLabel, label_name=labelselect)
-            if title or description or label:  
-                SoundNote.objects.create(note_title=title, note_description=description, note_label=label)
+            if title or description:  
+                SoundNote.objects.create(note_title=title, note_description=description, note_label=label, note_author=request.user)
         if "soundCreateLabel" in request.POST:
             label = request.POST.get('createLabel', "").strip()
             if label:
                 SoundLabel.objects.create(label_name=label)
+        if "get_recc" in request.POST:
+            genre_name = request.POST.get('get_recc', '').strip()
+            if genre_name:
+                recc = get_recc(genre_name)
+                notes = noteQuery()
+                labels = labelQuery()
+                return render(request, 'sound.html', {"notes":notes, "labels":labels, "recc":recc})
         return redirect('sound')
     else:
         notes = noteQuery()
@@ -40,4 +48,4 @@ def label_sort(request, label_name):
     notes = noteQuery()
     labels = labelQuery()
     label = SoundLabel.objects.get(label_name=label_name)
-    return render(request, 'label_sort.html', {'label': label, "notes":notes, "labels":labels})
+    return render(request, 'sound_label_sort.html', {'label': label, "notes":notes, "labels":labels})

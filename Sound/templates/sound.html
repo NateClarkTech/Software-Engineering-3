@@ -10,7 +10,7 @@
         }
         .sidebar {
             flex: 0.5;
-            color: #333;
+            color: white;
             width: 80px;
             padding: 20px 0;
             margin-right:10px;
@@ -19,7 +19,7 @@
             display: block;
             text-align: left;
             margin-bottom: 20px;
-            color: #333;
+            color: white;
             text-decoration: none;
             font-size: 20px;
         }
@@ -55,7 +55,7 @@
             -webkit-box-sizing:border-box;
             color: #333;
             -webkit-border-radius: 8px;
-            border: 2px solid #333;
+            border: 2px solid white;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             min-height: 245px;
             position: relative;
@@ -75,7 +75,7 @@
             padding: 10px 20px;
             background-color: #003087;
             border: none;
-            color: white;
+            color: black;
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease;
@@ -111,7 +111,7 @@
                 }
             </script>
             {% for label in labels %}
-            <a href="{% url 'label_sort' label.label_name %}"><img src="{% static 'icons/label-sound.png' %}" alt="Labels">{{label.label_name}}</a>
+            <a href="{% url 'sound_label_sort' label.label_name %}"><img src="{% static 'icons/label-sound.png' %}" alt="Labels">{{label.label_name}}</a>
             {% endfor %}
         </div>
         <div id="CreateLabel" style="display: none;">
@@ -153,6 +153,13 @@
                 </div>
                 <button type="note-button" name="soundNoteSubmit" >Note</button>
             </form>
+            <form class="note-form" method="POST" action="">
+                {% csrf_token %} <!-- CSRF verification, security satisfaction -->
+                <input type=text name="get_recc" method="POST" action="" placeholder="Type in Genre name to get recommendations">
+            </form>
+            {% if recc %}
+                <h3>{{recc}}</h3>
+            {% endif %}
             <div class="note-pad">
                 {% for sound in notes %}
                 <div class="note-box">

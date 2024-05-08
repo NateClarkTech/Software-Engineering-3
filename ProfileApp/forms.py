@@ -25,3 +25,12 @@ class ProfileUpdateForm(forms.ModelForm):
 # A profile search form from gpt
 class ProfileSearchForm(forms.Form):
     query = forms.CharField(label='Search Profiles', max_length=100)
+
+
+class ProfileCommentForm(forms.ModelForm):
+    class Meta:
+        model = ProfileComment
+        fields = ['content']
+        widgets = {
+            'content': forms.Textarea(attrs={'class': 'form-control', 'rows': 3})
+        }

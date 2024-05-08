@@ -1,57 +1,100 @@
-.card-custom {
-    max-height: 200px; /* Adjust the max height as needed */
-    overflow: hidden;
-}
+
 
 /* Custom CSS for setting width and height on medium screens */
 @media (min-width: 768px){
     .card-custom {
-        width: 300px; /* Set the desired width */
+        width: 100%; /* Set the desired width */
         height: 200px; /* Set the desired height */
         overflow: hidden;
+    }
+
+    .btn-size {
+        width: 100%;
+    }
+
+    #create-new-item-button {
+        position: fixed;
+        width: 125px;
+        padding-left: 10px;
+        padding-right: 10px;
+        bottom: 70px; /* Adjust the distance from the bottom as needed */
+        right: 20px; /* Adjust the distance from the right as needed */
+        z-index: 999; /* Ensure it appears above other content */
+        /* Additional styling */
+        padding: 10px 20px;
+        /*background-color: #007bff; /* Example background color */
+        border-radius: 5px;
+        cursor: pointer;
+        /* Add any other styles as needed */
+    }
+
+    #save-board-button {
+        position: fixed;
+        width: 125px;
+        padding-left: 10px;
+        padding-right: 10px;
+        bottom: 20px; /* Adjust the distance from the bottom as needed */
+        right: 20px; /* Adjust the distance from the right as needed */
+        z-index: 999; /* Ensure it appears above other content */
+        /* Additional styling */
+        padding: 10px 20px;
+        /*background-color: #03c900; /* Example background color */
+        border-radius: 5px;
+        cursor: pointer;
+        /* Add any other styles as needed */
+    }
+
+    
+}
+
+@media (max-width: 768px){
+    #create-new-item-button {
+        width: 100%;
+        height: 200px;
+        overflow: hidden;
+        margin: 16px 16px;
+        font-weight: bold;
+        font-size: 1.5em;
+    }
+
+    #save-board-button {
+        width: 100%;
+        height: 200px;
+        overflow: hidden;
+        margin: 16px 16px;
+        font-weight: bold;
+        font-size: 1.5em;
+    }
+
+    .btn-size {
+        width: 100%;
+    }
+    
+    .card-body{
+        width: 100%;
+    }
+
+    .card-custom {
+        width: 100%;
+        overflow: hidden;
+    }
+
+    .mode-selector{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 auto;
     }
 }
 
 .card-body {
     height: 100%;
     overflow: hidden;
-    color: black;
 }
 
 .card-title, .card-description {
     margin: 0;
     overflow: hidden;
-    color: black;
-}
-
-#create-new-item-button {
-    position: fixed;
-    bottom: 70px; /* Adjust the distance from the bottom as needed */
-    right: 20px; /* Adjust the distance from the right as needed */
-    z-index: 999; /* Ensure it appears above other content */
-    /* Additional styling */
-    padding: 10px 20px;
-    /*background-color: #007bff; /* Example background color */
-    color: black;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    /* Add any other styles as needed */
-}
-
-#save-board-button {
-    position: fixed;
-    bottom: 20px; /* Adjust the distance from the bottom as needed */
-    right: 20px; /* Adjust the distance from the right as needed */
-    z-index: 999; /* Ensure it appears above other content */
-    /* Additional styling */
-    padding: 10px 20px;
-    /*background-color: #03c900; /* Example background color */
-    color: black;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    /* Add any other styles as needed */
 }
 
 .break-text {
@@ -62,4 +105,30 @@
 #view-item-text {
     max-width: 100%; /* Ensure text does not extend beyond the modal body */
     overflow-wrap: break-word; /* Break words if they exceed the available width */
+}
+
+.modal-content {
+    background-color: #0F1035; /* Change this to your desired background color */
+    border-color: #333; /* Change this to your desired border color */
+}
+
+.modal-header {
+    border-bottom: 1px solid #365486; /* Change this to your desired border color */
+}
+
+.modal-footer {
+    border-top: 1px solid #365486; /* Change this to your desired border color */
+}
+
+.close {
+    color: #fff;
+}
+
+.close:hover {
+    color: #fff; /* Change this to your desired hover color */
+}
+
+
+hr  {
+    border-top: 1px solid #365486;
 }
