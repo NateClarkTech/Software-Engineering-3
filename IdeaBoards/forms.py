@@ -16,13 +16,7 @@ class NewIdeaBoardItemForm(forms.ModelForm):
         fields = [
             'title', 
             'description',
-            'item_image',
-            'item_sound',
+            'board_image',
+            'board_sound',
         ]
         
-class NewItemLabelForm(forms.ModelForm):
-    class Meta:
-        model = ItemLabel
-        fields = [
-            'label_name'
-        ]

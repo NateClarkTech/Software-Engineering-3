@@ -62,7 +62,6 @@ def IdeaBoard_Detail(request, id):
     try:
         board = IdeaBoard.objects.get(id=id)
         items = IdeaBoardItem.objects.filter(ideaboard=board)
-        labels = ItemLabel.objects.filter(label_board=board)
 
     except:
         # error implementation was based on GPT https://chat.openai.com/share/424d6891-b553-4829-b8fd-8eafd56f687c
@@ -83,8 +82,8 @@ def IdeaBoard_Detail(request, id):
             # Get file data
             file_data = request.FILES
 
-            print(form_data)
-            print(file_data)
+            #print(form_data)
+            #print(file_data)
 
             number_of_changes = form_data.get('numChanges')
             #print(number_of_changes)
@@ -100,49 +99,49 @@ def IdeaBoard_Detail(request, id):
                         "description": form_data.get(f'{x}_description'),
                     }
 
-                    item_image_files = file_data.getlist(f'{x}_item_image')
+                    board_image_files = file_data.getlist(f'{x}_board_image')
 
-                    # Check if there are any uploaded files for '0_item_image'
-                    if item_image_files:
-                        item_image_file = item_image_files[0]
+                    # Check if there are any uploaded files for '0_board_image'
+                    if board_image_files:
+                        board_image_file = board_image_files[0]
                         
                         # Create a TemporaryUploadedFile instance
                         temporary_uploaded_image = TemporaryUploadedFile(
-                            name=item_image_file.name,  # Set the name of the file
-                            content_type=item_image_file.content_type,  # Set the content type of the file
-                            size=item_image_file.size,  # Set the size of the file
+                            name=board_image_file.name,  # Set the name of the file
+                            content_type=board_image_file.content_type,  # Set the content type of the file
+                            size=board_image_file.size,  # Set the size of the file
                             charset=None  # Charset is not applicable for binary files
                         )
 
                         # Write the file content to the TemporaryUploadedFile
-                        temporary_uploaded_image.write(item_image_file.read())
+                        temporary_uploaded_image.write(board_image_file.read())
 
                         # Move the file pointer back to the beginning of the file
                         temporary_uploaded_image.seek(0)
 
-                    item_sound_files = file_data.getlist(f'{x}_item_sound')
+                    board_sound_files = file_data.getlist(f'{x}_board_sound')
 
-                    # Check if there are any uploaded files for '0_item_sound'
-                    if item_sound_files:
-                        item_sound_file = item_sound_files[0]
+                    # Check if there are any uploaded files for '0_board_sound'
+                    if board_sound_files:
+                        board_sound_file = board_sound_files[0]
                         
                         # Create a TemporaryUploadedFile instance for audio
                         temporary_uploaded_audio = TemporaryUploadedFile(
-                            name=item_sound_file.name,  # Set the name of the file
-                            content_type=item_sound_file.content_type,  # Set the content type of the file
-                            size=item_sound_file.size,  # Set the size of the file
+                            name=board_sound_file.name,  # Set the name of the file
+                            content_type=board_sound_file.content_type,  # Set the content type of the file
+                            size=board_sound_file.size,  # Set the size of the file
                             charset=None  # Charset is not applicable for binary files
                         )
 
                         # Write the file content to the TemporaryUploadedFile
-                        temporary_uploaded_audio.write(item_sound_file.read())
+                        temporary_uploaded_audio.write(board_sound_file.read())
 
                         # Move the file pointer back to the beginning of the file
                         temporary_uploaded_audio.seek(0)
 
                     fileData = {
-                        "item_image": temporary_uploaded_image if item_image_files else None,
-                        "item_sound": temporary_uploaded_audio if item_sound_files else None,
+                        "board_image": temporary_uploaded_image if board_image_files else None,
+                        "board_sound": temporary_uploaded_audio if board_sound_files else None,
                     }
 
                     form = NewIdeaBoardItemForm(formData, fileData)  # Pass both form data and file data
@@ -160,60 +159,6 @@ def IdeaBoard_Detail(request, id):
                     editedItem = IdeaBoardItem.objects.get(id=form_data.get(f'{x}_item_id'))
                     editedItem.title = form_data.get(f'{x}_title')
                     editedItem.description = form_data.get(f'{x}_description')
-                    
-                    # Check if the user has uploaded a new image for the item
-                    item_image_files = file_data.getlist(f'{x}_item_image')
-                    # Check if there are any uploaded files for '0_item_image'
-                    if item_image_files:
-                        item_image_file = item_image_files[0]
-                        
-                        # Create a TemporaryUploadedFile instance
-                        temporary_uploaded_image = TemporaryUploadedFile(
-                            name=item_image_file.name,  # Set the name of the file
-                            content_type=item_image_file.content_type,  # Set the content type of the file
-                            size=item_image_file.size,  # Set the size of the file
-                            charset=None  # Charset is not applicable for binary files
-                        )
-
-                        # Write the file content to the TemporaryUploadedFile
-                        temporary_uploaded_image.write(item_image_file.read())
-
-                        # Move the file pointer back to the beginning of the file
-                        temporary_uploaded_image.seek(0)
-                        editedItem.item_image = temporary_uploaded_image
-
-                    # Check if the user has uploaded a new audio file for the item
-                    item_sound_files = file_data.getlist(f'{x}_item_sound')
-
-                    # Check if there are any uploaded files for '0_item_sound'
-                    if item_sound_files:
-                        item_sound_file = item_sound_files[0]
-                        
-                        # Create a TemporaryUploadedFile instance for audio
-                        temporary_uploaded_audio = TemporaryUploadedFile(
-                            name=item_sound_file.name,  # Set the name of the file
-                            content_type=item_sound_file.content_type,  # Set the content type of the file
-                            size=item_sound_file.size,  # Set the size of the file
-                            charset=None  # Charset is not applicable for binary files
-                        )
-
-                        # Write the file content to the TemporaryUploadedFile
-                        temporary_uploaded_audio.write(item_sound_file.read())
-
-                        # Move the file pointer back to the beginning of the file
-                        temporary_uploaded_audio.seek(0)
-                        editedItem.item_sound = temporary_uploaded_audio
-
-
-                    remove_image = form_data.get(f'{x}_remove_image')
-                    if (remove_image == "true"):
-                        editedItem.item_image = None
-
-                    remove_audio = form_data.get(f'{x}_remove_sound')
-                    if (remove_audio == "true"):
-                        editedItem.item_sound = None
-                        
-
                     editedItem.save()
 
                 elif change_type == 'delete':
@@ -228,19 +173,6 @@ def IdeaBoard_Detail(request, id):
                     else:
                         board.is_public = False
                     board.save()
-
-                elif change_type == 'addLabel':
-                    formData = {
-                        "label_name": form_data.get(f'{x}_labelName'),
-                    }
-                    print(formData)
-                    form = NewItemLabelForm(formData)
-                    if form.is_valid():
-                        new_label = form.save(commit=False)
-                        new_label.label_board = board
-                        new_label.save()
-                    else:
-                        print(form.errors)
                 
                 else:
                     print('not a valid change type')
@@ -259,10 +191,10 @@ def IdeaBoard_Detail(request, id):
 
         
         #give the HTML for the board with the board's items
-        return render(request, 'boarddetail.html', {'board': board, 'items': items, 'labels': labels})
+        return render(request, 'boarddetail.html', {'board': board, 'items': items})
     
     elif board.is_public:
-        return render(request, 'publicboarddetails.html', {'board': board, 'items': items, 'labels': labels})
+        return render(request, 'publicboarddetails.html', {'board': board, 'items': items})
     
     #If the user is not the owner of the board redirect to them to their boards
     else:

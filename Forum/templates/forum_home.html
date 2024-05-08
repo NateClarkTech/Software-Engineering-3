@@ -17,63 +17,54 @@
         border: 1px solid #365486;
     }
 
+
     .recent-commenters {
         background-color: #211951;
         border: 1px solid #365486; /* Slightly lighter border for visibility */
         color: white; /* Ensure text is white */
         padding: 15px;
         border-radius: 5px; /* Rounded corners */
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around; /* Distribute space evenly around items */
+        /* make the content flex and wrap arround */
+
     }
-    
+
     .recent-commenters h3 {
-        width: 100%; /* Full width to align it centered over the list */
-        text-align: center;
-        margin-bottom: 20px; /* More space between title and items */
+        margin-bottom: 10px;
     }
-    
+
     .recent-commenters ul {
         list-style-type: none;
         padding: 0;
         margin: 0;
-        width: 100%; /* Full width */
         display: flex;
         flex-wrap: wrap;
-        justify-content: flex-start; /* Align items at the start */
+        justify-content: space-between;
+    }
+
+    .name {
+        /* make the text a bit bigger and bold */
+        font-size: 1.4rem !important;
+        font-weight: bold;
+        color: white; /* Set text color */
     }
     
     .recent-commenters li {
-        flex: 1 1 20%; /* Adjust basis to 20% to fit 5 across on larger screens */
+        flex: 0 1 18%; /* Flex grow, flex shrink, and basis */
         margin-bottom: 10px;
+        display: flex; /* Makes sure the content inside the li is centered */
+        flex-direction: column; /* Makes sure the content inside the li is centered */
+
+        
+    }
+
+    .recent-commenters li a {
         display: flex;
         flex-direction: column;
         align-items: center;
         text-align: center;
-    }
-    
-    .recent-commenters li a {
         text-decoration: none;
         color: white; /* Set text color */
-        display: flex;
-        flex-direction: column;
-        align-items: center;
     }
-    
-    .profile-picture {
-        width: 80px; /* Optimal size for mobile and desktop */
-        height: 80px;
-        border-radius: 50%;
-        border: 3px solid #ecf0f1;
-    }
-    
-    .name {
-        font-size: 1.2rem; /* Adjust font size for readability */
-        font-weight: bold;
-        margin-top: 5px; /* Space between picture and name */
-    }
-    
     .profile-picture {
         width: 100px;
         height: 100px;
@@ -82,115 +73,8 @@
         display: block; /* This centers the img in the li */
         margin: auto; /* This also helps in centering the img in the li */
     }
-    .page-item {
-        display: flex;
-        justify-content: space-between; /* Keep items on the sides */
-        align-items: center; /* Align items vertically in the center */
-        padding: 10px 15px;
-        background-color: #211951;
-        border-bottom: 1px solid #365486;
-        color: white;
-    }
-    
-    .page-item:last-child {
-        border-bottom: none; /* No border at the bottom of the last item */
-    }
-    
-    .page-link {
-        color: #f0f0f0;
-        text-decoration: none; /* Remove underline from links */
-        font-weight: bold;
-    }
-    
-    .page-link:hover {
-        text-decoration: underline; /* Only underline on hover */
-        color: #c0c0f0;
-    }
-    
-    .page-description {
-        font-size: 0.95rem;
-        color: #cccccc; /* Lighter text color for description */
-    }
 
-    .page-title {
-        display: flex;
-    }
 
-    .page-title {
-        flex-grow: 1; /* Ensures the title and description take up the remaining space */
-        margin-right: 20px; /* Adds some spacing between the title/description and the latest comment link */
-    }
-    
-    .comment-link {
-        white-space: nowrap; /* Ensures the link doesn't break into multiple lines */
-        text-align: right;
-    }
-    
-    .page-item {
-        display: flex;
-        justify-content: space-between; /* This already ensures the content on both sides are pushed to the edge */
-        align-items: center;
-    }
-
-    @media (max-width: 768px) {
-        .page-item {
-            flex-direction: column;
-            align-items: flex-start; /* Align items to the start on small screens */
-        }
-    
-        .page-title, .comment-link {
-            width: 100%; /* Full width to prevent overflow */
-            text-align: left; /* Align text to the left */
-            margin-bottom: 5px; /* Add some space between the title and the comment link */
-        }
-    
-        .comment-link {
-            order: 3; /* Make the comment link appear last */
-            text-align: left; /* Align the text to the left */
-            white-space: normal; /* Allow wrapping */
-        }
-    
-        .page-description {
-            font-size: 0.85rem; /* Smaller font size on mobile devices */
-        }
-        .recent-commenters li {
-            flex: 1 1 33%; /* 3 items per row on tablet screens */
-            
-        }
-    
-        .recent-commenters li a {
-            flex-direction: column; 
-        }
-    
-        .profile-picture {
-            width: 60px; /* Smaller profile pictures on mobile */
-            height: 60px;
-        }
-    
-        .name {
-            font-size: 1rem; /* Smaller font size for names */
-            display: block;
-        }
-
-    }
-    
-    @media (max-width: 480px) {
-        .recent-commenters li {
-            flex: 1 1 50%; /* 2 items per row on mobile screens */
-        }
-    
-        .profile-picture {
-            width: 60px; /* Smaller pictures on mobile */
-            height: 60px;
-        }
-    
-        .name {
-            font-size: 1rem; /* Smaller font size for mobile */
-        }
-    }
-
-    
-    
 
 
 
@@ -199,30 +83,16 @@
 {% block content %}
 <div class="container mt-3">
     <div class="row">
-        <div class="col-12">
-            <h3> Pages</h3>
-            <div class="list-group custom-border-wes">
-                {% for page in pages %}
-                <div class="page-item">
-                    <div class="page-title">
-                        <a href="{% url 'thread_list' page.id %}" class="page-link">{{ page.title }}</a>
-                        <p class="page-description">{{ page.description|truncatechars:150 }}</p>
-                    </div>
-                    <div class="comment-link">
-                        {% with latest_comment=page.get_latest_comment %}
-                        {% if latest_comment %}
-                            <a href="{% url 'thread_detail_comment' latest_comment.thread.id latest_comment.id %}">
-                                Last comment by <strong>{{ latest_comment.user.username }}</strong> on <strong>{{ latest_comment.created_at|date:"M d, Y H:i" }}</strong>
-                            </a>
-                        {% else %}
-                            <small>No comments yet.</small>
-                        {% endif %}
-                        {% endwith %}
-                    </div>
+        {% for page in pages %}
+        <div class="col-md-6 mb-3">
+            <div class="card custom-border-wes">
+                <div class="card-body">
+                    <h5 class="card-title">{{ page.title }}</h5>
+                    <a href="{% url 'thread_list' page.id %}" class="btn btn-primary">View Page</a>
                 </div>
-                {% endfor %}
             </div>
         </div>
+        {% endfor %}
     </div>
     <div class="row mt-4">
 

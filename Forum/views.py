@@ -131,10 +131,6 @@ def forum_home(request):
     # Get top threads based on comment count
     top_threads = Thread.objects.annotate(num_comments=Count('comment')).order_by('-num_comments')[:5]
     
-    
-
-    
-    
     return render(request, 'forum_home.html', {
         'pages': pages,
         'latest_threads': latest_threads,
