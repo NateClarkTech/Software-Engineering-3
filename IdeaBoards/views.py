@@ -160,6 +160,60 @@ def IdeaBoard_Detail(request, id):
                     editedItem = IdeaBoardItem.objects.get(id=form_data.get(f'{x}_item_id'))
                     editedItem.title = form_data.get(f'{x}_title')
                     editedItem.description = form_data.get(f'{x}_description')
+                    
+                    # Check if the user has uploaded a new image for the item
+                    item_image_files = file_data.getlist(f'{x}_item_image')
+                    # Check if there are any uploaded files for '0_item_image'
+                    if item_image_files:
+                        item_image_file = item_image_files[0]
+                        
+                        # Create a TemporaryUploadedFile instance
+                        temporary_uploaded_image = TemporaryUploadedFile(
+                            name=item_image_file.name,  # Set the name of the file
+                            content_type=item_image_file.content_type,  # Set the content type of the file
+                            size=item_image_file.size,  # Set the size of the file
+                            charset=None  # Charset is not applicable for binary files
+                        )
+
+                        # Write the file content to the TemporaryUploadedFile
+                        temporary_uploaded_image.write(item_image_file.read())
+
+                        # Move the file pointer back to the beginning of the file
+                        temporary_uploaded_image.seek(0)
+                        editedItem.item_image = temporary_uploaded_image
+
+                    # Check if the user has uploaded a new audio file for the item
+                    item_sound_files = file_data.getlist(f'{x}_item_sound')
+
+                    # Check if there are any uploaded files for '0_item_sound'
+                    if item_sound_files:
+                        item_sound_file = item_sound_files[0]
+                        
+                        # Create a TemporaryUploadedFile instance for audio
+                        temporary_uploaded_audio = TemporaryUploadedFile(
+                            name=item_sound_file.name,  # Set the name of the file
+                            content_type=item_sound_file.content_type,  # Set the content type of the file
+                            size=item_sound_file.size,  # Set the size of the file
+                            charset=None  # Charset is not applicable for binary files
+                        )
+
+                        # Write the file content to the TemporaryUploadedFile
+                        temporary_uploaded_audio.write(item_sound_file.read())
+
+                        # Move the file pointer back to the beginning of the file
+                        temporary_uploaded_audio.seek(0)
+                        editedItem.item_sound = temporary_uploaded_audio
+
+
+                    remove_image = form_data.get(f'{x}_remove_image')
+                    if (remove_image == "true"):
+                        editedItem.item_image = None
+
+                    remove_audio = form_data.get(f'{x}_remove_sound')
+                    if (remove_audio == "true"):
+                        editedItem.item_sound = None
+                        
+
                     editedItem.save()
 
                 elif change_type == 'delete':
