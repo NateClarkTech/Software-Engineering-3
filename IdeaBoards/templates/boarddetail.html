@@ -215,8 +215,8 @@
 
                     <h5 class="mt-2">New Label</h5>
                     <p>(Leave blank to keep current label)</p>
-                    <div id="editItemLabel" class="form-control">
-                        <select id="labelSelect" class="label-dropdown" >
+                    <div id="editItemLabelDiv" class="form-control">
+                        <select id="editItemLabel" class="label-dropdown" >
                             <option value="" disabled selected hidden>Choose Label</option>
                             {% for label in labels %}
                                 <option value="{{label}}">{{ label.label_name }}</option>

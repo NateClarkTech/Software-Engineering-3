@@ -205,7 +205,6 @@ function addFormItem() {
                 rowDiv.appendChild(audioIcon);
             }
             if (item_label) {
-                    /* FIX */
                     let label = document.createElement("p");
                     label.textContent = item_label;
                     rowDiv.appendChild(label);
@@ -224,7 +223,6 @@ function addFormItem() {
         if (item_sound){
             cardTitle.setAttribute("data-sound-src", URL.createObjectURL(item_sound));
         }
-        // May need FIX
         if (item_label){
             cardTitle.setAttribute("data-label", item_label);
         }
@@ -349,7 +347,7 @@ document.getElementById("edit-item-button").addEventListener("click", function()
     let newDescription = document.getElementById("editItemDescriptionInput").value;
     let newImage = document.getElementById("editItemImage").files[0];
     let newSound = document.getElementById("editItemSound").files[0];
-    let newLabel = document.getElementById("labelSelect").value;
+    let newLabel = document.getElementById("editItemLabel").value;
     let removeImage = document.getElementById("removeImage").checked;
     let removeSound = document.getElementById("removeSound").checked;
     let removeLabel = document.getElementById("removeLabel").checked;
@@ -365,6 +363,7 @@ document.getElementById("edit-item-button").addEventListener("click", function()
             if (changesToBoard[item].changeType === "add" && changesToBoard[item].item_index === itemIndex){
                 changesToBoard[item].title = newTitle;
                 changesToBoard[item].description = newDescription;
+                changesToBoard[item].note_label = newLabel;
 
                 if (document.getElementById("editItemImage").files[0]){
                     changesToBoard[item].item_image = newImage;
@@ -379,6 +378,9 @@ document.getElementById("edit-item-button").addEventListener("click", function()
 
                 if (removeSound){
                     changesToBoard[item].item_sound = null;
+                }
+                if (removeLabel){
+                    changesToBoard[item].note_label = null;
                 }
                 
                 itemTitle.textContent = newTitle;
@@ -395,6 +397,9 @@ document.getElementById("edit-item-button").addEventListener("click", function()
                 if (document.getElementById("removeSound").checked){
                     itemTitle.removeAttribute("data-sound-src");
                 }
+                if (document.getElementById("removeLabel").checked){
+                    itemTitle.removeAttribute("data-label");
+                }
 
                 $('#editBoardItem').modal('hide');
 
@@ -406,6 +411,7 @@ document.getElementById("edit-item-button").addEventListener("click", function()
             if (changesToBoard[item].changeType === "edit" && changesToBoard[item].item_index === itemIndex){
                 changesToBoard[item].title = newTitle;
                 changesToBoard[item].description = newDescription;
+                changesToBoard[item].note_label = newLabel;
                 
                 if (newImage){
                     changesToBoard[item].item_image = newImage;
@@ -424,6 +430,10 @@ document.getElementById("edit-item-button").addEventListener("click", function()
                 if (removeSound){
                     changesToBoard[item].item_sound = null;
                     itemTitle.removeAttribute("data-sound-src");
+                }
+                if (removeLabel){
+                    changesToBoard[item].note_label = null;
+                    itemTitle.removeAttribute("data-label");
                 }
 
                 isCase2 = false;
@@ -445,6 +455,7 @@ document.getElementById("edit-item-button").addEventListener("click", function()
                 item_index: itemIndex,
                 item_image: removeImage ? null : newImage, // If removeImage is true set the image to null
                 item_sound: removeSound ? null : newSound, // If removeSound is true set the sound to null
+                note_label: removeLabel ? null : newLabel,
             });
         
 
@@ -461,7 +472,9 @@ document.getElementById("edit-item-button").addEventListener("click", function()
             if (removeSound){
                 itemTitle.removeAttribute("data-sound-src");
             }
-
+            if (removeLabel){
+                itemTitle.removeAttribute("data-label");
+            }
             boardSaved = false;
         }
 
@@ -624,7 +637,7 @@ document.getElementById("save-board-button").addEventListener("click", function(
             formData.append(`${index}_title`, change.title);
             formData.append(`${index}_description`, change.description);
             formData.append(`${index}_item_index`, change.item_index);
-            formData.append(`${index}_item_label`, change.note_label || null);
+            formData.append(`${index}_item_label`, change.note_label);
             if (change.item_image){
                 formData.append(`${index}_item_image`, change.item_image);
             }
@@ -787,6 +800,7 @@ document.getElementById("edit-item-modal-button").addEventListener("click", func
     //reset the remove image and sound checkboxes
     document.getElementById("removeImage").checked = false;
     document.getElementById("removeSound").checked = false;
+    document.getElementById("removeLabel").checked = false;
 
     //if there is no image or sound, disable the input fields
     if (document.getElementById("view-item-image").classList.contains("d-none")){
@@ -830,6 +844,17 @@ document.getElementById("removeSound").addEventListener("click", function() {
     }
     else{
         document.getElementById("editItemSound").disabled = false;
+    }
+});
+
+document.getElementById("removeLabel").addEventListener("click", function() {
+    let removeLabelToggle = document.getElementById("removeLabel");
+    if (removeLabelToggle.checked === true){
+        document.getElementById("editItemLabel").disabled = true;
+        document.getElementById("editItemLabel").value = "";
+    }
+    else{
+        document.getElementById("editItemLabel").disabled = false;
     }
 });
 
@@ -929,7 +954,7 @@ document.getElementById("add-label-button").addEventListener("click", function()
     }
     duplicate_label=false;
     labels.forEach(function(label) {
-        if(new_label = label.textContent){
+        if(new_label == label.textContent){
             duplicate_label=true;
             document.getElementById("error-modal-text").innerHTML = "Label exists";
             $('#editBoardItem').modal('hide');
@@ -937,7 +962,7 @@ document.getElementById("add-label-button").addEventListener("click", function()
         }
             
     });
-    if(!duplicate_label){
+    if(duplicate_label==false){
         changesToBoard.push(
             {
                 changeType: "addLabel",

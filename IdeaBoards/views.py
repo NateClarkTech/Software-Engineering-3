@@ -102,7 +102,10 @@ def IdeaBoard_Detail(request, id, label=None):
                 #print(change_type)
 
                 if change_type == 'add':
-                    label = ItemLabel.objects.get(label_name=form_data.get(f'{x}_item_label'), label_board=board)
+                    item_label = form_data.get(f'{x}_item_label')
+                    if item_label:
+                        label = ItemLabel.objects.get(label_name=item_label, label_board=board)
+
                     formData = {
                         "title": form_data.get(f'{x}_title'),
                         "description": form_data.get(f'{x}_description'),
@@ -169,8 +172,13 @@ def IdeaBoard_Detail(request, id, label=None):
                     editedItem = IdeaBoardItem.objects.get(id=form_data.get(f'{x}_item_id'))
                     editedItem.title = form_data.get(f'{x}_title')
                     editedItem.description = form_data.get(f'{x}_description')
-                    editedItem.note_label = ItemLabel.objects.get(label_name=form_data.get(f'{x}_item_label'), label_board=board)
                     
+                    remove_label = form_data.get(f'{x}_remove_label')
+                    if (remove_label == "true"):
+                        editedItem.note_label = None
+                    else:
+                        editedItem.note_label = ItemLabel.objects.get(label_name=form_data.get(f'{x}_item_label'), label_board=board)
+
                     # Check if the user has uploaded a new image for the item
                     item_image_files = file_data.getlist(f'{x}_item_image')
                     # Check if there are any uploaded files for '0_item_image'
@@ -222,10 +230,6 @@ def IdeaBoard_Detail(request, id, label=None):
                     remove_audio = form_data.get(f'{x}_remove_sound')
                     if (remove_audio == "true"):
                         editedItem.item_sound = None
-                        
-                    remove_label = form_data.get(f'{x}_remove_label')
-                    if (remove_label == "true"):
-                        editedItem.note_label = None
                         
 
                     editedItem.save()
