@@ -18,6 +18,7 @@ class NewIdeaBoardItemForm(forms.ModelForm):
             'description',
             'item_image',
             'item_sound',
+            'note_label'
         ]
         
 class NewItemLabelForm(forms.ModelForm):

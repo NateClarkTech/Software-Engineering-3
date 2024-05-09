@@ -150,6 +150,7 @@ function addFormItem() {
     let description = document.getElementById("description").value;
     let item_image = document.getElementById("item_image").files[0];
     let item_sound = document.getElementById("item_sound").files[0];
+    let item_label = document.getElementById("labelSelect").value;
 
     if (title !== "" && title.length <= 64) {
         boardSaved = false;
@@ -162,6 +163,7 @@ function addFormItem() {
                 item_index: String(assignBoardId),
                 item_image: item_image,
                 item_sound: item_sound,
+                note_label: item_label,
             }
         );
 
@@ -179,8 +181,8 @@ function addFormItem() {
         let cardBody = document.createElement("div");
         cardBody.classList.add("card-body");
 
-        //If there is an image/sound file, add the icon to show it
-        if (item_image || item_sound) {
+        //If there is an image/sound/label file, add the icon to show it
+        if (item_image || item_sound || item_label) {
             let rowDiv = document.createElement("div");
             rowDiv.classList.add("row", "justify-content-end", "mt-auto");
 
@@ -202,7 +204,12 @@ function addFormItem() {
                 audioIcon.classList.add("audio-icon", "mr-3", "px-1");
                 rowDiv.appendChild(audioIcon);
             }
-
+            if (item_label) {
+                    /* FIX */
+                    let label = document.createElement("p");
+                    label.textContent = item_label;
+                    rowDiv.appendChild(label);
+                }
             cardBody.appendChild(rowDiv);
         }
         
@@ -216,6 +223,10 @@ function addFormItem() {
         }
         if (item_sound){
             cardTitle.setAttribute("data-sound-src", URL.createObjectURL(item_sound));
+        }
+        // May need FIX
+        if (item_label){
+            cardTitle.setAttribute("data-label", item_label);
         }
         
         // Add the description to the card
@@ -241,6 +252,7 @@ function addFormItem() {
             let item_id = document.getElementById("board-item-" + index + "-title").getAttribute("data-id");
             let img_src = itemTitle.getAttribute("data-img-src");
             let sound_src = itemTitle.getAttribute("data-sound-src");
+            let label_name = document.getAttribute("data-label")
 
             document.getElementById("view-item-description").textContent = itemDescription.textContent;
 
@@ -267,6 +279,15 @@ function addFormItem() {
                 modalSound.classList.add("d-none");
             }
             
+            let modalLabel = document.getElementById("view-item-label");
+            if (label_name){
+                modalLabel.classList.remove("d-none");
+                modalLabel.textContent = label_name.textContent;
+            }
+            else{
+                modalLabel.classList.add("d-none");
+            }
+
             // Show the modal
             $('#viewBoardItem').modal('show');
             console.log(changesToBoard);
@@ -328,8 +349,10 @@ document.getElementById("edit-item-button").addEventListener("click", function()
     let newDescription = document.getElementById("editItemDescriptionInput").value;
     let newImage = document.getElementById("editItemImage").files[0];
     let newSound = document.getElementById("editItemSound").files[0];
+    let newLabel = document.getElementById("labelSelect").value;
     let removeImage = document.getElementById("removeImage").checked;
     let removeSound = document.getElementById("removeSound").checked;
+    let removeLabel = document.getElementById("removeLabel").checked;
 
     // Make sure input is valid, else give error modal
     if (newTitle !== "" && newTitle.length <= 64) {
@@ -592,6 +615,7 @@ document.getElementById("save-board-button").addEventListener("click", function(
             formData.append(`${index}_item_index`, change.item_index);
             formData.append(`${index}_item_image`, change.item_image || null);
             formData.append(`${index}_item_sound`, change.item_sound || null);
+            formData.append(`${index}_item_label`, change.note_label || null);
         }
         
         if (change.changeType === "edit") {
@@ -600,6 +624,7 @@ document.getElementById("save-board-button").addEventListener("click", function(
             formData.append(`${index}_title`, change.title);
             formData.append(`${index}_description`, change.description);
             formData.append(`${index}_item_index`, change.item_index);
+            formData.append(`${index}_item_label`, change.note_label || null);
             if (change.item_image){
                 formData.append(`${index}_item_image`, change.item_image);
             }
@@ -612,6 +637,13 @@ document.getElementById("save-board-button").addEventListener("click", function(
             }
             if (change.item_sound === null){
                 formData.append(`${index}_remove_sound`, true);
+            }
+
+            if (change.note_label){
+                formData.append(`${index}_item_label`, change.note_label);
+            }
+            if (change.note_label === null){
+                formData.append(`${index}_remove_label`, true);
             }
         }
 
@@ -677,6 +709,7 @@ while (document.getElementById("board-item-" + i)) {
             let itemDescription = document.getElementById("board-item-" + index + "-description");
             let item_id = document.getElementById("board-item-" + index + "-title").getAttribute("data-id");
             let img_src = itemTitle.getAttribute("data-img-src");
+            let item_label = itemTitle.getAttribute("data-label");
 
             let modalTitle = document.getElementById("view-item-title");
             modalTitle.textContent = itemTitle.textContent;
@@ -699,6 +732,15 @@ while (document.getElementById("board-item-" + i)) {
             }
             else{
                 modalSound.classList.add("d-none");
+            }
+
+            let modalLabel = document.getElementById("view-item-label");
+            if (itemTitle.getAttribute("data-label")){
+                modalLabel.classList.remove("d-none");
+                modalLabel.textContent = item_label;
+            }
+            else{
+                modalLabel.classList.add("d-none");
             }
 
             document.getElementById("view-item-description").textContent = itemDescription.textContent;
@@ -831,34 +873,42 @@ window.onbeforeunload = function() {
 
 src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"
 
-// /*
+/*
 //         Sort Label
 //     @author: Bilge Akyol
-// */
-// document.getElementById("sort-label").addEventListener("click", function() {
-//     label = document.getElementById('sort-label').textContent;
-//     id = document.getElementById('sort-label').getAttribute("data-id");
-//     request = "POST";
-//     // Construct the data to be sent
-//     var data = {
-//         request: request,
-//         id: id,
-//         label: label
-//     };
+*/
+var labels = document.querySelectorAll('[id^="sort-label-"]');
 
-//     // Construct the request
-//     var requestOptions = {
-//         method: 'POST', // Or 'GET' depending on your server endpoint
-//         headers: {
-//             'Content-Type': 'application/json',
-//             "X-CSRFToken": getCookie("csrfToken"),
-//         },
-//         body: JSON.stringify(data)
-//     };
-
-//     window.location.href = label;
-
-// });
+// Loop through each label element and attach a click event listener
+labels.forEach(function(label) {
+    label.addEventListener('click', function() {
+        var labelText = label.textContent;
+        var labelId = label.getAttribute('data-id');
+        var request = 'POST';
+        
+        // Construct the data to be sent
+        var data = {
+            request: request,
+            id: labelId,
+            label: labelText
+        };
+        
+        // Construct the request
+        var requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrfToken'),
+            },
+            body: JSON.stringify(data)
+        };
+        
+        // Perform any necessary action with the label data here
+        
+        // Redirect to the specified URL
+        window.location.href = labelText;
+    });
+});
 
 /*
         Create Label
@@ -870,24 +920,40 @@ document.getElementById("create-label").addEventListener("click", function() {
 
 document.getElementById("add-label-button").addEventListener("click", function() {    
 
-    console.log("add label button clicked");    
     new_label = document.getElementById("new-label-name").value;
 
-    changesToBoard.push(
-        {
-            changeType: "addLabel",
-            labelName: new_label,
+    if (new_label.length <= 0){
+        document.getElementById("error-modal-text").innerHTML = "Label can't be empty";
+        $('#editBoardItem').modal('hide');
+        $('#errorModel').modal('show');
+    }
+    duplicate_label=false;
+    labels.forEach(function(label) {
+        if(new_label = label.textContent){
+            duplicate_label=true;
+            document.getElementById("error-modal-text").innerHTML = "Label exists";
+            $('#editBoardItem').modal('hide');
+            $('#errorModel').modal('show');
         }
-    );    
-    
-    let newLabelButton = document.createElement("button");
-    newLabelButton.type = "button";
-    newLabelButton.classList.add("btn", "btn-primary", "my-1", "col-md-1.5", "ml-1");
-    newLabelButton.textContent = new_label;   
+            
+    });
+    if(!duplicate_label){
+        changesToBoard.push(
+            {
+                changeType: "addLabel",
+                labelName: new_label,
+            }
+        );    
+        boardSaved = false;
+        
+        let newLabelButton = document.createElement("button");
+        newLabelButton.type = "button";
+        newLabelButton.classList.add("btn", "btn-primary", "my-1", "col-md-1.5", "ml-1");
+        newLabelButton.textContent = new_label;   
 
-    let labelRow = document.getElementById("labelRow");
-    labelRow.appendChild(newLabelButton);
+        let labelRow = document.getElementById("labelRow");
+        labelRow.appendChild(newLabelButton);
 
-    $('#createLabel').modal('hide');
-
+        $('#createLabel').modal('hide');
+    }
 });
