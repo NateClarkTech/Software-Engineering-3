@@ -259,7 +259,7 @@ def create_page(request):
     return render(request, 'create_page.html', {'form': form})
 
 #@W_Farmer
-# This is a view to allow an admin to modify a page should they wish too. It is not currently accessable However it will exist for the future deployments. 
+# This is a view to allow an admin to modify a page should they wish too. It is not currently enabled However it will exist for the future deployments. 
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
 def modify_page(request, page_id):
@@ -271,7 +271,7 @@ def modify_page(request, page_id):
             return redirect('forum_home')
     else:
         form = PageForm(instance=page)
-    return render(request, 'modify_page.html', {'form': form, 'page': page})
+    return render(request, 'create_page.html', {'form': form, 'page': page})
 
 
 #@W_Farmer

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}{{ user_profile.username }}'s Profile{% endblock %}
-
+<!-- @W_Farmer -->
 {% block stylesheets %}
 <style>
     .profile-container {
@@ -305,6 +305,7 @@
         <div class="tab-content">
             <div class="tab-pane fade show active" id="comments" role="tabpanel" aria-labelledby="comments-tab">
                 {% for comment in comments %}
+                <!-- List of comments on the users profile, A lot of redundant code, but im leaving it be -->
                     <div class="comment-wrapper">
                       <div class="comment-header">
                         <!-- Profile Picture -->
@@ -318,7 +319,6 @@
                         <!-- Comment Details -->
                         <div class="comment-details">
                           <span class="comment-author">{{ comment.user.username }}</span>
-                          <!-- Include any badges or awards here -->
                           <div class="comment-metadata">
                             <span>{{ comment.created_at|date:"M d, Y H:i" }}</span> <!-- Timestamp -->
                             {% if comment.last_edited %}
@@ -367,7 +367,7 @@
                   {% endif %}
                 </div>
             </div>
-
+            <!-- A list of threads the user has created-->
             <div class="tab-pane fade" id="threads" role="tabpanel" aria-labelledby="threads-tab">
                 <ul class="list-group">
                     {% for thread in threads %}
@@ -390,8 +390,8 @@
                     <a href="?threads_page={{ threads.paginator.num_pages }}">Last &raquo;</a>
                     {% endif %}
                 </div>
-                <!-- Add pagination if necessary -->
             </div>
+            <!-- A list of comments the user has made-->
             <div class="tab-pane fade" id="user-comments" role="tabpanel" aria-labelledby="user-comments-tab">
                 <ul class="list-group">
                     {% for comment in user_comments %}
@@ -445,7 +445,6 @@
                     </div>
                     {% endfor %}
                 </ul>
-                <!-- Add pagination if necessary -->
                 <div class="pagination">
                     {% if user_comments.has_previous %}
                     <a href="?user_comments_page=1">&laquo; First</a>
