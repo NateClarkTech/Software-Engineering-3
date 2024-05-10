@@ -1,10 +1,8 @@
-
-
 /* Custom CSS for setting width and height on medium screens */
 @media (min-width: 768px){
     .card-custom {
-        width: 100%; /* Set the desired width */
-        height: 200px; /* Set the desired height */
+        width: 100%;
+        height: 200px;
         overflow: hidden;
     }
 
@@ -17,12 +15,12 @@
         width: 125px;
         padding-left: 10px;
         padding-right: 10px;
-        bottom: 70px; /* Adjust the distance from the bottom as needed */
-        right: 20px; /* Adjust the distance from the right as needed */
-        z-index: 999; /* Ensure it appears above other content */
+        bottom: 70px;
+        right: 20px;
+        z-index: 999;
         /* Additional styling */
         padding: 10px 20px;
-        /*background-color: #007bff; /* Example background color */
+        /*background-color: #007bff; */
         border-radius: 5px;
         cursor: pointer;
         /* Add any other styles as needed */
@@ -72,48 +70,49 @@
 }
 
 .card-image {
-    max-width: 100%; /* Ensure the image fits within the width of the card-body */
+    max-width: 100%;
     height: auto;
 }
 .break-text {
-    word-wrap: break-word; /* Allow long words to be broken and wrap onto the next line */
+    word-wrap: break-word;
 }
 
 #view-item-title,
 #view-item-text {
-    max-width: 100%; /* Ensure text does not extend beyond the modal body */
-    overflow-wrap: break-word; /* Break words if they exceed the available width */
+    max-width: 100%;
+    overflow-wrap: break-word;
 }
 #view-item-image{
-    max-width: 100%; /* Ensure the image doesn't exceed the modal width */
-    max-height: 300px; /* Limit the height of the image to prevent it from taking up too much space */
-    display: block; /* Ensure the image is displayed as a block element */
-    margin: 0 auto; /* Center the image horizontally within the modal */
+    max-width: 100%;
+    max-height: 300px;
+    display: block;
+    margin: 0 auto; 
 }
+
 .modal-content {
-    background-color: #0F1035; /* Change this to your desired background color */
-    border-color: #333; /* Change this to your desired border color */
+    background-color: var(--Background-Color); 
+    border-color: var(--Border-Color); 
 }
 
 .modal-header {
-    border-bottom: 1px solid #365486; /* Change this to your desired border color */
+    border-bottom: 1px solid var(--Third-Color); 
 }
 
 .modal-footer {
-    border-top: 1px solid #365486; /* Change this to your desired border color */
+    border-top: 1px solid var(--Third-Color); 
 }
 
 .close {
-    color: #fff;
+    color: var(--Text-Color);
 }
 
 .close:hover {
-    color: #fff; /* Change this to your desired hover color */
+    color: var(--Text-Color); 
 }
 
 .audio-icon {
     cursor: pointer;
-    width: 25px; /* Adjust width and height as needed */
+    width: 25px; 
     height: 25px;
     object-fit: contain;
 }
@@ -124,5 +123,5 @@
 }
 
 hr  {
-    border-top: 1px solid #365486;
+    border-top: 1px solid var(--Third-Color);
 }

@@ -5,7 +5,7 @@
 {% block title %}{% endblock %}
 
 {% block stylesheets %}
-<link rel="stylesheet" href="{% static 'css/boarddetails.css' %}">
+    <link rel="stylesheet" href="{% static 'css/boarddetails.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -13,7 +13,7 @@
 
     <!-- Board Settings Modal -->
     <div class="modal fade" id="boardSettings" tabindex="-1" role="dialog" aria-labelledby="BoardSettingsModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="form">
+        <div class="modal-dialog modal-lg" role="form">
             <div class="modal-content">
 
                 <div class="modal-header">
@@ -25,7 +25,10 @@
                 </div>
 
                 <div class="modal-body row justify-content-center">
+                    <!-- Button opens Edit Board Modal -->
                     <button type="button" class="btn btn-success col-10 m-2" data-dismiss="modal" data-toggle="modal" data-target="#editBoard">Edit Board Details</button>
+
+                    <!-- Button opens Delet Board Modal -->
                     <button type="button" class="btn btn-danger col-10 m-2" data-dismiss="modal" data-toggle="modal" data-target="#deleteBoard">Delete Board</button>
                 </div>
 
@@ -35,7 +38,7 @@
 
     <!-- Edit Board Modal -->
     <div class="modal fade" id="editBoard" tabindex="-1" role="dialog" aria-labelledby="EditBoardModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="form">
+        <div class="modal-dialog modal-lg" role="form">
             <div class="modal-content">
 
                 <div class="modal-header">
@@ -46,11 +49,15 @@
                 </div>
 
                 <div class="modal-body">
+                    <!-- input field for new board title -->
                     <h5>New Board Title<p class="text-danger" style="display: inline; margin: 0;">*</p></h5>
                     <input type="text" id="editBoardTitleInput" data-id='none' class="form-control" value="{{ board.title }}">
+
+                    <!-- input field for new board description -->
                     <h5 class="mt-2">New Board Description</h5>
                     <input type="text" id="editBoardDescriptionInput" class="form-control" value="{{ board.description }}">
 
+                    <!-- Checkbox to change board privacy settings (checked = public, unchecked = private) -->
                     <h5 class="mt-2">Board is public</h5>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="privacy_setting" {% if board.is_public == True %}checked{% endif %}>
@@ -58,7 +65,6 @@
                             Public
                         </label>
                     </div>
-                    
 
                     <p><p class="text-danger" style="display: inline; margin: 0;">*</p> required field</p>
                 </div>
@@ -74,7 +80,7 @@
 
     <!-- Delete Board Modal -->
     <div class="modal fade" id="deleteBoard" tabindex="-1" role="dialog" aria-labelledby="DeleteBoardModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="form">
+        <div class="modal-dialog modal-lg" role="form">
             <div class="modal-content">
 
                 <div class="modal-header">
@@ -85,6 +91,7 @@
                 </div>
 
                 <div class="modal-body">
+                    <!-- Warning text -->
                     <h5>Are you sure you want to delete the board:</h5>
                     <h3 class="my-2"><strong>{{ board.title }}</strong></h3>
                     <h5>This action cannot be undone.</h5>
@@ -92,6 +99,8 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+
+                    <!-- Button to confirm deletion -->
                     <button id="delete-board-button" type="button" class="btn btn-danger" data-id="{{ board.id }}">Confirm Deletion</button>
                 </div>
 
@@ -101,7 +110,7 @@
 
     <!-- New Item Modal -->
     <div class="modal fade" id="createBoardItem" tabindex="-1" role="dialog" aria-labelledby="CreateItemModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <form id="addItemForm">
                     {% csrf_token %}
@@ -111,6 +120,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
+
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="title">Title<p class="text-danger" style="display: inline; margin: 0;">*</p> (max 64 characters)</label>
@@ -136,6 +146,7 @@
                                 {% endfor %}
                             </select>
                         </div>
+
                         <p><p class="text-danger" style="display: inline; margin: 0;">*</p> required field</p>
                     </div>
                     <div class="modal-footer">
@@ -149,7 +160,7 @@
 
     <!-- View Item Modal -->
     <div class="modal fade" id="viewBoardItem" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <p class="mt-1 col-md-2" id="view-item-label" data-id='none' data-index="none" style="justify-content:left"></p>
@@ -173,7 +184,7 @@
 
     <!-- Edit Item Modal -->
     <div class="modal fade" id="editBoardItem" tabindex="-1" role="dialog" aria-labelledby="EditItemModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="EditItemModalLabel">Edit Item</h5>
@@ -240,7 +251,7 @@
 
     <!-- Delete Item Modal -->
     <div class="modal fade" id="deleteItem" tabindex="-1" role="dialog" labelledby="DeleteItemModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="form">
+        <div class="modal-dialog modal-lg" role="form">
             <div class="modal-content">
 
                 <div class="modal-header">
@@ -269,7 +280,7 @@
 
     <!-- Create Label Modal -->
     <div class="modal fade" id="createLabel" tabindex="-1" role="dialog" aria-labelledby="CreateLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="CreateItemModalLabel">Create New Label</h5>
@@ -295,7 +306,7 @@
 
     <!-- Error Modal -->
     <div class="modal fade" id="errorModel" tabindex="-1" labelledby="error-modal-label" role="dialog" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title text-danger" id="error-modal-label">Error</h5>

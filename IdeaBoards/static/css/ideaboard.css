@@ -98,32 +98,32 @@
 }
 
 .modal-content {
-    background-color: #0F1035; /* Change this to your desired background color */
-    border-color: #333; /* Change this to your desired border color */
+    background-color: var(--Background-Color); /* Change this to your desired background color */
+    border-color: var(--Border-Color); /* Change this to your desired border color */
 }
 
 .modal-header{
-    border-bottom: 1px solid #365486; /* Change this to your desired border color */
+    border-bottom: 1px solid var(--Third-Color); /* Change this to your desired border color */
 }
 
 .modal-footer {
-    border-top: 1px solid #365486; /* Change this to your desired border color */
+    border-top: 1px solid var(--Third-Color); /* Change this to your desired border color */
 }
 
 .close {
-    color: #fff;
+    color: var(--Text-Color);
 }
 
 .close:hover {
-    color: #fff; /* Change this to your desired hover color */
+    color: var(--Text-Color); /* Change this to your desired hover color */
 }
 
 hr {
-    border-top: 1px solid #365486;
+    border-top: 1px solid var(--Third-Color);
 }
 
 .card {
-    border-color: #365486;
+    border-color: var(--Third-Color);
 }
 
 .custom-select {
