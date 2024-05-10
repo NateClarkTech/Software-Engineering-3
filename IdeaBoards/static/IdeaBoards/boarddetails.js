@@ -250,7 +250,7 @@ function addFormItem() {
             let item_id = document.getElementById("board-item-" + index + "-title").getAttribute("data-id");
             let img_src = itemTitle.getAttribute("data-img-src");
             let sound_src = itemTitle.getAttribute("data-sound-src");
-            let label_name = document.getAttribute("data-label")
+            let label_name = itemTitle.getAttribute("data-label")
 
             document.getElementById("view-item-description").textContent = itemDescription.textContent;
 
