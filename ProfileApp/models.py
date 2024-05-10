@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 '''
 This is the Profile model, it will be connected to a single user, and hold all of that users profile info.
-@W_Farmer
+@W_Farmer and N_Clark
     @user: This will hold the user the profile belongs too
     @profile_picture: This will hold the profile picture of the user
     @personal_info: This will hold the personal info of the user
