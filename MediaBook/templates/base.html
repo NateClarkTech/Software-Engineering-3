@@ -1,3 +1,5 @@
+<!-- @W_Farmer -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,7 +14,7 @@
     <!-- Add custom stylesheets here -->
     {% block stylesheets %}{% endblock %}
     <style>
-        /* Color variables */
+        /* Color variables to be used throughout the site*/
         :root {
             --Background-Color: #0F1035;
             --Text-Color: #fff;
@@ -24,7 +26,7 @@
 
 
 
-
+        /* Notification badges */
         .notification-badge {
             position: absolute;
             top: 0px;
@@ -105,8 +107,7 @@
             border: 1px solid var(--Third-Color);
         }
 
-        /* list group styles */
-        /* so here we will be making a new tag to center everything */
+        /* so here we will be making a new tag to center divs if we want it centered*/
         .center {
             justify-content: center;
             align-items: center;
@@ -124,7 +125,6 @@
           color: var(--Text-Color) /* Light color for the form title */
           margin-bottom: 15px;
         }
-      
         
         .comment-form-textarea {
           width: 100%;
@@ -136,12 +136,6 @@
           color: var(--Text-Color); /* Light text color */
         }
       
-
-
-
-
-        
-        
         {% block extra_css %}{% endblock %}
     </style>
 </head>

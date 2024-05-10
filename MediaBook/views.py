@@ -10,7 +10,8 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 
 
-
+#@W_Farmer
+# View for the registration page
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -22,6 +23,8 @@ def register(request):
         form = UserCreationForm()
     return render(request, 'registration/register.html', {'form': form})
 
+#@W_Farmer
+# View for the logout page
 def logout_view(request):
     logout(request)
     return redirect('home')

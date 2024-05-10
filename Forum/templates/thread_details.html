@@ -1,3 +1,4 @@
+<!-- @W_Farmer -->
 {% extends 'base.html' %}
 {% block stylesheets %}
 <style>
@@ -20,9 +21,10 @@
   }
 
   .comment-body {
-    background-color: var(--Third-Color); /* Lighter than the header but still dark */
+    background-color: var(--Third-Color); 
     padding: 15px;
-    border-bottom-left-radius: 6px; /* Rounded corners for the bottom */
+    /* Rounded corners for the bottom */
+    border-bottom-left-radius: 6px; 
     border-bottom-right-radius: 6px;
   }
   .comment-wrapper {
@@ -53,7 +55,7 @@
   }
   .comment-metadata {
     font-size: 0.85rem;
-    color: #bdc3c7; /* Subdued color for metadata */
+    color: #bdc3c7; /* Subdued color for comment metadata */
   }
   .comment-body {
     font-size: 1rem;
@@ -113,8 +115,7 @@
     
   }
 
-
-  /* move the likes over to the left */
+  /* Color the likes text */
   .likes {
     color: #aea7d6 !important;
   }
@@ -137,7 +138,7 @@
     white-space: pre-wrap;
     color: #ecf0f1;
   }
-  /* styling for the embedded videos and stuff */
+  /* styling for the embedded videos and spotify pages */
   .responsive-iframe {
     position: relative;
     overflow: hidden;
@@ -199,9 +200,7 @@
             {% endif %}
           {% endif %}
         </span>
-      </h2> <!-- Title with adjusted color for visibility -->
-      <!-- Subscribe button -->
-
+      </h2> 
       <!-- Comment Loop -->
       {% for comment in comments %}
       <div class="comment-wrapper">
@@ -222,9 +221,9 @@
             <a href="{% url 'ProfileApp:public_profile' comment.user.username %}">
               <span class="comment-author">{{ comment.user.username }}</span>
             </a>
-            <!-- Include any badges or awards here -->
+            <!-- Comment MetaData-->
             <div class="comment-metadata">
-              <span>{{ comment.created_at|date:"M d, Y H:i" }}</span> <!-- Timestamp -->
+              <span>{{ comment.created_at|date:"M d, Y H:i" }}</span> 
               {% if comment.last_edited %}
                 <span>(edited)</span> <!-- Show if edited -->
               {% endif %}
@@ -233,7 +232,7 @@
         </div>
         <!-- Comment Body -->
         <div class="comment-body">
-          <!-- If it's a reply to another comment, show this -->
+          <!-- If it's a reply to another comment, show a short part of the origional comment -->
           {% if comment.parent %}
           <div class="reply-section">
             <div class="reply-wrapper">
@@ -248,12 +247,10 @@
           </div>
           {% endif %}
 
-          <!-- Print the comment, and allow for the urls to apply -->
+          <!-- Print the comment, and allow for the iframes to apply -->
           {% autoescape off %}
             <pre>{{ comment.content }}</pre>
           {% endautoescape %}
-
-          <!-- If it's a reply to another comment, show this -->
 
         <!-- Comment Actions -->
         <div class="comment-actions">
@@ -270,7 +267,7 @@
             {% else %}
               <span class="text-muted likes likes-btn">Likes: {{ comment.likes.count }}</span>
             {% endif %}
-
+          <!-- If the comment user is the current user, OR the current user is a superuser, allow them to edit and delete the comment-->
           {% if comment.user == user or user.is_superuser %}
             <a href="{% url 'edit_comment' comment.id %}" class="comment-action-btn">Edit</a>
             <a href="{% url 'delete_comment' comment.id %}" class="comment-action-btn">Delete</a>
@@ -326,7 +323,7 @@
 
 
 
-
+  <!-- If the user is authenticated allow them to make a new comment-->
   {% if user.is_authenticated %}
   <div class="comment-form-wrapper">
     <h5>Leave a Comment</h5>
@@ -351,10 +348,12 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="replyModalLabel">Reply to Comment</h5>
+        <!-- close button -->
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+      <!-- Form for the modal -->
       <form method="post" action="" id="replyForm">
         <div class="modal-body">
           {% csrf_token %}
@@ -377,6 +376,7 @@
 
 {% block scripts %}
 <script>
+  // When the reply button is clicked, set the form action to the correct URL and show the modal
   $(document).ready(function() {
     $('.btn-reply').click(function() {
       var parentCommentId = $(this).data('commentid');

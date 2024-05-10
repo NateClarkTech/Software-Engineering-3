@@ -4,9 +4,8 @@ from Forum.models import *
 from Forum.forms import CommentForm, ThreadForm, PageForm
 from django.urls import reverse
 
-
+#@W_Farmer
 class ForumTestCase(TestCase):
-    
     def setUp(self):
         # Setting up users
         self.user = User.objects.create_user(username='john', password='doepass')
@@ -19,10 +18,12 @@ class ForumTestCase(TestCase):
         
         # Log in the user for each test
         self.client.login(username='john', password='doepass')
-
+        
+    # Test the creation of comments
     def create_comment(self, thread, content='A test comment', user=None):
         return Comment.objects.create(content=content, thread=thread, user=user if user else self.user)
     
+    # Test that the thread list view correctly uses its templates and context
     def test_thread_list_view(self):
         self.client.login(username='john', password='doepass')
         url = reverse('thread_list', kwargs={'page_id': self.page.pk})
@@ -31,6 +32,7 @@ class ForumTestCase(TestCase):
         self.assertTemplateUsed(response, 'thread_list.html')
         self.assertIn('threads', response.context)
     
+    # Test that the thread detail view correctly uses its templates and context
     def test_thread_detail_view(self):
         self.client.login(username='john', password='doepass')
         url = reverse('thread_detail', kwargs={'thread_id': self.thread.pk})
@@ -39,7 +41,7 @@ class ForumTestCase(TestCase):
         self.assertTemplateUsed(response, 'thread_details.html')
         self.assertIn('comments', response.context)
 
-
+    # Test that the create comment view correctly creates a comment, and redirects
     def test_create_comment_post(self):
         self.client.login(username='john', password='doepass')
         url = reverse('create_comment', kwargs={'thread_id': self.thread.pk})
@@ -48,7 +50,8 @@ class ForumTestCase(TestCase):
         })
         self.assertEqual(response.status_code, 302)  # Redirect expected
         self.assertTrue(Comment.objects.filter(content='New comment').exists())
-    
+
+    # Test that ensures that we are able to mark a notification as read
     def test_mark_notification_as_read(self):
         self.client.login(username='john', password='doepass')
         notification = Notification.objects.create(notification_type=1, to_user=self.user, from_user=self.user, thread=self.thread, comment=self.comment)
@@ -59,22 +62,21 @@ class ForumTestCase(TestCase):
         self.assertTrue(notification.is_read)
         
         
-        def test_thread_list_pagination_and_content(self):
-            # Create additional threads to test pagination
-            for _ in range(15):
-                Thread.objects.create(title='More Threads', page=self.page, original_poster=self.user)
+    def test_thread_list_pagination_and_content(self):
+        # Create additional threads to test pagination
+        for _ in range(15):
+            Thread.objects.create(title='More Threads', page=self.page, original_poster=self.user)
+        response = self.client.get(reverse('thread_list', kwargs={'page_id': self.page.id}))
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(len(response.context['threads']) <= 10)  # Pagination limit
+        
+    def test_thread_detail_with_comments(self):
+        comment = self.create_comment(self.thread, 'Hello world')
+        response = self.client.get(reverse('thread_detail', kwargs={'thread_id': self.thread.id}))
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(comment, response.context['comments'])
 
-            response = self.client.get(reverse('thread_list', kwargs={'page_id': self.page.id}))
-            self.assertEqual(response.status_code, 200)
-            self.assertTrue(len(response.context['threads']) <= 10)  # Pagination limit
-            
-        def test_thread_detail_with_comments(self):
-            comment = self.create_comment(self.thread, 'Hello world')
-            response = self.client.get(reverse('thread_detail', kwargs={'thread_id': self.thread.id}))
-            self.assertEqual(response.status_code, 200)
-            self.assertIn(comment, response.context['comments'])
-
-
+    # Test that the create comment view correctly creates a comment, and redirects
     def test_create_comment_valid(self):
         response = self.client.post(reverse('create_comment', kwargs={'thread_id': self.thread.id}), {
             'content': 'Another test comment'
@@ -82,7 +84,7 @@ class ForumTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertTrue(Comment.objects.filter(content='Another test comment').exists())
         
-        
+    # Test that the edit comment view will prevent unauthorized users from editing comments
     def test_edit_comment_permission_denied(self):
         # Log out any currently logged-in user
         self.client.logout()
@@ -103,7 +105,7 @@ class ForumTestCase(TestCase):
         self.comment.refresh_from_db()
         self.assertNotEqual(self.comment.content, 'Edited Comment')
 
-        
+   # Test that the edit comment view will allow the author to edit comments     
     def test_edit_comment_valid(self):
         self.client.login(username='john', password='doepass')
         response = self.client.post(reverse('edit_comment', kwargs={'comment_id': self.comment.id}), {
@@ -112,39 +114,26 @@ class ForumTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(Comment.objects.get(id=self.comment.id).content, 'Edited Comment')
 
-    def test_notification_mark_as_read(self):
-        # Create a notification and ensure it is initially unread
-        notification = Notification.objects.create(notification_type=Notification.COMMENT, to_user=self.user, from_user=self.admin, thread=self.thread, comment=self.comment, is_read=False)
-
-        # Send POST request to the mark as read endpoint
-        self.client.post(reverse('mark_notification_as_read', kwargs={'notification_id': notification.id}))
-
-        # Refresh the notification object from the database
-        notification.refresh_from_db()
-
-        # Check if the notification is now marked as read
-        self.assertTrue(notification.is_read)
-
-
-
+    # Test to ensure that a superuser can create a page
     def test_create_page_as_superuser(self):
         self.client.login(username='admin', password='adminpass')
         response = self.client.post(reverse('create_page'), {'title': 'New Admin Page'})
         self.assertEqual(response.status_code, 302)  # Expect redirection to 'forum_home' or another success page
         self.assertTrue(Page.objects.filter(title='New Admin Page').exists())
-
+    # Test to ensure that a regular user cannot create a page
     def test_create_page_as_regular_user(self):
         response = self.client.post(reverse('create_page'), {'title': 'Unauthorized Page'})
         self.assertNotEqual(response.status_code, 302)  # Not allowed to create page, check for failure status
         self.assertFalse(Page.objects.filter(title='Unauthorized Page').exists())
 
-
+    # Test to see if a user can delete their own comment
     def test_delete_comment_by_author(self):
         comment_id = self.comment.id
         response = self.client.post(reverse('delete_comment', kwargs={'comment_id': comment_id}))
         self.assertEqual(response.status_code, 302)  # Expect redirection after deletion
         self.assertFalse(Comment.objects.filter(id=comment_id).exists())
 
+    # Test to make sure a user cannot delete another user's comment
     def test_delete_comment_by_non_author(self):
         self.client.logout()
         self.client.login(username='jane', password='janepass')
@@ -162,13 +151,14 @@ class ForumTestCase(TestCase):
     #    self.assertEqual(response.status_code, 302)  # Expect redirection after liking a comment
     #    self.assertTrue(self.user in self.comment.likes.all())  # Check if the user's like is recorded
 
+    # Test that a user cannot like their own comment
     def test_like_own_comment(self):
         response = self.client.post(reverse('like_comment', kwargs={'comment_id': self.comment.id}))
         self.assertEqual(response.status_code, 403)  # User should not be able to like their own comment
         self.assertFalse(self.user in self.comment.likes.all())  # Like should not be recorded
         
         
-        
+    # Test unsubscribe and subscribe to threads
     def test_subscribe_to_thread(self):
         response = self.client.post(reverse('subscribe_to_thread', kwargs={'thread_id': self.thread.id}))
         self.assertEqual(response.status_code, 302)  # Expect redirection after subscribing
@@ -179,4 +169,3 @@ class ForumTestCase(TestCase):
         response = self.client.post(reverse('unsubscribe_from_thread', kwargs={'thread_id': self.thread.id}))
         self.assertEqual(response.status_code, 302)  # Expect redirection after unsubscribing
         self.assertFalse(self.user in self.thread.subscribers.all())  # User should no longer be subscribed
-

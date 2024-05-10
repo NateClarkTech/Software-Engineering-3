@@ -1,6 +1,7 @@
 from django.apps import AppConfig
 
-
+#@W_Farmer
+# mostly auto generated except for the signals
 class ForumConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     app_name = 'Forum'

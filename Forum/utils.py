@@ -1,6 +1,7 @@
 import re
 from bleach.sanitizer import Cleaner
-
+#@W_Farmer
+# Function to convert links in text to HTML IFRAME embeds for media, Currently works for youtube ans spotify
 def convert_media_links_to_embed(text):
     # Regex for YouTube and Spotify URLs
     patterns = {
@@ -14,7 +15,7 @@ def convert_media_links_to_embed(text):
         ),
 
     }
-
+    # Function to replace the URL with the embed code
     def replace_with_embed(match, platform):
         return patterns[platform][1].format(**match.groupdict())
 
@@ -23,6 +24,7 @@ def convert_media_links_to_embed(text):
 
     return text
 
+# Function to clean HTML content
 def clean_html(text):
     # Configuration for bleach
     allowed_tags = ['div', 'iframe']

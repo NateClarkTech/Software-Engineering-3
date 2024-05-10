@@ -1,18 +1,26 @@
-# forum/views.py
 from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.urls import reverse
+from django.db.models import Count, OuterRef, Subquery, Max, F
+from django.utils import timezone
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib.auth.models import User
+from django.views.decorators.http import require_POST
+from django.http import JsonResponse
+
+# Custom Imports from the Forum App
 from .models import Notification, Thread, Page, Comment
 from .forms import ThreadForm, PageForm, CommentForm
-from django.db.models import Count
-from django.db.models import Max, F
-from django.utils import timezone
-# Learned this exists from ChatGPT and good god this makes my life easier lol
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from .utils import convert_media_links_to_embed, clean_html
+
+# Custom Imports from the Profile App
+from ProfileApp.models import Profile
 
 
 
+#@W_Farmer
+# This view represents a list of threads, it can take in a page_id, and will display all threads on that page
 def thread_list(request, page_id):
     page = get_object_or_404(Page, pk=page_id)
     threads = Thread.objects.filter(page=page).distinct()
@@ -27,9 +35,10 @@ def thread_list(request, page_id):
             thread.latest_comment_time = None
             thread.latest_comment_username = "No comments"
             
-    # now order them, This works, even though it errors, it still orders them
+    # Order the threads by the latest comment time in descending order
     threads = sorted(threads, key=lambda x: x.latest_comment_time, reverse=True)
-    # Pagination
+    
+    # Pagination For the threads, should it be needed 
     paginator = Paginator(threads, 10)  # Shows 10 threads per page
     page_number = request.GET.get('page')
     try:
@@ -43,12 +52,14 @@ def thread_list(request, page_id):
 
     return render(request, 'thread_list.html', {'threads': threads, 'page': page})
 
-from django.core.paginator import Paginator
-
+#@W_Farmer
+# This view is a detailed view of a specefic view, It can take in a thread_id, and a comment_id, and will display the thread, and the comments on that thread
 def thread_detail(request, thread_id, comment_id=None):
     thread = get_object_or_404(Thread, id=thread_id)
+    # Sort comments by created_at date and that belong to said thread
     comments_list = Comment.objects.filter(thread=thread).order_by('created_at')
     
+    # Integer to store the number of comments we want to display per page
     per_page = 15
     paginator = Paginator(comments_list, per_page)
 
@@ -65,6 +76,7 @@ def thread_detail(request, thread_id, comment_id=None):
     else:
         page_number = request.GET.get('page', 1)
 
+    # Get the comments for the current page if we have a page number, otherwise default to page 1
     try:
         comments = paginator.page(page_number)
     except PageNotAnInteger:
@@ -79,9 +91,8 @@ def thread_detail(request, thread_id, comment_id=None):
     })
 
 
-from django.views.decorators.http import require_POST
-from django.http import JsonResponse
-
+#@W_Farmer
+# # Utility view to mark a specific notification as read
 @require_POST
 @login_required
 def mark_notification_as_read(request, notification_id):
@@ -91,15 +102,8 @@ def mark_notification_as_read(request, notification_id):
     return JsonResponse({'status': 'success'})
 
 
-
-
-# forum/views.py
-from django.db.models import Max, F
-from django.db.models import OuterRef, Subquery, Max
-from django.contrib.auth.models import User
-from ProfileApp.models import Profile
-# ... (the rest of your imports)
-
+#@W_Farmer
+# The home page of the forum, This will display the top 5 most recent threads, the top 5 most commented threads, and the top 10 most recent commenters
 def forum_home(request):
     pages = Page.objects.all()
     
@@ -142,10 +146,12 @@ def forum_home(request):
         'recent_commenter_profiles': profiles_with_latest_comment_dates,
     })
 
-
+#@W_Farmer
+# View to allow a user to create a new thread, it will take in a page_id, and will create a new thread on that page
 @login_required
 def create_thread(request, page_id):
     page = get_object_or_404(Page, id=page_id)
+    
     if request.method == 'POST':
         thread_form = ThreadForm(request.POST)
         comment_form = CommentForm(request.POST)
@@ -154,18 +160,17 @@ def create_thread(request, page_id):
             thread = thread_form.save(commit=False)
             
             comment_content = comment_form.cleaned_data['content']
-            # Convert links to embeds
-
             # Convert links to embeds and sanitize
             comment_content = convert_media_links_to_embed(comment_content)
-            comment_content = clean_html(comment_content)  # Clean the HTML
+            comment_content = clean_html(comment_content)
 
 
             comment = comment_form.save(commit=False)
-            comment.content = comment_content  # Set the processed content with YouTube embeds
+            # Set the processed content with YouTube embeds
+            comment.content = comment_content 
 
 
-
+            # Associate the new thread with its page, the logged-in user as the original poster, and the initial comment
             thread.page = page
             thread.original_poster = request.user
             thread.save()  # Save the thread to get a valid ID
@@ -184,8 +189,8 @@ def create_thread(request, page_id):
         'page': page
     })
     
-    
-from .utils import convert_media_links_to_embed, clean_html
+#@W_Farmer
+# This view will allow the user to create a new comment on the forum. 
 @login_required
 def create_comment(request, thread_id):
     thread = get_object_or_404(Thread, id=thread_id)
@@ -198,9 +203,10 @@ def create_comment(request, thread_id):
         comment_content = convert_media_links_to_embed(comment_content)
         comment_content = clean_html(comment_content)  # Clean the HTML
 
-        
+        # Create the comment object
         comment = form.save(commit=False)
         comment.content = comment_content  # Set the processed content with YouTube embeds
+        # Associate the comment with the thread and the logged-in user
         comment.user = request.user
         comment.thread = thread
         comment.save()
@@ -230,19 +236,18 @@ def create_comment(request, thread_id):
                 comment=comment
             )
             
-        # if the comment is a reply use the signals, because for some reason it just fucking works
-        
-
         return redirect(reverse('thread_detail_comment', args=[thread.id, comment.id]))
     else:
         # Handle errors or redirect
         return render(request, 'thread_detail.html', {'form': form, 'thread': thread})
 
-# I am not using the @login_required here as it simply redirects to login, but there should be NO reason for a normal user to get this.
+
+#@W_Farmer
+# This is a view created to allow for an admin to create a new page on the forum
 def create_page(request):
-    # if the user isnt a superuser return forbidden
+    # if the user isnt a superuser return forbidden error
     if not request.user.is_superuser:
-        return HttpResponseForbidden("You cannot do this.")
+        return HttpResponseForbidden("You are not authorized to create a new page.")
     
     if request.method == 'POST':
         form = PageForm(request.POST)
@@ -253,6 +258,8 @@ def create_page(request):
         form = PageForm()
     return render(request, 'create_page.html', {'form': form})
 
+#@W_Farmer
+# This is a view to allow an admin to modify a page should they wish too. It is not currently accessable However it will exist for the future deployments. 
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
 def modify_page(request, page_id):
@@ -267,7 +274,7 @@ def modify_page(request, page_id):
     return render(request, 'modify_page.html', {'form': form, 'page': page})
 
 
-
+#@W_Farmer
 # Here we want to be able to edit a comment, either by deleating it, or by changing the content, and the user HAS to be the one logged in, or a superuser
 @login_required
 def edit_comment(request, comment_id):
@@ -287,13 +294,15 @@ def edit_comment(request, comment_id):
         form = CommentForm(instance=comment)
     return render(request, 'edit_comment.html', {'form': form, 'comment': comment})
 
-# To make it easier on myself, I have a seperate view for deleting a comment
+#@W_Farmer
+# This is a view to allow the user to delete a comment, they have to be the author of the comment, or a superuser
 def delete_comment(request, comment_id):
     # Add a check to see uf the user is authentacated at all
     if not request.user.is_authenticated:
         return HttpResponseForbidden("You are not authorized to delete this comment.")
     
     comment = get_object_or_404(Comment, id=comment_id)
+    
     # Check if the user is the author of the comment or a superuser
     if request.user != comment.user and not request.user.is_superuser:
         # Throw an error, they are not authorized to do this
@@ -301,7 +310,8 @@ def delete_comment(request, comment_id):
     comment.delete()
     return redirect('thread_detail', thread_id=comment.thread.id)
 
-# Could be renamed to toggle-like, but I dont want to change it and break things
+#@W_Farmer
+# This is a view that will allow a user to like a comment, or unlike said comment
 def like_comment(request, comment_id):
     # Some checks to make sure that the user cannot like their comment, even by messing with the urls
 
@@ -326,8 +336,8 @@ def like_comment(request, comment_id):
     return redirect('thread_detail', thread_id=comment.thread.id)
 
 
-
-
+#@W_Farmer
+# This view will display all the notifications for the user, and mark them as read at the same time. 
 @login_required
 def notifications_page(request):
     user_notifications_list = request.user.notifications.all().order_by('-date')
@@ -340,8 +350,8 @@ def notifications_page(request):
     
     return render(request, 'notifications_page.html', {'notifications': user_notifications})
 
-
-# Making it easier on myself by making a seperate view for replies to comments
+#@W_Farmer
+# This is a seperate view to handle the creation of a reply to a comment, it will take in a thread_id, and a parent_comment_id, and will create a reply to that comment
 def reply_to_comment(request, thread_id, parent_comment_id):
     thread = get_object_or_404(Thread, id=thread_id)
     parent_comment = get_object_or_404(Comment, id=parent_comment_id, thread=thread)
@@ -362,8 +372,8 @@ def reply_to_comment(request, thread_id, parent_comment_id):
             return redirect('thread_detail_comment' , thread_id=thread.id, comment_id=comment.id)
     return render(request, 'reply_to_comment.html', {'form': form, 'thread': thread, 'parent_comment': parent_comment})
 
-
-# views to handle subscribing and unsubscribing from threads
+#@W_Farmer
+# Views to handle subscribing and unsubscribing from threads
 #TODO: combine these into one "toggle" view later. 
 @login_required
 def subscribe_to_thread(request, thread_id):

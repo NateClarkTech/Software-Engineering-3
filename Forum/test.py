@@ -4,6 +4,8 @@ from .models import Page, Thread, Comment, Notification
 from .forms import CommentForm, ThreadForm, PageForm
 from django.urls import reverse
 
+#@W_Farmer
+# Create a small handful of test cases to test the forum app. The remainder of the tests are in the test_forum.py file in Software-Engineering-3/test_forum.py
 class ForumTestCase(TestCase):
     def setUp(self):    
         # Create a user

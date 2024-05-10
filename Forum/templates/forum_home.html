@@ -1,3 +1,4 @@
+<!-- @W_Farmer -->
 {% extends 'base.html' %}
 {% block extra_css %}
 
@@ -19,7 +20,7 @@
 
     .recent-commenters {
         background-color: #211951;
-        border: 1px solid #365486; /* Slightly lighter border for visibility */
+        border: 1px solid #365486; 
         color: white; /* Ensure text is white */
         padding: 15px;
         border-radius: 5px; /* Rounded corners */
@@ -131,7 +132,7 @@
         justify-content: space-between; /* This already ensures the content on both sides are pushed to the edge */
         align-items: center;
     }
-
+    /* sppecefic styles for smaller devices */
     @media (max-width: 768px) {
         .page-item {
             flex-direction: column;
@@ -173,7 +174,7 @@
         }
 
     }
-    
+    /* sppecefic styles for even smaller devices */
     @media (max-width: 480px) {
         .recent-commenters li {
             flex: 1 1 50%; /* 2 items per row on mobile screens */
@@ -197,17 +198,24 @@
 {% endblock %}
 
 {% block content %}
+<!-- @W_Farmer -->
+
 <div class="container mt-3">
     <div class="row">
         <div class="col-12">
             <h3> Pages</h3>
+            <!-- @W_Farmer -->
+
             <div class="list-group custom-border-wes">
+                <!-- Loop through every existing page -->
                 {% for page in pages %}
                 <div class="page-item">
+                    <!-- Link to the page -->
                     <div class="page-title">
                         <a href="{% url 'thread_list' page.id %}" class="page-link">{{ page.title }}</a>
                         <p class="page-description">{{ page.description|truncatechars:150 }}</p>
                     </div>
+                    <!-- List and link to the latest comment -->
                     <div class="comment-link">
                         {% with latest_comment=page.get_latest_comment %}
                         {% if latest_comment %}
@@ -228,12 +236,16 @@
 
         
         <div class="col-md-8">
+            <!-- @W_Farmer -->
+
             <h3>Latest Threads</h3>
             <ul class="list-group custom-border-wes">
+                <!-- Loop through every thread in the latest threads input -->
                 {% for thread in latest_threads %}
                 <li class="list-group-item custom-border-wes">
                     <a href="{% url 'thread_detail' thread.id %}">{{ thread.title }}</a>
                     <small class="float-right text-muted">
+                        <!-- Display the most recent comments for the thread-->
                         {% if thread.latest_comment_username != "No comments" %}
                             {{ thread.latest_comment_username }} - updated {{ thread.latest_comment_time|timesince }} ago
                         {% else %}
@@ -245,6 +257,8 @@
             </ul>
         </div>
         <div class="col-md-4">
+            <!-- List of the top threads -->
+            <!-- @W_Farmer -->
             <h3>Top Threads</h3>
             <ul class="list-group custom-border-wes">
                 {% for thread in top_threads %}
@@ -265,7 +279,6 @@
     <div class="recent-commenters">
         <ul>
             {% for profile in recent_commenter_profiles %}
-            <!-- Username div, should be right under the image -->
             <li>
                 <a href="{% url 'ProfileApp:public_profile' profile.user.username %}">
                     <!-- Small profile picture by their username -->
