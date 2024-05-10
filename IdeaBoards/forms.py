@@ -7,7 +7,7 @@ class NewIdeaBoardForm(forms.ModelForm):
         model = IdeaBoard
         fields = [
             'title', 
-            'description'
+            'description',
             ]
         
 class NewIdeaBoardItemForm(forms.ModelForm):
@@ -18,11 +18,12 @@ class NewIdeaBoardItemForm(forms.ModelForm):
             'description',
             'item_image',
             'item_sound',
+            'note_label',
         ]
         
 class NewItemLabelForm(forms.ModelForm):
     class Meta:
         model = ItemLabel
         fields = [
-            'label_name'
+            'label_name',
         ]

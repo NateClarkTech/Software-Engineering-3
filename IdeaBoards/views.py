@@ -57,7 +57,7 @@ IdeaBoard_Details:
     Users can add, delete, and edit notes on the board
 """
 @login_required
-def IdeaBoard_Detail(request, id):
+def IdeaBoard_Detail(request, id, label=None):
     #make sure the board exists, if not redirect to the boards page
     try:
         board = IdeaBoard.objects.get(id=id)
@@ -73,7 +73,13 @@ def IdeaBoard_Detail(request, id):
         request.session['error_messages'] = error_messages
         return redirect('IdeaBoards_Home')
         
-    #print(request.method)
+    labels = ItemLabel.objects.filter(label_board=board)
+    if(label==None):
+        items = IdeaBoardItem.objects.filter(ideaboard=board)
+    else:
+        label_id = labels.get(label_name=label)
+        items = IdeaBoardItem.objects.filter(ideaboard=board, note_label=label_id)
+
 
     #If the user is the owner of the board
     if board.user == request.user:
@@ -89,15 +95,23 @@ def IdeaBoard_Detail(request, id):
             number_of_changes = form_data.get('numChanges')
             #print(number_of_changes)
 
+
             for x in range(int(number_of_changes)):
                 #print("iteration:", x)
                 change_type = form_data.get(f'{x}_change_type')
                 #print(change_type)
 
                 if change_type == 'add':
+                    item_label = form_data.get(f'{x}_item_label')
+                    if item_label == 'null':
+                        label = None
+                    else:
+                        label = ItemLabel.objects.get(label_name=item_label, label_board=board)
+
                     formData = {
                         "title": form_data.get(f'{x}_title'),
                         "description": form_data.get(f'{x}_description'),
+                        "note_label": label,
                     }
 
                     item_image_files = file_data.getlist(f'{x}_item_image')
@@ -161,6 +175,12 @@ def IdeaBoard_Detail(request, id):
                     editedItem.title = form_data.get(f'{x}_title')
                     editedItem.description = form_data.get(f'{x}_description')
                     
+                    remove_label = form_data.get(f'{x}_remove_label')
+                    if (remove_label == "true"):
+                        editedItem.note_label = None
+                    else:
+                        editedItem.note_label = ItemLabel.objects.get(label_name=form_data.get(f'{x}_item_label'), label_board=board)
+
                     # Check if the user has uploaded a new image for the item
                     item_image_files = file_data.getlist(f'{x}_item_image')
                     # Check if there are any uploaded files for '0_item_image'
@@ -228,6 +248,7 @@ def IdeaBoard_Detail(request, id):
                     else:
                         board.is_public = False
                     board.save()
+
 
                 elif change_type == 'addLabel':
                     formData = {

@@ -128,7 +128,14 @@
                             <label for="item_sound">Add Sound File<p style="display: inline; margin: 0;"></p></label>
                             <input type="file" class="form-control" id="item_sound" name="item_image" accept="audio/*">
                         </div>
-
+                        <div id="LabelSelect" class="label-selection">
+                            <select id="labelSelect" class="label-dropdown" >
+                                <option value="" disabled selected hidden>Choose Label</option>
+                                {% for label in labels %}
+                                    <option value="{{label}}">{{ label.label_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
                         <p><p class="text-danger" style="display: inline; margin: 0;">*</p> required field</p>
                     </div>
                     <div class="modal-footer">
@@ -145,6 +152,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
+                    <p class="mt-1 col-md-2" id="view-item-label" data-id='none' data-index="none" style="justify-content:left"></p>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -200,6 +208,23 @@
                         <input class="form-check-input" type="checkbox" id="removeSound">
                         <label class="form-check-label" for="removeSound">
                             Remove Sound
+                        </label>
+                    </div>
+
+                    <h5 class="mt-2">New Label</h5>
+                    <p>(Leave blank to keep current label)</p>
+                    <div id="editItemLabelDiv" class="form-control">
+                        <select id="editItemLabel" class="label-dropdown" >
+                            <option value="" disabled selected hidden>Choose Label</option>
+                            {% for label in labels %}
+                                <option value="{{label}}">{{ label.label_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-check pt-2" id="modal-item-remove-label">
+                        <input class="form-check-input" type="checkbox" id="removeLabel">
+                        <label class="form-check-label" for="removeLabel">
+                            Remove Label
                         </label>
                     </div>
 
@@ -314,6 +339,19 @@
     <hr>
 
     <div class="row col-12" id="labelRow">
+        <button type="button" class="btn btn-primary my-1 col-md-1.5" id="ideaBoardView" data-board-id="{{board.id}}"
+        >All Notes</button>
+        <script>
+            document.getElementById("ideaBoardView").addEventListener("click", function() {
+                var boardId = this.getAttribute("data-board-id");
+
+                // Construct the URL with the board ID
+                var url = "/boards/" + boardId + "/"; // Replace "/boards/" with your actual URL pattern
+
+                // Redirect to the URL
+                window.location.href = url;
+            });
+        </script>
         <button type="button" class="btn btn-primary my-1" id="create-label" data-toggle="modal" data-target="#createLabel" data-label-nate="{{ label.name }}">Create Label</button>
         {% for label in labels %}
             <button type="button" class="btn btn-primary my-1 ml-1" id="sort-label-{{ forloop.counter }}" data-label-nate="{{ label.name }}">{{label.label_name}}</button>
@@ -356,8 +394,8 @@
                                         data-sound-src="{{ item.item_sound.url }}"
                                     {% endif %}
 
-                                    {% if item.label %}
-                                        data-label="{{ item.label.label_name }}"
+                                    {% if item.note_label %}
+                                        data-label="{{ item.note_label }}"
                                     {% endif %}
                 
                                     class='card-title pb-2'> 

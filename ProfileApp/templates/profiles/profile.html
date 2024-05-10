@@ -197,6 +197,45 @@
         font-size: 1.5rem;
         font-weight: bold;
     }
+
+  .user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Adjust the gap between bio and other info */
+    margin-top: 20px;
+    background-color: var(--Third-Color); /* Adjust color as necessary */
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid var(--Section-Color);
+}
+.bio-info {
+    flex: 1;
+    text-align: left; /* Align bio text to the left */
+    /* make the text wrap arround if its too long */
+    word-wrap: break-word;
+}
+.contact-info {
+    flex: 1;
+    text-align: left; /* Align contact info to the right */
+}
+
+/* mobile styling */
+@media (max-width: 768px) {
+    .user-info {
+        padding: 10px;
+    }
+    .bio-info {
+        text-align: center;
+    }
+    .contact-info {
+        text-align: center;
+    }
+}
+
+
+
+
+
     
 </style>
 {% endblock %}
@@ -208,6 +247,8 @@
             <img src="{{ profile.profile_picture.url }}" alt="{{ user_profile.username }}'s Profile Image" class="profile-image">
             <div class="user-details">
                 <h2>{{ user_profile.username }}</h2>
+                <!-- The user stats section -->
+
                 <div class="user-stats">
                     <div class="stat-item">
                         <div class="stat-count">{{ thread_count }}</div>
@@ -218,6 +259,31 @@
                         <div>Comments</div>
                     </div>
                 </div>
+                
+            </div>
+        </div>
+        <!-- User Info Section -->
+  <div class="user-info">
+            <div class="bio-info">
+                <!-- Include bio information here -->
+                {% if profile.personal_info %}
+                    <p>{{ profile.personal_info }}</p>
+                {% endif %}
+            </div>
+
+            <div class="contact-info">
+                {% if profile.displayName %}
+                    <p>First Name: {{ profile.firstName }}</p>
+                    <p>Last Name: {{ profile.lastName }}</p>
+                {% endif %}
+
+                {% if profile.displayEmail %}
+                    <p>Email: {{ profile.email }}</p>
+                {% endif %}
+
+                {% if profile.displayNumber %}
+                    <p>Phone Number: {{ profile.phoneNumber }}</p>
+                {% endif %}
             </div>
         </div>
 
