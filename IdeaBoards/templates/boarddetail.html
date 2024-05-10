@@ -215,7 +215,7 @@
                     <p>(Leave blank to keep current label)</p>
                     <div id="editItemLabelDiv" class="form-control">
                         <select id="editItemLabel" class="label-dropdown" >
-                            <option value="" disabled selected hidden>Choose Label</option>
+                            <option value="null" disabled selected hidden>Choose Label</option>
                             {% for label in labels %}
                                 <option value="{{label}}">{{ label.label_name }}</option>
                             {% endfor %}

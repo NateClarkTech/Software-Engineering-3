@@ -181,13 +181,17 @@ def IdeaBoard_Detail(request, id, label=None):
                     editedItem.description = form_data.get(f'{x}_description')
                     
                     remove_label = form_data.get(f'{x}_remove_label') #get the value of the checkbox via javascript
-                    item_label = form_data.get(f'{x}_item_label')
                     # if the edit request includes label removal
-                    if (remove_label == "true" or item_label == 'null'):
+                    if (remove_label == "true"):
                         editedItem.note_label = None
                     # else, assign keep the existing label
                     else:
-                        editedItem.note_label = ItemLabel.objects.get(label_name=form_data.get(f'{x}_item_label'), label_board=board)
+                        item_label = form_data.get(f'{x}_item_label')
+                        # checking the two cases of label values to avoid bugs
+                        if item_label == 'null':
+                            label = None
+                        else:
+                            label = ItemLabel.objects.get(label_name=item_label, label_board=board)
 
                     # Check if the user has uploaded a new image for the item
                     item_image_files = file_data.getlist(f'{x}_item_image')
