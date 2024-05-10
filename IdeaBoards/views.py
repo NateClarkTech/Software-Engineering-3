@@ -181,8 +181,9 @@ def IdeaBoard_Detail(request, id, label=None):
                     editedItem.description = form_data.get(f'{x}_description')
                     
                     remove_label = form_data.get(f'{x}_remove_label') #get the value of the checkbox via javascript
+                    item_label = form_data.get(f'{x}_item_label')
                     # if the edit request includes label removal
-                    if (remove_label == "true"):
+                    if (remove_label == "true" or item_label == 'null'):
                         editedItem.note_label = None
                     # else, assign keep the existing label
                     else:
