@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+# @Bilge_AKYOL : ItemLabel class;  item_iamge, item_sound, note_label in IdeaBoardItem
+
 class IdeaBoard(models.Model):
     title = models.CharField(max_length=64)
     description = models.TextField(blank=True, default='', max_length=128)
@@ -19,6 +21,7 @@ def user_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT / user_<id>/<filename> 
     return 'user_{0}/{1}'.format(instance.user.id, filename) 
     
+
 class ItemLabel(models.Model):
     label_name = models.CharField(max_length=15)
     label_board = models.ForeignKey(IdeaBoard, on_delete=models.CASCADE)

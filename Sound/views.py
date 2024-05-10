@@ -8,7 +8,14 @@ from Sound.models import *
 from django.shortcuts import render, redirect, get_object_or_404
 from Sound.spotify import *
 
-# Bilge implemented this application.
+'''
+    The Visual App is completely implemented by
+    @Bilge_AKYOL
+    implementation of Spotify API
+    implementation of sound notes as well as labeling
+    wasn't directly used in the final product
+    labeling, model, and the API is used in IdeaBoards and are commented in detail.
+'''
 
 @login_required
 def sound(request):

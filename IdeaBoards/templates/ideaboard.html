@@ -14,7 +14,7 @@
 
 {% block content %}
     <!-- Source: https: //getbootstrap.com/docs/5.3/components/modal/ -->
-    <!-- Spotify API Song Reccommendation Request -->
+    <!-- @Bilge_AKYOL : Spotify API Song Reccommendation Request -->
     <div class="modal fade" id="getRecc" tabindex="-1" role="dialog" aria-labelledby="spotifyAPI" aria-hidden="true">
         <div class="modal-dialog" role="form">
             <form method="POST" name="getRecc">
@@ -49,7 +49,7 @@
                 <div class="modal-body">
                     <h5 class="modal-title" id="reccResult"></h5>
                 </div>
-                {% for i in "01234" %}
+                {% for i in "01234" %} <!-- dynamic implementation to embed the 5 recommendations with their unique src inputted via javascript-->
                 <div name="result">
                     <iframe id="iframe-{{i}}" style="border-radius:12px" src="" width="100%" style="margin-left:7px" height="100" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
                 </div>
@@ -57,6 +57,7 @@
             </div>
         </div>
     </div>
+    <!--  -->
 
     <!-- Make Board Modal -->
     <div class="modal fade" id="createBoard" tabindex="-1" role="dialog" aria-labelledby="CreateBoardModalLabel" aria-hidden="true">

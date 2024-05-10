@@ -123,6 +123,12 @@
     object-fit: contain;
 }
 
+.label-icon{
+    max-width: 25px;
+    height: 25px;
+    object-fit: contain;
+}
+
 hr  {
     border-top: 1px solid #365486;
 }

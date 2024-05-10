@@ -30,12 +30,13 @@ def IdeaBoards_Home(request):
                 new_board.save()
                 return redirect('IdeaBoards_Home')
 
+        # @Bilge_AKYOL
         if request.method == "GETRECC":
-            genre_name = json.loads(request.body.decode('utf-8'))[0]["genreName"]
+            genre_name = json.loads(request.body.decode('utf-8'))[0]["genreName"] #parsing the javascript data
             if genre_name:
-                data = get_recc(genre_name)
+                data = get_recc(genre_name) #calling the function from spotify.py
                 response_data = {'message': data}
-                return JsonResponse(response_data)
+                return JsonResponse(response_data) #returning the output to javascript
         
         form = NewIdeaBoardForm(instance=request.user)
         boards = IdeaBoard.objects.filter(user=request.user)
@@ -52,6 +53,7 @@ def IdeaBoards_Home(request):
 
 """
 IdeaBoard_Details: 
+    @Bilge_AKYOL : creating, adding, sorting, editing labels + implemented image & and sound upload before the structure was changed
     This is a view for a board
     This page will display all the notes on the board
     Users can add, delete, and edit notes on the board
@@ -62,7 +64,7 @@ def IdeaBoard_Detail(request, id, label=None):
     try:
         board = IdeaBoard.objects.get(id=id)
         items = IdeaBoardItem.objects.filter(ideaboard=board)
-        labels = ItemLabel.objects.filter(label_board=board)
+        labels = ItemLabel.objects.filter(label_board=board) #filtering labels by the board so that the labels are unique to the board
 
     except:
         # error implementation was based on GPT https://chat.openai.com/share/424d6891-b553-4829-b8fd-8eafd56f687c
@@ -73,9 +75,11 @@ def IdeaBoard_Detail(request, id, label=None):
         request.session['error_messages'] = error_messages
         return redirect('IdeaBoards_Home')
         
-    labels = ItemLabel.objects.filter(label_board=board)
+    # if the function is not given a label, just display board items
     if(label==None):
         items = IdeaBoardItem.objects.filter(ideaboard=board)
+    # Displaying by label:
+    # if given a label parameter through the urş, sort the items with that label and only display those
     else:
         label_id = labels.get(label_name=label)
         items = IdeaBoardItem.objects.filter(ideaboard=board, note_label=label_id)
@@ -103,6 +107,7 @@ def IdeaBoard_Detail(request, id, label=None):
 
                 if change_type == 'add':
                     item_label = form_data.get(f'{x}_item_label')
+                    # checking the two cases of label values to avoid bugs
                     if item_label == 'null':
                         label = None
                     else:
@@ -175,9 +180,11 @@ def IdeaBoard_Detail(request, id, label=None):
                     editedItem.title = form_data.get(f'{x}_title')
                     editedItem.description = form_data.get(f'{x}_description')
                     
-                    remove_label = form_data.get(f'{x}_remove_label')
+                    remove_label = form_data.get(f'{x}_remove_label') #get the value of the checkbox via javascript
+                    # if the edit request includes label removal
                     if (remove_label == "true"):
                         editedItem.note_label = None
+                    # else, assign keep the existing label
                     else:
                         editedItem.note_label = ItemLabel.objects.get(label_name=form_data.get(f'{x}_item_label'), label_board=board)
 
@@ -249,17 +256,17 @@ def IdeaBoard_Detail(request, id, label=None):
                         board.is_public = False
                     board.save()
 
-
+                # adding labels to the database via create label button, will only be added 
                 elif change_type == 'addLabel':
                     formData = {
                         "label_name": form_data.get(f'{x}_labelName'),
                     }
                     print(formData)
-                    form = NewItemLabelForm(formData)
+                    form = NewItemLabelForm(formData) #from forms.py
                     if form.is_valid():
-                        new_label = form.save(commit=False)
+                        new_label = form.save(commit=False) # commit = False to not reload the page
                         new_label.label_board = board
-                        new_label.save()
+                        new_label.save() # the changes will be stored to the database only when the save board button is clicked via the addLabel section in "change_type=add" statement
                     else:
                         print(form.errors)
                 

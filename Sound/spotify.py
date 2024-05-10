@@ -5,6 +5,14 @@ import base64
 from requests import post, get
 import json
 
+
+'''
+    @Bilge_AKYOL
+    implementation of Spotify API
+    the API is used in IdeaBoards and are commented in detail.
+'''
+
+
 load_dotenv()
 client_id=os.getenv("CLIENT_ID")
 client_secret=os.getenv("CLIENT_SECRET")

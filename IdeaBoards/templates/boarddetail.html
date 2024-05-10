@@ -267,7 +267,7 @@
         </div>
     </div>
 
-    <!-- Create Label Modal -->
+    <!-- @Bilge_AKYOL : Create Label Modal -->
     <div class="modal fade" id="createLabel" tabindex="-1" role="dialog" aria-labelledby="CreateLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -292,6 +292,7 @@
             </div>
         </div>
     </div>
+    <!--  -->
 
     <!-- Error Modal -->
     <div class="modal fade" id="errorModel" tabindex="-1" labelledby="error-modal-label" role="dialog" aria-hidden="true">
@@ -337,22 +338,26 @@
     </div>
 
     <hr>
-
+    <!-- @Bilge_AKYOL : Labels -->
     <div class="row col-12" id="labelRow">
+        <!-- View all notes -->
         <button type="button" class="btn btn-primary my-1 col-md-1.5" id="ideaBoardView" data-board-id="{{board.id}}"
         >All Notes</button>
+        <!-- script to handle the url back to the board view from any path -->
         <script>
             document.getElementById("ideaBoardView").addEventListener("click", function() {
                 var boardId = this.getAttribute("data-board-id");
 
                 // Construct the URL with the board ID
-                var url = "/boards/" + boardId + "/"; // Replace "/boards/" with your actual URL pattern
+                var url = "/boards/" + boardId + "/"; // Replace "/boards/" with the actual URL pattern
 
                 // Redirect to the URL
                 window.location.href = url;
             });
         </script>
+        <!-- opens up create label modal -->
         <button type="button" class="btn btn-primary my-1" id="create-label" data-toggle="modal" data-target="#createLabel" data-label-nate="{{ label.name }}">Create Label</button>
+        <!-- loop through board's labels -->
         {% for label in labels %}
             <button type="button" class="btn btn-primary my-1 ml-1" id="sort-label-{{ forloop.counter }}" data-label-nate="{{ label.name }}">{{label.label_name}}</button>
         {% endfor %}
@@ -380,10 +385,15 @@
                                         <img src="{% static "images/audioiconwhite.png" %}" class="audio-icon mr-3 px-1" alt="audio icon">
                                     {% endif %}
 
+                                    {% if item.note_label %}
+                                        <!-- HTML for the custom icon -->
+                                        <img src="{% static "images/label-icon.png" %}" class="label-icon mr-3 px-1" alt="label icon">
+                                    {% endif %}
+
                                 </div>
 
                                 <!-- h2 start -->
-                                <!-- contains item model id, image/sound src if model contains one. -->
+                                <!-- contains item model id, image/sound src, label name if model contains one. -->
                                 <h2 id="board-item-{{ forloop.counter }}-title" 
                                     data-id="{{ item.id }}" 
                                     {% if item.item_image %}

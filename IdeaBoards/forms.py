@@ -21,6 +21,8 @@ class NewIdeaBoardItemForm(forms.ModelForm):
             'note_label',
         ]
         
+
+# Bilge: to add labels via the create label button
 class NewItemLabelForm(forms.ModelForm):
     class Meta:
         model = ItemLabel
