@@ -42,6 +42,7 @@ def get_recc(genre_name):
         'limit': 5
     }
     result = get(url, headers=headers, params=params)
+    print(result)
     
     if result.status_code == 200:
         json_result = result.json()

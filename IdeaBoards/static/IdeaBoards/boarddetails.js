@@ -1002,11 +1002,11 @@ document.getElementById("ideaBoardView").addEventListener("click", function() {
 */
 
 // JavaScript to handle form submission and displaying result
-document.getElementById('getRecc').addEventListener('submit', function(event) {
+document.getElementById('get-rec-button').addEventListener('click', function(event) {
     event.preventDefault(); // Prevent default form submission
       
     // Get input value
-    var genreName = document.getElementById('genreNameInput').value;
+    var genreName = document.getElementById("genreNameInput").value;
     console.log(genreName)
     fetch(window.location.pathname, {
         method: "GETRECC",
@@ -1024,6 +1024,5 @@ document.getElementById('getRecc').addEventListener('submit', function(event) {
         }
         $('#getRecc').modal('hide');
         $('#displayReccResults').modal('show');
-    })
-    
+    });
 });

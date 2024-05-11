@@ -29,17 +29,6 @@ def IdeaBoards_Home(request):
                 new_board.user = request.user
                 new_board.save()
                 return redirect('IdeaBoards_Home')
-
-        # @Bilge_AKYOL
-        if request.method == "GETRECC":
-            genre_name = json.loads(request.body.decode('utf-8'))[0]["genreName"] #parsing the javascript data
-            print("1")
-            print(genre_name)
-            print("2")
-            if genre_name:
-                data = get_recc(genre_name) #calling the function from spotify.py
-                response_data = {'message': data}
-                return JsonResponse(response_data) #returning the output to javascript
         
         form = NewIdeaBoardForm(instance=request.user)
         boards = IdeaBoard.objects.filter(user=request.user)
@@ -90,6 +79,13 @@ def IdeaBoard_Detail(request, id, label=None):
 
     #If the user is the owner of the board
     if board.user == request.user:
+        # @Bilge_AKYOL
+        if request.method == "GETRECC":
+            genre_name = json.loads(request.body.decode('utf-8'))[0]["genreName"] #parsing the javascript data
+            if genre_name:
+                data = get_recc(genre_name) #calling the function from spotify.py
+                response_data = {'message': data}
+                return JsonResponse(response_data) #returning the output to javascript
         if request.method == 'POST':
             # Get form data
             form_data = request.POST

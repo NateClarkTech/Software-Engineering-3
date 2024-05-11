@@ -7,8 +7,11 @@
         height: 200px; /* Set the desired height */
         overflow: hidden;
     }
-
+    
     .btn-size {
+        width: 100%;
+    }
+    .genre-input {
         width: 100%;
     }
 
@@ -40,6 +43,10 @@
     }
     
     .btn-size {
+        width: 100%;
+    }
+    
+    .genre-input {
         width: 100%;
     }
     
@@ -124,6 +131,12 @@
 }
 
 .label-icon{
+    max-width: 25px;
+    height: 25px;
+    object-fit: contain;
+}
+
+.search-icon{
     max-width: 25px;
     height: 25px;
     object-fit: contain;
