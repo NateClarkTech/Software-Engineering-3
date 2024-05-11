@@ -775,6 +775,18 @@ while (document.getElementById("board-item-" + i)) {
  * Author: Nathaniel Clark 
  * ********************************************************************/
 document.getElementById("edit-item-modal-button").addEventListener("click", function() {
+    /*************************************
+            * @Bilge_AKYOL display labels that are not yet saved to the database 
+            * as options in the dropdown  *
+            **************************************/
+     for (item in changesToBoard){
+        if(changesToBoard[item].changeType === "addLabel"){
+            var option = document.createElement("option");
+            option.value = changesToBoard[item].labelName;
+            option.text = changesToBoard[item].labelName;
+            document.getElementById("editItemLabel").appendChild(option);
+        }
+    }
     let itemTitle = document.getElementById("view-item-title");
     let itemDescription = document.getElementById("view-item-description");
     let item_id = itemTitle.getAttribute("data-id");
