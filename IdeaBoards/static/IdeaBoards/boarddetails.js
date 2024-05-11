@@ -982,3 +982,18 @@ document.getElementById("add-label-button").addEventListener("click", function()
         $('#createLabel').modal('hide');
     }
 });
+
+
+/*
+    script to handle the url back to the board view from any path
+    @author: Bilge Akyol
+*/ 
+document.getElementById("ideaBoardView").addEventListener("click", function() {
+    var boardId = this.getAttribute("data-board-id");
+
+    // Construct the URL with the board ID
+    var url = "/boards/" + boardId + "/"; // Replace "/boards/" with the actual URL pattern
+
+    // Redirect to the URL
+    window.location.href = url;
+});
