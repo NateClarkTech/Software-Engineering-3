@@ -465,6 +465,9 @@ document.getElementById("edit-item-button").addEventListener("click", function()
             if (newSound){
                 itemTitle.setAttribute("data-sound-src", URL.createObjectURL(newSound));
             }
+            if (newLabel){
+                itemTitle.setAttribute("data-label", newLabel);
+            }
 
             if (removeImage){
                 itemTitle.removeAttribute("data-img-src");
@@ -651,10 +654,6 @@ document.getElementById("save-board-button").addEventListener("click", function(
             if (change.item_sound === null){
                 formData.append(`${index}_remove_sound`, true);
             }
-
-            if (change.note_label){
-                formData.append(`${index}_item_label`, change.note_label);
-            }
             if (change.note_label === null){
                 formData.append(`${index}_remove_label`, true);
             }
@@ -802,7 +801,7 @@ document.getElementById("edit-item-modal-button").addEventListener("click", func
     document.getElementById("removeSound").checked = false;
     document.getElementById("removeLabel").checked = false;
 
-    //if there is no image or sound, disable the input fields
+    //if there is no image, sound, or label disable the input fields
     if (document.getElementById("view-item-image").classList.contains("d-none")){
         document.getElementById("modal-item-remove-image").classList.add("d-none");
     }
@@ -815,6 +814,12 @@ document.getElementById("edit-item-modal-button").addEventListener("click", func
     }
     else{
         document.getElementById("modal-item-remove-sound").classList.remove("d-none");
+    }
+    if (document.getElementById("view-item-label").classList.contains("d-none")){
+        document.getElementById("modal-item-remove-label").classList.add("d-none");
+    }
+    else{
+        document.getElementById("modal-item-remove-label").classList.remove("d-none");
     }
 
     //reset the image and sound inputs
@@ -935,14 +940,7 @@ labels.forEach(function(label) {
     });
 });
 
-/*
-        Create Label
-    @author: Bilge Akyol
-*/ 
-document.getElementById("create-label").addEventListener("click", function() {
-    $('#createLabel').modal('show');
-});
-
+ 
 document.getElementById("add-label-button").addEventListener("click", function() {    
 
     new_label = document.getElementById("new-label-name").value;
@@ -952,6 +950,10 @@ document.getElementById("add-label-button").addEventListener("click", function()
         $('#editBoardItem').modal('hide');
         $('#errorModel').modal('show');
     }
+    /*
+        Duplicate Label Check
+        author: @Bilge_AKYOL
+    */
     duplicate_label=false;
     labels.forEach(function(label) {
         if(new_label == label.textContent){
@@ -985,7 +987,7 @@ document.getElementById("add-label-button").addEventListener("click", function()
 
 /*
         Direct back to board detail view with all notes
-    @author: Bilge Akyol
+    author: @Bilge_AKYOL
 */ 
 document.getElementById("ideaBoardView").addEventListener("click", function() {
     var boardId = this.getAttribute("data-board-id");
