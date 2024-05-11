@@ -1,23 +1,23 @@
-
+/* @W_Farmer */
 .list-group-item {
-    background-color: #211951;
+    background-color: var(--Section-Color);
     color: white;
     border: none;
 }
 
 .card-body {
-    background-color: #211951;
+    background-color: var(--Section-Color);
     color: white;
 }.
 
 .card {
     color: white;
-    border: 1px solid #365486;
+    border: 1px solid var(--Third-Color);
 }
 
 .recent-commenters {
-    background-color: #211951;
-    border: 1px solid #365486; 
+    background-color: var(--Section-Color);
+    border: 1px solid var(--Third-Color); 
     color: white; /* Ensure text is white */
     padding: 15px;
     border-radius: 5px; /* Rounded corners */
@@ -85,8 +85,8 @@
     justify-content: space-between; /* Keep items on the sides */
     align-items: center; /* Align items vertically in the center */
     padding: 10px 15px;
-    background-color: #211951;
-    border-bottom: 1px solid #365486;
+    background-color: var(--Section-Color);
+    border-bottom: 1px solid var(--Third-Color);
     color: white;
 }
 

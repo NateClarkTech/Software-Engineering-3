@@ -1,3 +1,5 @@
+
+/* @W_Farmer */
 .container {
     margin-top: 20px;
   }
@@ -99,7 +101,7 @@
     padding: 0.2rem 0.6rem;
     margin: 0; /* Override default margins */
     color: white;
-    background-color: #211951;
+    background-color: var(--Section-Color);
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -125,7 +127,7 @@
   .subscribe-btn {
     margin-left: auto;
     float: right;
-    background-color: #211951;
+    background-color: var(--Section-Color);
 
   }
 

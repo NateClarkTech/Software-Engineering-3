@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 @receiver(post_save, sender=Comment)
 def create_comment_notification(sender, instance, created, **kwargs):
     if created:
-            # If there is a parrent and the parrent is not the parents user. AKA the user isnt replying to themselves
+            # If there is a parent and the parent is not the parents user. AKA the user isnt replying to themselves
             if instance.parent is not None and instance.parent.user != instance.user:  # Avoid self-notification
                 Notification.objects.create(
                     notification_type=Notification.REPLY,
