@@ -1,12 +1,13 @@
-<!-- forum/templates/forum/thread_list.html -->
+<!-- @W_Farmer -->
 {% extends 'base.html' %}
 
-{% block extra_css %}
-.list-group-item {
-  background-color: #211951;
-  color: white;
-}
+{% block stylesheets %}
+<!-- link the thread list css -->
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/thread_list.css' %}">
+{% endblock %}
 
+{% block title %}Threads in {{ page.title }}
 {% endblock %}
 
 
@@ -25,6 +26,7 @@
   <div class="row">
     <div class="col-md-12">
       <ul class="list-group custom-border-wes">
+        <!-- for each thread in the current  page -->
         {% for thread in threads %}
         <li class="list-group-item d-flex justify-content-between align-items-center custom-border-wes">
           <a href="{% url 'thread_detail' thread.id %}">{{ thread.title }}</a>

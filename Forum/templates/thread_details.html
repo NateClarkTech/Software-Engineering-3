@@ -1,189 +1,12 @@
+<!-- @W_Farmer -->
 {% extends 'base.html' %}
 {% block stylesheets %}
-<style>
-  .container {
-    margin-top: 20px;
-  }
-
-  .comment-header {
-    background-color: var(--Section-Color); 
-    color: #ecf0f1; /* Light text for contrast */
-    padding: 10px;
-    border-top-left-radius: 6px; /* Rounded corners for the top */
-    border-top-right-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between; /* Space out items */
-    /* border color */
-    border: 1px solid var(--Third-Color);
-
-  }
-
-  .comment-body {
-    background-color: var(--Third-Color); /* Lighter than the header but still dark */
-    padding: 15px;
-    border-bottom-left-radius: 6px; /* Rounded corners for the bottom */
-    border-bottom-right-radius: 6px;
-  }
-  .comment-wrapper {
-    margin-bottom: 20px; /* Space between comments */
-    border-radius: 6px; /* If the comment-wrapper is used */
-  }
-  .profile-picture {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    margin-right: 10px;
-    border: 3px solid var(--Third-Color); /* Border color for the profile picture */
-    object-fit: cover;
-  }
-  .comment-details {
-    flex-grow: 1;
-  }
-  .comment-author {
-    font-size: 1.2rem; /* Larger font size for the author */
-    color: #f1c40f; /* Highlight color for the author's name */
-    font-weight: bold;
-    margin-right: 5px;
-  }
-  /* comment author hover color */
-  .comment-author:hover {
-    color: #acafb5;
-    text-decoration: underline;
-  }
-  .comment-metadata {
-    font-size: 0.85rem;
-    color: #bdc3c7; /* Subdued color for metadata */
-  }
-  .comment-body {
-    font-size: 1rem;
-    color: var(--Text-Color) !important; /* Light text color for main comment body */
-    /* padding-left: 70px; */
-  }
-  .comment-actions {
-    display: flex;
-    gap: 10px;
-    justify-content: flex-end; /* Align action buttons to the right */
-    padding-top: 10px; /* Space between comment content and buttons */
-  }
-
-  .comment-action-btn {
-    background: none;
-    border: none;
-    color: var(--Text-Color); /* Same as comment text color */
-    cursor: pointer;
-  }
-  .comment-action-btn:hover {
-    text-decoration: underline;
-    color: #acafb5;
-  }
-
-  .reply-section {
-    margin-top: 10px;
-    padding-left: 20px; /* Indent replies */
-    border-left: 3px solid var(--Background-Color); /* Vertical line for replies */
-    background: #34495e; /* different background color for replies */
-  }
-
-  .reply-header {
-    display: flex;
-    align-items: center;
-    font-size: 0.9rem;
-    color: #95a5a6; /* Subtle color for reply header */
-  }
-
-  .reply-to {
-    font-style: italic;
-  }
-
-  .btn-reply {
-    font-size: 0.8rem;
-    padding: 0.2rem 0.6rem;
-    margin: 0; /* Override default margins */
-    color: white;
-    background-color: #211951;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-
-  .btn-reply:hover {
-    color: black;
-    
-  }
-
-
-  /* move the likes over to the left */
-  .likes {
-    color: #aea7d6 !important;
-  }
-
-  /* like button move to the left */
-  .likes-btn {
-    margin-right: auto;
-  }
-
-  /* move the subscribe button to the right */
-  .subscribe-btn {
-    margin-left: auto;
-    float: right;
-    background-color: #211951;
-
-  }
-
-  /* make sure the pre will wrap arround when it reaches the end of the line */
-  pre {
-    white-space: pre-wrap;
-    color: #ecf0f1;
-  }
-  /* styling for the embedded videos and stuff */
-  .responsive-iframe {
-    position: relative;
-    overflow: hidden;
-    padding-top: 56.25%; /* Aspect ratio of 16:9 */
-  }
-  
-  .responsive-iframe iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: 0;
-  }
-
-  /* reply modal */
-  .modal-content {
-    background-color: var(--Third-Color);
-    color: var(--Text-Color);
-  }
-  .modal-header {
-    /* rounded top corners */
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
-    border: 1px solid var(--Third-Color);
-    border-bottom: 1px solid var(--Third-Color);
-    background-color: var(--Background-Color);
-  }
-  .modal-footer {
-    /* rounded bottom corners */
-    border-bottom-left-radius: 6px;
-    border-bottom-right-radius: 6px;
-    border: 1px solid var(--Third-Color);
-    border-top: 1px solid var(--Third-Color);
-    background-color: var(--Background-Color);
-  }
-  /* special textarea for the reply modal */
-  #replyContent {
-    background-color: var(--Section-Color);
-    color: var(--Text-Color);
-    border: 1px solid var(--Third-Color);
-  }
-  
-
-</style>
+<!-- Add the custom css file -->
+{% load static%}
+<link rel="stylesheet" href="{% static 'css/thread_details.css' %}">
 {% endblock %}
+
+
 
 {% block content %}
 <div class="container">
@@ -199,9 +22,7 @@
             {% endif %}
           {% endif %}
         </span>
-      </h2> <!-- Title with adjusted color for visibility -->
-      <!-- Subscribe button -->
-
+      </h2> 
       <!-- Comment Loop -->
       {% for comment in comments %}
       <div class="comment-wrapper">
@@ -222,9 +43,9 @@
             <a href="{% url 'ProfileApp:public_profile' comment.user.username %}">
               <span class="comment-author">{{ comment.user.username }}</span>
             </a>
-            <!-- Include any badges or awards here -->
+            <!-- Comment MetaData-->
             <div class="comment-metadata">
-              <span>{{ comment.created_at|date:"M d, Y H:i" }}</span> <!-- Timestamp -->
+              <span>{{ comment.created_at|date:"M d, Y H:i" }}</span> 
               {% if comment.last_edited %}
                 <span>(edited)</span> <!-- Show if edited -->
               {% endif %}
@@ -233,7 +54,7 @@
         </div>
         <!-- Comment Body -->
         <div class="comment-body">
-          <!-- If it's a reply to another comment, show this -->
+          <!-- If it's a reply to another comment, show a short part of the origional comment -->
           {% if comment.parent %}
           <div class="reply-section">
             <div class="reply-wrapper">
@@ -248,12 +69,10 @@
           </div>
           {% endif %}
 
-          <!-- Print the comment, and allow for the urls to apply -->
+          <!-- Print the comment, and allow for the iframes to apply -->
           {% autoescape off %}
             <pre>{{ comment.content }}</pre>
           {% endautoescape %}
-
-          <!-- If it's a reply to another comment, show this -->
 
         <!-- Comment Actions -->
         <div class="comment-actions">
@@ -270,7 +89,7 @@
             {% else %}
               <span class="text-muted likes likes-btn">Likes: {{ comment.likes.count }}</span>
             {% endif %}
-
+          <!-- If the comment user is the current user, OR the current user is a superuser, allow them to edit and delete the comment-->
           {% if comment.user == user or user.is_superuser %}
             <a href="{% url 'edit_comment' comment.id %}" class="comment-action-btn">Edit</a>
             <a href="{% url 'delete_comment' comment.id %}" class="comment-action-btn">Delete</a>
@@ -326,7 +145,7 @@
 
 
 
-
+  <!-- If the user is authenticated allow them to make a new comment-->
   {% if user.is_authenticated %}
   <div class="comment-form-wrapper">
     <h5>Leave a Comment</h5>
@@ -351,10 +170,12 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="replyModalLabel">Reply to Comment</h5>
+        <!-- close button -->
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+      <!-- Form for the modal -->
       <form method="post" action="" id="replyForm">
         <div class="modal-body">
           {% csrf_token %}
@@ -377,6 +198,7 @@
 
 {% block scripts %}
 <script>
+  // When the reply button is clicked, set the form action to the correct URL and show the modal
   $(document).ready(function() {
     $('.btn-reply').click(function() {
       var parentCommentId = $(this).data('commentid');

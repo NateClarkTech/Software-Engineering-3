@@ -9,7 +9,7 @@ from django.contrib.auth import views as auth_views
 # And GPT helped me fix everything
 
 app_name = 'ProfileApp'
-
+#@W_Farmer
 # Here we have the urls for the profile app
 urlpatterns = [
 

@@ -1,6 +1,7 @@
 # your_app/context_processors.py
 from .models import Notification
 
+# This context processor will add the global notifications to the context of every request
 def notifications(request):
     if request.user.is_authenticated:
         return {

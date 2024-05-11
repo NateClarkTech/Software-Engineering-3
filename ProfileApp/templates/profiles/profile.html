@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 
 {% block title %}{{ user_profile.username }}'s Profile{% endblock %}
-
+<!-- @W_Farmer -->
 {% block stylesheets %}
 <style>
     .profile-container {
-        background-color: #211951;
+        background-color: var(--Section-Color);
         color: white;
         padding: 20px;
         margin-bottom: 20px;
         border-radius: 5px;
-        border: 1px solid #365486;
+        border: 1px solid var(--Third-Color);
     }
     .profile-header {
         margin-bottom: 30px;
@@ -26,16 +26,16 @@
         margin-top: 20px;
     }
     .list-group-item {
-        background-color: #211951;
+        background-color: var(--Section-Color);
         color: white;
-        border: 1px solid #365486;
+        border: 1px solid var(--Third-Color);
     }
     .btn-primary {
-        background-color: #211951;
-        border-color: #365486;
+        background-color: var(--Section-Color);
+        border-color: var(--Third-Color);
     }
     .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
-        background-color: #365486;
+        background-color: var(--Third-Color);
         color: white;
     }
     .container {
@@ -43,7 +43,7 @@
       }
     
       .comment-header {
-        background-color: #211951; /* Darker header background */
+        background-color: var(--Section-Color); /* Darker header background */
         color: #ecf0f1; /* Light text for contrast */
         padding: 10px;
         border-top-left-radius: 6px; /* Rounded corners for the top */
@@ -54,7 +54,7 @@
       }
     
       .comment-body {
-        background-color: #365486; /* Lighter than the header but still dark */
+        background-color: var(--Third-Color); /* Lighter than the header but still dark */
         padding: 15px;
         border-bottom-left-radius: 6px; /* Rounded corners for the bottom */
         border-bottom-right-radius: 6px;
@@ -126,7 +126,7 @@
         padding: 0.2rem 0.6rem;
         margin: 0; /* Override default margins */
         color: white;
-        background-color: #211951;
+        background-color: var(--Section-Color);
         border: none;
         border-radius: 4px;
         cursor: pointer;
@@ -155,16 +155,16 @@
         border-radius: 4px;
         border: 1px solid #7f8c8d; /* Subtle border color */
         min-height: 100px; /* Larger text area for comments */
-        background-color: #365486; /* Slightly lighter than form background for contrast */
+        background-color: var(--Third-Color); /* Slightly lighter than form background for contrast */
         color: white; /* Light text color */
       }
       .profile-container {
-        background-color: #211951; /* Darker theme for the profile */
+        background-color: var(--Section-Color); /* Darker theme for the profile */
         color: white;
         padding: 20px;
         margin-bottom: 20px;
         border-radius: 5px;
-        border: 1px solid #365486;
+        border: 1px solid var(--Third-Color);
     }
     .profile-header {
         display: flex;
@@ -305,6 +305,7 @@
         <div class="tab-content">
             <div class="tab-pane fade show active" id="comments" role="tabpanel" aria-labelledby="comments-tab">
                 {% for comment in comments %}
+                <!-- List of comments on the users profile, A lot of redundant code, but im leaving it be -->
                     <div class="comment-wrapper">
                       <div class="comment-header">
                         <!-- Profile Picture -->
@@ -318,7 +319,6 @@
                         <!-- Comment Details -->
                         <div class="comment-details">
                           <span class="comment-author">{{ comment.user.username }}</span>
-                          <!-- Include any badges or awards here -->
                           <div class="comment-metadata">
                             <span>{{ comment.created_at|date:"M d, Y H:i" }}</span> <!-- Timestamp -->
                             {% if comment.last_edited %}
@@ -367,7 +367,7 @@
                   {% endif %}
                 </div>
             </div>
-
+            <!-- A list of threads the user has created-->
             <div class="tab-pane fade" id="threads" role="tabpanel" aria-labelledby="threads-tab">
                 <ul class="list-group">
                     {% for thread in threads %}
@@ -390,8 +390,8 @@
                     <a href="?threads_page={{ threads.paginator.num_pages }}">Last &raquo;</a>
                     {% endif %}
                 </div>
-                <!-- Add pagination if necessary -->
             </div>
+            <!-- A list of comments the user has made-->
             <div class="tab-pane fade" id="user-comments" role="tabpanel" aria-labelledby="user-comments-tab">
                 <ul class="list-group">
                     {% for comment in user_comments %}
@@ -445,7 +445,6 @@
                     </div>
                     {% endfor %}
                 </ul>
-                <!-- Add pagination if necessary -->
                 <div class="pagination">
                     {% if user_comments.has_previous %}
                     <a href="?user_comments_page=1">&laquo; First</a>

@@ -1,19 +1,18 @@
+<!-- @W_Farmer -->
 {% extends 'base.html' %}
-{% block extra_css %}
-.list-group-item {
-    background-color: #211951;
-    color: white;
-    border: none;
-}
-/* make the notification links white */
-.list-group-item a {
-    color: white;
-}
-
+{% block stylesheets %}
+<!-- Add the custom css file -->
+{% load static%}
+<link rel="stylesheet" href="{% static 'css/notifications.css' %}">
 {% endblock %}
+{% block title %}Notifications{% endblock %}
+
+
+
 {% block content %}
 <div class="container mt-4">
     <h2>Notifications</h2>
+    <!-- Pagination -->
     {% if notifications.has_other_pages %}
         <ul class="pagination">
             {% if notifications.has_previous %}
@@ -40,6 +39,7 @@
     
     {% if notifications %}
         <ul class="list-group">
+            <!-- For every notification -->
             {% for notification in notifications %}
             <li class="list-group-item">
                 <!-- Check the type of notification and create a link accordingly -->

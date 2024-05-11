@@ -27,15 +27,17 @@ from Forum import views as forum
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    #@W_Farmer
+    # User authentication paths
     path('login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
     path('logout/', views.logout_view, name='logout'),
     path('register/', views.register, name='register'),
-    path('forum/', include('Forum.urls'), name='Forum'),
+    path('forum/', include('Forum.urls'), name='Forum'), #@W_Farmer Forum url
     path('boards/', include('IdeaBoards.urls')),
     path('profile/', include('ProfileApp.urls')),
     path('visual/' , include('Visual.urls')),
     path('sound/' , include('Sound.urls')),
-    path('notifications/mark_as_read/<int:notification_id>/', forum.mark_notification_as_read, name='mark_notification_as_read'),
+    path('notifications/mark_as_read/<int:notification_id>/', forum.mark_notification_as_read, name='mark_notification_as_read'), #@W_Farmer, Global notification mark as read
 
     path('' , views.home, name='home'),
 

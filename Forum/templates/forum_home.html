@@ -1,213 +1,34 @@
+<!-- @W_Farmer -->
 {% extends 'base.html' %}
-{% block extra_css %}
+{% block stylesheets %}
 
-    .list-group-item {
-        background-color: #211951;
-        color: white;
-        border: none;
-    }
+<!-- Add the custom css file -->
+{% load static%}
+<link rel="stylesheet" href="{% static 'css/forum_home.css' %}">
+{% endblock %}
 
-    .card-body {
-        background-color: #211951;
-        color: white;
-    }.
-
-    .card {
-        color: white;
-        border: 1px solid #365486;
-    }
-
-    .recent-commenters {
-        background-color: #211951;
-        border: 1px solid #365486; /* Slightly lighter border for visibility */
-        color: white; /* Ensure text is white */
-        padding: 15px;
-        border-radius: 5px; /* Rounded corners */
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around; /* Distribute space evenly around items */
-    }
-    
-    .recent-commenters h3 {
-        width: 100%; /* Full width to align it centered over the list */
-        text-align: center;
-        margin-bottom: 20px; /* More space between title and items */
-    }
-    
-    .recent-commenters ul {
-        list-style-type: none;
-        padding: 0;
-        margin: 0;
-        width: 100%; /* Full width */
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: flex-start; /* Align items at the start */
-    }
-    
-    .recent-commenters li {
-        flex: 1 1 20%; /* Adjust basis to 20% to fit 5 across on larger screens */
-        margin-bottom: 10px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-    
-    .recent-commenters li a {
-        text-decoration: none;
-        color: white; /* Set text color */
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    .profile-picture {
-        width: 80px; /* Optimal size for mobile and desktop */
-        height: 80px;
-        border-radius: 50%;
-        border: 3px solid #ecf0f1;
-    }
-    
-    .name {
-        font-size: 1.2rem; /* Adjust font size for readability */
-        font-weight: bold;
-        margin-top: 5px; /* Space between picture and name */
-    }
-    
-    .profile-picture {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        border: 3px solid #ecf0f1;
-        display: block; /* This centers the img in the li */
-        margin: auto; /* This also helps in centering the img in the li */
-    }
-    .page-item {
-        display: flex;
-        justify-content: space-between; /* Keep items on the sides */
-        align-items: center; /* Align items vertically in the center */
-        padding: 10px 15px;
-        background-color: #211951;
-        border-bottom: 1px solid #365486;
-        color: white;
-    }
-    
-    .page-item:last-child {
-        border-bottom: none; /* No border at the bottom of the last item */
-    }
-    
-    .page-link {
-        color: #f0f0f0;
-        text-decoration: none; /* Remove underline from links */
-        font-weight: bold;
-    }
-    
-    .page-link:hover {
-        text-decoration: underline; /* Only underline on hover */
-        color: #c0c0f0;
-    }
-    
-    .page-description {
-        font-size: 0.95rem;
-        color: #cccccc; /* Lighter text color for description */
-    }
-
-    .page-title {
-        display: flex;
-    }
-
-    .page-title {
-        flex-grow: 1; /* Ensures the title and description take up the remaining space */
-        margin-right: 20px; /* Adds some spacing between the title/description and the latest comment link */
-    }
-    
-    .comment-link {
-        white-space: nowrap; /* Ensures the link doesn't break into multiple lines */
-        text-align: right;
-    }
-    
-    .page-item {
-        display: flex;
-        justify-content: space-between; /* This already ensures the content on both sides are pushed to the edge */
-        align-items: center;
-    }
-
-    @media (max-width: 768px) {
-        .page-item {
-            flex-direction: column;
-            align-items: flex-start; /* Align items to the start on small screens */
-        }
-    
-        .page-title, .comment-link {
-            width: 100%; /* Full width to prevent overflow */
-            text-align: left; /* Align text to the left */
-            margin-bottom: 5px; /* Add some space between the title and the comment link */
-        }
-    
-        .comment-link {
-            order: 3; /* Make the comment link appear last */
-            text-align: left; /* Align the text to the left */
-            white-space: normal; /* Allow wrapping */
-        }
-    
-        .page-description {
-            font-size: 0.85rem; /* Smaller font size on mobile devices */
-        }
-        .recent-commenters li {
-            flex: 1 1 33%; /* 3 items per row on tablet screens */
-            
-        }
-    
-        .recent-commenters li a {
-            flex-direction: column; 
-        }
-    
-        .profile-picture {
-            width: 60px; /* Smaller profile pictures on mobile */
-            height: 60px;
-        }
-    
-        .name {
-            font-size: 1rem; /* Smaller font size for names */
-            display: block;
-        }
-
-    }
-    
-    @media (max-width: 480px) {
-        .recent-commenters li {
-            flex: 1 1 50%; /* 2 items per row on mobile screens */
-        }
-    
-        .profile-picture {
-            width: 60px; /* Smaller pictures on mobile */
-            height: 60px;
-        }
-    
-        .name {
-            font-size: 1rem; /* Smaller font size for mobile */
-        }
-    }
-
-    
-    
-
-
-
+{% block title %}Forum Home
 {% endblock %}
 
 {% block content %}
+<!-- @W_Farmer -->
+
 <div class="container mt-3">
     <div class="row">
         <div class="col-12">
             <h3> Pages</h3>
+            <!-- @W_Farmer -->
+
             <div class="list-group custom-border-wes">
+                <!-- Loop through every existing page -->
                 {% for page in pages %}
                 <div class="page-item">
+                    <!-- Link to the page -->
                     <div class="page-title">
                         <a href="{% url 'thread_list' page.id %}" class="page-link">{{ page.title }}</a>
                         <p class="page-description">{{ page.description|truncatechars:150 }}</p>
                     </div>
+                    <!-- List and link to the latest comment -->
                     <div class="comment-link">
                         {% with latest_comment=page.get_latest_comment %}
                         {% if latest_comment %}
@@ -228,12 +49,16 @@
 
         
         <div class="col-md-8">
+            <!-- @W_Farmer -->
+
             <h3>Latest Threads</h3>
             <ul class="list-group custom-border-wes">
+                <!-- Loop through every thread in the latest threads input -->
                 {% for thread in latest_threads %}
                 <li class="list-group-item custom-border-wes">
                     <a href="{% url 'thread_detail' thread.id %}">{{ thread.title }}</a>
                     <small class="float-right text-muted">
+                        <!-- Display the most recent comments for the thread-->
                         {% if thread.latest_comment_username != "No comments" %}
                             {{ thread.latest_comment_username }} - updated {{ thread.latest_comment_time|timesince }} ago
                         {% else %}
@@ -245,6 +70,8 @@
             </ul>
         </div>
         <div class="col-md-4">
+            <!-- List of the top threads -->
+            <!-- @W_Farmer -->
             <h3>Top Threads</h3>
             <ul class="list-group custom-border-wes">
                 {% for thread in top_threads %}
@@ -258,14 +85,13 @@
     </div>
     <!-- Line, used this source  https://www.w3schools.com/tags/tag_hr.asp-->
 
-    <hr style="height:2px;border-width:0;background-color:#365486">
+    <hr style="height:2px;border-width:0;background-color:var(--Third-Color)">
     <!-- Recent Commenters -->
     <h3>Recent Commenters</h3>
 
     <div class="recent-commenters">
         <ul>
             {% for profile in recent_commenter_profiles %}
-            <!-- Username div, should be right under the image -->
             <li>
                 <a href="{% url 'ProfileApp:public_profile' profile.user.username %}">
                     <!-- Small profile picture by their username -->

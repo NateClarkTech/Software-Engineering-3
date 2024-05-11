@@ -13,9 +13,9 @@ from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import EmptyPage , PageNotAnInteger, Paginator
 
-
-@login_required
-def profile(request, username=None):
+# View for a profile page, which will functino for both the current user, or a specefic user
+@login_required 
+def profile(request, username=None): #@W_Farmer
     if username:
         user = get_object_or_404(User, username=username)
     else:
@@ -45,6 +45,7 @@ def profile(request, username=None):
     user_comments_paginator = Paginator(user_comments_query, 5)
     profile_comments_paginator = Paginator(comments_query, 5)
 
+    # Try to get the page number, if not set to 1
     try:
         threads = threads_paginator.page(threads_page)
         user_comments = user_comments_paginator.page(user_comments_page)
@@ -57,8 +58,9 @@ def profile(request, username=None):
         threads = threads_paginator.page(threads_paginator.num_pages)
         user_comments = user_comments_paginator.page(user_comments_paginator.num_pages)
         profile_comments = profile_comments_paginator.page(profile_comments_paginator.num_pages)
-
+    # Allow the user to post a comment on the profile
     comment_form = ProfileCommentForm(request.POST or None)
+    
     if request.method == 'POST' and comment_form.is_valid():
         new_comment = ProfileComment.objects.create(
             profile=profile,
