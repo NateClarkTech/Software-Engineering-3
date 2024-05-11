@@ -37,12 +37,13 @@ while (document.getElementById("board-item-" + i)) {
             //bring up modal to view item
             let itemTitle = document.getElementById("board-item-" + index + "-title");
             let itemDescription = document.getElementById("board-item-" + index + "-description");
+            let item_id = document.getElementById("board-item-" + index + "-title").getAttribute("data-id");
             let img_src = itemTitle.getAttribute("data-img-src");
-
-            console.log(img_src);
+            let item_label = itemTitle.getAttribute("data-label");
 
             let modalTitle = document.getElementById("view-item-title");
             modalTitle.textContent = itemTitle.textContent;
+            modalTitle.setAttribute("data-id", item_id);
             modalTitle.setAttribute("data-index", index);
 
             let modalImage = document.getElementById("view-item-image");
@@ -61,6 +62,15 @@ while (document.getElementById("board-item-" + i)) {
             }
             else{
                 modalSound.classList.add("d-none");
+            }
+
+            let modalLabel = document.getElementById("view-item-label");
+            if (itemTitle.getAttribute("data-label")){
+                modalLabel.classList.remove("d-none");
+                modalLabel.textContent = item_label;
+            }
+            else{
+                modalLabel.classList.add("d-none");
             }
 
             document.getElementById("view-item-description").textContent = itemDescription.textContent;
