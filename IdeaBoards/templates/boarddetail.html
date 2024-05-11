@@ -13,7 +13,7 @@
 
     <!-- Board Settings Modal -->
     <div class="modal fade" id="boardSettings" tabindex="-1" role="dialog" aria-labelledby="BoardSettingsModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="form">
+        <div class="modal-dialog" role="form">
             <div class="modal-content">
 
                 <div class="modal-header">
@@ -38,7 +38,7 @@
 
     <!-- Edit Board Modal -->
     <div class="modal fade" id="editBoard" tabindex="-1" role="dialog" aria-labelledby="EditBoardModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable modal-lg" role="form">
+        <div class="modal-dialog modal-dialog-scrollable" role="form">
             <div class="modal-content">
 
                 <div class="modal-header">
@@ -80,7 +80,7 @@
 
     <!-- Delete Board Modal -->
     <div class="modal fade" id="deleteBoard" tabindex="-1" role="dialog" aria-labelledby="DeleteBoardModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable modal-lg" role="form">
+        <div class="modal-dialog modal-dialog-scrollable" role="form">
             <div class="modal-content">
 
                 <div class="modal-header">
@@ -110,7 +110,7 @@
 
     <!-- New Item Modal -->
     <div class="modal fade" id="createBoardItem" tabindex="-1" role="dialog" aria-labelledby="CreateItemModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <form id="addItemForm">
                     {% csrf_token %}
@@ -165,7 +165,7 @@
 
     <!-- View Item Modal -->
     <div class="modal fade" id="viewBoardItem" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-dialog" role="document">
             <div class="modal-content">
 
                 <div class="modal-header">
@@ -196,7 +196,7 @@
 
     <!-- Edit Item Modal -->
     <div class="modal fade" id="editBoardItem" tabindex="-1" role="dialog" aria-labelledby="EditItemModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
             <div class="modal-content">
 
                 <div class="modal-header">
@@ -268,7 +268,7 @@
 
     <!-- Delete Item Modal -->
     <div class="modal fade" id="deleteItem" tabindex="-1" role="dialog" labelledby="DeleteItemModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable modal-lg" role="form">
+        <div class="modal-dialog modal-dialog-scrollable" role="form">
             <div class="modal-content">
 
                 <div class="modal-header">
@@ -298,7 +298,7 @@
 
     <!-- Create Label Modal -->
     <div class="modal fade" id="createLabel" tabindex="-1" role="dialog" aria-labelledby="CreateLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
             <div class="modal-content">
 
                 <div class="modal-header">
@@ -328,7 +328,7 @@
 
     <!-- Error Modal -->
     <div class="modal fade" id="errorModel" tabindex="-1" labelledby="error-modal-label" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
             <div class="modal-content">
 
                 <!-- Error warning here -->
@@ -406,15 +406,9 @@
 
                                 <!-- Move the row with images to the bottom of the card -->
                                 <div class="row justify-content-end mt-auto">
-                                    {% if item.item_image %}
-                                        <img class="col-3 img-icon px-1 {% if not item.item_sound %}mr-3{% endif %}" src="{% static "images/imageiconwhite.png" %}" alt="img icon"></img>
-                                    {% endif %}
-                
-                                    {% if item.item_sound %}
-                                        <!-- HTML for the custom icon -->
-                                        <img src="{% static "images/audioiconwhite.png" %}" class="audio-icon mr-3 px-1" alt="audio icon">
-                                    {% endif %}
-
+                                    <img id="img-icon-{{ forloop.counter }}" class="col-3 img-icon px-1 {% if not item.item_sound %}mr-3{% endif %} {% if not item.item_image %}d-none{% endif %}" src="{% static "images/imageiconwhite.png" %}" alt="img icon"></img>
+                                    <!-- HTML for the custom icon -->
+                                    <img id="audio-icon-{{ forloop.counter }}" class="audio-icon mr-3 px-1 if {% if not item.item_sound %}d-none{% endif %}" src="{% static "images/audioiconwhite.png" %}"  alt="audio icon">
                                 </div>
 
                                 <!-- h2 start -->

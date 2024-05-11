@@ -210,39 +210,44 @@ function addNewBoardItem() {
         let cardBody = document.createElement("div");
         cardBody.classList.add("card-body");
 
-        //If there is an image/sound/label file, add the icon to show it
-        if (item_image || item_sound || item_label) {
-            let rowDiv = document.createElement("div");
-            rowDiv.classList.add("row", "justify-content-end", "mt-auto");
+        //Icon div for image, sound, and label
+        let rowDiv = document.createElement("div");
+        rowDiv.classList.add("row", "justify-content-end", "mt-auto");
 
-            // Add the image icon to the card
-            if (item_image) {
-                let imgIcon = document.createElement("img");
-                imgIcon.setAttribute("id", "board-item-" + assignBoardId + "-img-icon");
-                imgIcon.classList.add("col-3", "img-icon", "px-1", "mr-3");
-                if (item_sound){
-                    imgIcon.classList.remove("mr-3");
-                }
-                imgIcon.src = "/static/images/imageiconwhite.png";
-                imgIcon.alt = "img icon";
-                rowDiv.appendChild(imgIcon);
-            }
-
-            // Add the sound icon to the card
-            if (item_sound) {
-                let audioIcon = document.createElement("img");
-                audioIcon.src = "/static/images/audioiconwhite.png";
-                audioIcon.classList.add("audio-icon", "mr-3", "px-1");
-                rowDiv.appendChild(audioIcon);
-            }
-            // Add the label icon to the card
-            if (item_label) {
-                    let label = document.createElement("p");
-                    label.textContent = item_label;
-                    rowDiv.appendChild(label);
-                }
-            cardBody.appendChild(rowDiv);
+        // Add the image icon to the card
+        let imgIcon = document.createElement("img");
+        imgIcon.setAttribute("id", "img-icon-" + assignBoardId);
+        imgIcon.classList.add("col-3", "img-icon", "px-1", "mr-3");
+        if (item_sound){
+            imgIcon.classList.remove("mr-3");
         }
+        imgIcon.src = "/static/images/imageiconwhite.png";
+        imgIcon.alt = "img icon";
+        if (!item_image){
+            imgIcon.classList.add("d-none");
+        }
+
+        rowDiv.appendChild(imgIcon);
+
+
+        // Add the sound icon to the card
+        let audioIcon = document.createElement("img");
+        audioIcon.src = "/static/images/audioiconwhite.png";
+        audioIcon.classList.add("audio-icon", "mr-3", "px-1");
+        rowDiv.appendChild(audioIcon);
+        audioIcon.setAttribute("id", "audio-icon-" + assignBoardId);
+        audioIcon.alt = "audio icon";
+        if (!item_sound){
+            audioIcon.classList.add("d-none");
+        }
+            
+        // Add the label icon to the card
+        if (item_label) {
+                let label = document.createElement("p");
+                label.textContent = item_label;
+                rowDiv.appendChild(label);
+            }
+        cardBody.appendChild(rowDiv);
         
         // Add the title to the card
         let cardTitle = document.createElement("h2");
@@ -402,24 +407,33 @@ document.getElementById("edit-item-button").addEventListener("click", function()
                 changesToBoard[item].description = newDescription;
                 changesToBoard[item].note_label = newLabel;
 
+                // Add the new image and sound to the changesToBoard array if they exist
                 if (document.getElementById("editItemImage").files[0]){
                     changesToBoard[item].item_image = newImage;
+                    // Add the image icon to the card
+                    document.getElementById("img-icon-" + itemIndex).classList.remove("d-none");
                 }
                 if (document.getElementById("editItemSound").files[0]){
                     changesToBoard[item].item_sound = newSound;
+                    // Add the sound icon to the card
+                    document.getElementById("audio-icon-" + itemIndex).classList.remove("d-none");
                 }
-
+                
+                // Remove the image and sound from the changesToBoard array if the user wants to remove them
                 if (removeImage){
                     changesToBoard[item].item_image = null;
+                    document.getElementById("img-icon-" + itemIndex).classList.add("d-none");
                 }
 
                 if (removeSound){
                     changesToBoard[item].item_sound = null;
+                    document.getElementById("audio-icon-" + itemIndex).classList.add("d-none");
                 }
                 if (removeLabel){
                     changesToBoard[item].note_label = null;
                 }
                 
+                //update the html elements with the new image/sound source
                 itemTitle.textContent = newTitle;
                 if (newImage){
                     itemTitle.setAttribute("data-img-src", URL.createObjectURL(newImage));
@@ -428,6 +442,7 @@ document.getElementById("edit-item-button").addEventListener("click", function()
                     itemTitle.setAttribute("data-sound-src", URL.createObjectURL(newSound));
                 }
 
+                //remove the image/sound source if the user wants to remove them
                 if (document.getElementById("removeImage").checked){
                     itemTitle.removeAttribute("data-img-src");
                 }
@@ -436,6 +451,14 @@ document.getElementById("edit-item-button").addEventListener("click", function()
                 }
                 if (document.getElementById("removeLabel").checked){
                     itemTitle.removeAttribute("data-label");
+                }
+
+                //if the image is shown and the sound is hidden, add margin to the image icon
+                if (!document.getElementById("img-icon-" + itemIndex).classList.contains("d-none") && document.getElementById("audio-icon-" + itemIndex).classList.contains("d-none")){
+                    document.getElementById("img-icon-" + itemIndex).classList.add("mr-3");
+                }
+                else{
+                    document.getElementById("img-icon-" + itemIndex).classList.remove("mr-3");
                 }
 
                 $('#editBoardItem').modal('hide');
@@ -503,19 +526,31 @@ document.getElementById("edit-item-button").addEventListener("click", function()
         // Update the item's details
         if (newImage){
             itemTitle.setAttribute("data-img-src", URL.createObjectURL(newImage));
+            document.getElementById("img-icon-" + itemIndex).classList.remove("d-none");
         }
         if (newSound){
             itemTitle.setAttribute("data-sound-src", URL.createObjectURL(newSound));
+            document.getElementById("audio-icon-" + itemIndex).classList.remove("d-none");
         }
 
         if (removeImage){
             itemTitle.removeAttribute("data-img-src");
+            document.getElementById("img-icon-" + itemIndex).classList.add("d-none");
         }
         if (removeSound){
             itemTitle.removeAttribute("data-sound-src");
+            document.getElementById("audio-icon-" + itemIndex).classList.add("d-none");
         }
         if (removeLabel){
             itemTitle.removeAttribute("data-label");
+        }
+
+        //if the image is shown and the sound is hidden, add margin to the image icon
+        if (!document.getElementById("img-icon-" + itemIndex).classList.contains("d-none") && document.getElementById("audio-icon-" + itemIndex).classList.contains("d-none")){
+            document.getElementById("img-icon-" + itemIndex).classList.add("mr-3");
+        }
+        else{
+            document.getElementById("img-icon-" + itemIndex).classList.remove("mr-3");
         }
 
         // Close the modal
