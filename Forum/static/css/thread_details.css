@@ -1,0 +1,180 @@
+.container {
+    margin-top: 20px;
+  }
+
+  .comment-header {
+    background-color: var(--Section-Color); 
+    color: #ecf0f1; /* Light text for contrast */
+    padding: 10px;
+    border-top-left-radius: 6px; /* Rounded corners for the top */
+    border-top-right-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Space out items */
+    /* border color */
+    border: 1px solid var(--Third-Color);
+
+  }
+
+  .comment-body {
+    background-color: var(--Third-Color); 
+    padding: 15px;
+    /* Rounded corners for the bottom */
+    border-bottom-left-radius: 6px; 
+    border-bottom-right-radius: 6px;
+  }
+  .comment-wrapper {
+    margin-bottom: 20px; /* Space between comments */
+    border-radius: 6px; /* If the comment-wrapper is used */
+  }
+  .profile-picture {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-right: 10px;
+    border: 3px solid var(--Third-Color); /* Border color for the profile picture */
+    object-fit: cover;
+  }
+  .comment-details {
+    flex-grow: 1;
+  }
+  .comment-author {
+    font-size: 1.2rem; /* Larger font size for the author */
+    color: #f1c40f; /* Highlight color for the author's name */
+    font-weight: bold;
+    margin-right: 5px;
+  }
+  /* comment author hover color */
+  .comment-author:hover {
+    color: #acafb5;
+    text-decoration: underline;
+  }
+  .comment-metadata {
+    font-size: 0.85rem;
+    color: #bdc3c7; /* Subdued color for comment metadata */
+  }
+  .comment-body {
+    font-size: 1rem;
+    color: var(--Text-Color) !important; /* Light text color for main comment body */
+    /* padding-left: 70px; */
+  }
+  .comment-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end; /* Align action buttons to the right */
+    padding-top: 10px; /* Space between comment content and buttons */
+  }
+
+  .comment-action-btn {
+    background: none;
+    border: none;
+    color: var(--Text-Color); /* Same as comment text color */
+    cursor: pointer;
+  }
+  .comment-action-btn:hover {
+    text-decoration: underline;
+    color: #acafb5;
+  }
+
+  .reply-section {
+    margin-top: 10px;
+    padding-left: 20px; /* Indent replies */
+    border-left: 3px solid var(--Background-Color); /* Vertical line for replies */
+    background: #34495e; /* different background color for replies */
+  }
+
+  .reply-header {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    color: #95a5a6; /* Subtle color for reply header */
+  }
+
+  .reply-to {
+    font-style: italic;
+  }
+
+  .btn-reply {
+    font-size: 0.8rem;
+    padding: 0.2rem 0.6rem;
+    margin: 0; /* Override default margins */
+    color: white;
+    background-color: #211951;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+
+  .btn-reply:hover {
+    color: black;
+    
+  }
+
+  /* Color the likes text */
+  .likes {
+    color: #aea7d6 !important;
+  }
+
+  /* like button move to the left */
+  .likes-btn {
+    margin-right: auto;
+  }
+
+  /* move the subscribe button to the right */
+  .subscribe-btn {
+    margin-left: auto;
+    float: right;
+    background-color: #211951;
+
+  }
+
+  /* make sure the pre will wrap arround when it reaches the end of the line */
+  pre {
+    white-space: pre-wrap;
+    color: #ecf0f1;
+  }
+  /* styling for the embedded videos and spotify pages */
+  .responsive-iframe {
+    position: relative;
+    overflow: hidden;
+    padding-top: 56.25%; /* Aspect ratio of 16:9 */
+  }
+  
+  .responsive-iframe iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  /* reply modal */
+  .modal-content {
+    background-color: var(--Third-Color);
+    color: var(--Text-Color);
+  }
+  .modal-header {
+    /* rounded top corners */
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    border: 1px solid var(--Third-Color);
+    border-bottom: 1px solid var(--Third-Color);
+    background-color: var(--Background-Color);
+  }
+  .modal-footer {
+    /* rounded bottom corners */
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    border: 1px solid var(--Third-Color);
+    border-top: 1px solid var(--Third-Color);
+    background-color: var(--Background-Color);
+  }
+  /* special textarea for the reply modal */
+  #replyContent {
+    background-color: var(--Section-Color);
+    color: var(--Text-Color);
+    border: 1px solid var(--Third-Color);
+  }
+  

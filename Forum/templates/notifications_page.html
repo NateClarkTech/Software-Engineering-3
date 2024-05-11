@@ -1,17 +1,14 @@
 <!-- @W_Farmer -->
 {% extends 'base.html' %}
-{% block extra_css %}
-.list-group-item {
-    background-color: #211951;
-    color: white;
-    border: none;
-}
-/* make the notification links white */
-.list-group-item a {
-    color: white;
-}
-
+{% block stylesheets %}
+<!-- Add the custom css file -->
+{% load static%}
+<link rel="stylesheet" href="{% static 'css/notifications.css' %}">
 {% endblock %}
+{% block title %}Notifications{% endblock %}
+
+
+
 {% block content %}
 <div class="container mt-4">
     <h2>Notifications</h2>

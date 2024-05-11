@@ -1,12 +1,13 @@
 <!-- @W_Farmer -->
 {% extends 'base.html' %}
 
-{% block extra_css %}
-.list-group-item {
-  background-color: #211951;
-  color: white;
-}
+{% block stylesheets %}
+<!-- link the thread list css -->
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/thread_list.css' %}">
+{% endblock %}
 
+{% block title %}Threads in {{ page.title }}
 {% endblock %}
 
 

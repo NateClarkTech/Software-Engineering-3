@@ -1,0 +1,9 @@
+.list-group-item {
+    background-color: #211951;
+    color: white;
+    border: none;
+}
+/* make the notification links white */
+.list-group-item a {
+    color: white;
+}
