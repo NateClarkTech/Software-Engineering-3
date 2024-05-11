@@ -1,9 +1,9 @@
 /**
  * Date Created: 4/09/2024
- * Date Modified: 4/29/2024
+ * Date Modified: 5/10/2024
  * 
  * Author: Nathaniel Clark
- * Purpose: This file is used to handle the javascript for the board details page
+ * Purpose: This file is used to handle the javascript for the public board view.
  */
 
 console.log('script loaded');
@@ -17,14 +17,6 @@ let assignBoardId = 1;
 /**********************************************************************
  * Adds an event listener to each item so when they are clicked they open up in the view modal
  * 
- * Cases:  formate: case number, explanation of case, solution (not saved unless Save Board button pressed)
- *  1 - add new item to board (add details to changesToBoard array)
- *  2 - edit existing item on board (add edit details to changesToBoard array)
- *  3 - delete existing item on board (add delete details to changesToBoard array)
- *  4 - edit item that was added (replace add details with edited names and description)
- *  5 - delete item that was added (remove add details from changesToBoard array)
- *  6 - edited item was previously edited but not saved to database (replace edit details with new edit details)
- * 
  * Author: Nathaniel Clark
  **********************************************************************/
 let i = 1;
@@ -34,16 +26,19 @@ while (document.getElementById("board-item-" + i)) {
         let item = document.getElementById("board-item-" + index);
         
         item.addEventListener("click", function() {
-            //bring up modal to view item
+            //get the item's title, description, image, sound, and label
             let itemTitle = document.getElementById("board-item-" + index + "-title");
             let itemDescription = document.getElementById("board-item-" + index + "-description");
+            let item_id = document.getElementById("board-item-" + index + "-title").getAttribute("data-id");
             let img_src = itemTitle.getAttribute("data-img-src");
+            let item_label = itemTitle.getAttribute("data-label");
 
-            console.log(img_src);
-
+            //set the modal's title, description, image, sound, and label
             let modalTitle = document.getElementById("view-item-title");
             modalTitle.textContent = itemTitle.textContent;
+            modalTitle.setAttribute("data-id", item_id);
             modalTitle.setAttribute("data-index", index);
+            document.getElementById("view-item-description").textContent = itemDescription.textContent;
 
             let modalImage = document.getElementById("view-item-image");
             if (itemTitle.getAttribute("data-img-src")){
@@ -63,10 +58,17 @@ while (document.getElementById("board-item-" + i)) {
                 modalSound.classList.add("d-none");
             }
 
-            document.getElementById("view-item-description").textContent = itemDescription.textContent;
+            let modalLabel = document.getElementById("view-item-label");
+            if (itemTitle.getAttribute("data-label")){
+                modalLabel.classList.remove("d-none");
+                modalLabel.textContent = item_label;
+            }
+            else{
+                modalLabel.classList.add("d-none");
+            }
             
+            //show the modal
             $('#viewBoardItem').modal('show');
-            console.log(changesToBoard);
         });
     
     })(i);
@@ -74,3 +76,71 @@ while (document.getElementById("board-item-" + i)) {
     assignBoardId = assignBoardId + 1;
     i = i + 1;
 }
+
+
+/************************************************************************************************************
+ * Add an event listener to each label so that when they are clicked only items with that label are shown   *
+ *                                                                                                          *
+ * The label will loop through each item and check if the label matches the item's label                    *
+ * If the label matches the item's label then the item will be shown                                        *
+ * Else the item will be hidden                                                                             *
+ *                                                                                                          *
+ * Author: Nathaniel Clark                                                                                  *
+ ************************************************************************************************************/
+i = 1;
+while (document.getElementById("sort-label-" + i)) {
+    (function (index){
+        // Get the label
+        let label = document.getElementById("sort-label-" + index);
+        let labelName = label.getAttribute("data-label");
+
+        // Add an event listener to the label
+        label.addEventListener("click", function() {
+            // Loop through each item
+            // using j < assignBoardId insures that even if items are deleted via other functions the function still works
+            let j = 1;
+            while (j < assignBoardId){
+                // Check an item at the current index exists
+                if (document.getElementById("board-item-container-" + j)){
+
+                    // Get the item and its label
+                    let itemContainer = document.getElementById("board-item-container-" + j);
+                    let item = document.getElementById("board-item-" + j + "-title");
+                    let itemLabel = item.getAttribute("data-label");
+
+                    // If the labels match show the item
+                    if (itemLabel === labelName){
+                        itemContainer.classList.remove("d-none");
+                    }
+                    // else hide the item
+                    else{
+                        itemContainer.classList.add("d-none");
+                    }
+                }
+                j = j + 1;
+            }
+        });
+    })(i);
+    i = i + 1;
+}
+
+/****************************************************************
+ * Add an event listener to the show all items button           *
+ *                                                              *
+ * The function loops through each item and unhides all items   *
+ *                                                              *
+ * Author: Nathaniel Clark                                      *
+ ***************************************************************/
+document.getElementById("show-all-items").addEventListener("click", function() {
+    let index = 0;
+    //loop though each item and unhide them, assignBoardId insures that 
+    //even if items are deleted via other functions the function still unhides all items
+    while(index < assignBoardId){
+        if (document.getElementById("board-item-container-" + index)){
+            document.getElementById("board-item-container-" + index).classList.remove("d-none");
+        }
+        index = index + 1;
+    }
+});
+
+

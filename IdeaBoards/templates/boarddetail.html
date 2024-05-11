@@ -5,7 +5,7 @@
 {% block title %}{% endblock %}
 
 {% block stylesheets %}
-<link rel="stylesheet" href="{% static 'css/boarddetails.css' %}">
+    <link rel="stylesheet" href="{% static 'css/boarddetails.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -25,7 +25,10 @@
                 </div>
 
                 <div class="modal-body row justify-content-center">
+                    <!-- Button opens Edit Board Modal -->
                     <button type="button" class="btn btn-success col-10 m-2" data-dismiss="modal" data-toggle="modal" data-target="#editBoard">Edit Board Details</button>
+
+                    <!-- Button opens Delete Board Modal -->
                     <button type="button" class="btn btn-danger col-10 m-2" data-dismiss="modal" data-toggle="modal" data-target="#deleteBoard">Delete Board</button>
                 </div>
 
@@ -35,7 +38,7 @@
 
     <!-- Edit Board Modal -->
     <div class="modal fade" id="editBoard" tabindex="-1" role="dialog" aria-labelledby="EditBoardModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="form">
+        <div class="modal-dialog modal-dialog-scrollable" role="form">
             <div class="modal-content">
 
                 <div class="modal-header">
@@ -46,11 +49,15 @@
                 </div>
 
                 <div class="modal-body">
+                    <!-- input field for new board title -->
                     <h5>New Board Title<p class="text-danger" style="display: inline; margin: 0;">*</p></h5>
                     <input type="text" id="editBoardTitleInput" data-id='none' class="form-control" value="{{ board.title }}">
+
+                    <!-- input field for new board description -->
                     <h5 class="mt-2">New Board Description</h5>
                     <input type="text" id="editBoardDescriptionInput" class="form-control" value="{{ board.description }}">
 
+                    <!-- Checkbox to change board privacy settings (checked = public, unchecked = private) -->
                     <h5 class="mt-2">Board is public</h5>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="privacy_setting" {% if board.is_public == True %}checked{% endif %}>
@@ -58,7 +65,6 @@
                             Public
                         </label>
                     </div>
-                    
 
                     <p><p class="text-danger" style="display: inline; margin: 0;">*</p> required field</p>
                 </div>
@@ -74,7 +80,7 @@
 
     <!-- Delete Board Modal -->
     <div class="modal fade" id="deleteBoard" tabindex="-1" role="dialog" aria-labelledby="DeleteBoardModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="form">
+        <div class="modal-dialog modal-dialog-scrollable" role="form">
             <div class="modal-content">
 
                 <div class="modal-header">
@@ -85,6 +91,7 @@
                 </div>
 
                 <div class="modal-body">
+                    <!-- Warning text -->
                     <h5>Are you sure you want to delete the board:</h5>
                     <h3 class="my-2"><strong>{{ board.title }}</strong></h3>
                     <h5>This action cannot be undone.</h5>
@@ -92,6 +99,8 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+
+                    <!-- Button to confirm deletion -->
                     <button id="delete-board-button" type="button" class="btn btn-danger" data-id="{{ board.id }}">Confirm Deletion</button>
                 </div>
 
@@ -101,7 +110,7 @@
 
     <!-- New Item Modal -->
     <div class="modal fade" id="createBoardItem" tabindex="-1" role="dialog" aria-labelledby="CreateItemModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <form id="addItemForm">
                     {% csrf_token %}
@@ -111,6 +120,8 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
+
+                    <!-- Form fields to create a new item -->
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="title">Title<p class="text-danger" style="display: inline; margin: 0;">*</p> (max 64 characters)</label>
@@ -128,6 +139,7 @@
                             <label for="item_sound">Add Sound File<p style="display: inline; margin: 0;"></p></label>
                             <input type="file" class="form-control" id="item_sound" name="item_image" accept="audio/*">
                         </div>
+
                         <!-- @Bilge_AKYOL Label selection for the new item -->
                         <div id="LabelSelect" class="label-selection">
                             <select id="labelSelect" class="label-dropdown" >
@@ -137,12 +149,15 @@
                                 {% endfor %}
                             </select>
                         </div>
+
                         <p><p class="text-danger" style="display: inline; margin: 0;">*</p> required field</p>
                     </div>
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary text-danger" data-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary text-success">Add Item</button>
                     </div>
+
                 </form>
             </div>
         </div>
@@ -152,6 +167,7 @@
     <div class="modal fade" id="viewBoardItem" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
+
                 <div class="modal-header">
                     <!-- placing the label name at the top of the item view modal -->
                     <p class="mt-1 col-md-2" id="view-item-label" data-id='none' data-index="none" style="justify-content:left"></p>
@@ -159,24 +175,31 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
+
+                <!-- Item content displayed here -->
                 <div class="modal-body break-text row">
                     <h1 class="col-12" id="view-item-title" data-id='none' data-index="none"></h1>
                     <p class="col-12" id="view-item-description"></p>
-                    <image class="mt-3 col-12" id="view-item-image" src=""></image>
+                    <div class="col-12 row">
+                        <image class="mt-3 col-auto" id="view-item-image" src=""></image>
+                    </div>
                     <audio class="mt-3 col-12" id="view-item-sound" controls src="" ></audio>
                 </div>
+
                 <div class="modal-footer justify-content-center">
                     <button type="button" id="edit-item-modal-button" class="btn btn-success" accept="image/*">Edit</button>
                     <button type="button" id="delete-item-modal-button" class="btn btn-danger" accept="audio/*">Delete</button>
                 </div>
+
             </div>
         </div>
     </div>
 
     <!-- Edit Item Modal -->
     <div class="modal fade" id="editBoardItem" tabindex="-1" role="dialog" aria-labelledby="EditItemModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
             <div class="modal-content">
+
                 <div class="modal-header">
                     <h5 class="modal-title" id="EditItemModalLabel">Edit Item</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -184,6 +207,7 @@
                     </button>
                 </div>
 
+                <!-- Edit fields here -->
                 <div class="modal-body text-start">
 
                     <h5>New Item Title<p class="text-danger" style="display: inline; margin: 0;">*</p></h5>
@@ -192,7 +216,8 @@
                     <h5>New Item Description</h5>
                     <input type="text" id="editItemDescriptionInput" class="form-control" placeholder="New Item Description">
                     <p><p class="text-danger" style="display: inline; margin: 0;">*</p> required field</p>
-                    
+
+                    <!-- New item image, or remove attached image from item -->
                     <h5>New Item Image</h5>
                     <p>(Leave blank to keep current image)</p>
                     <input type="file" class="form-control" id="editItemImage" name="editItemImage" accept="image/*">
@@ -203,6 +228,7 @@
                         </label>
                     </div>
 
+                    <!-- New item sound, or remove attached sound from item -->
                     <h5 class="mt-2">New Item Sound</h5>
                     <p>(Leave blank to keep current sound)</p>
                     <input type="file" class="form-control" id="editItemSound" name="editItemSound" accept="audio/*">
@@ -212,7 +238,10 @@
                             Remove Sound
                         </label>
                     </div>
+
                     <!-- @Bilge_AKYOL : to edit label -->
+                    <!-- New item label, or remove attached label from item -->
+
                     <h5 class="mt-2">New Label</h5>
                     <p>(Leave blank to keep current label)</p>
                     <div id="editItemLabelDiv" class="form-control">
@@ -229,20 +258,20 @@
                             Remove Label
                         </label>
                     </div>
-
                 </div>
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary text-danger" data-dismiss="modal">Cancel</button>
                     <button id="edit-item-button" type="button" class="btn btn-primary text-success">Confirm Change</button>
                 </div>
+
             </div>
         </div>
     </div>
 
     <!-- Delete Item Modal -->
     <div class="modal fade" id="deleteItem" tabindex="-1" role="dialog" labelledby="DeleteItemModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="form">
+        <div class="modal-dialog modal-dialog-scrollable" role="form">
             <div class="modal-content">
 
                 <div class="modal-header">
@@ -252,6 +281,7 @@
                     </button>
                 </div>
 
+                <!-- Warning text -->
                 <div class="modal-body">
                     <h2 id="deleteModalWarning">
                         Are you sure you want to delete this item?
@@ -271,14 +301,16 @@
 
     <!-- @Bilge_AKYOL : Create Label Modal -->
     <div class="modal fade" id="createLabel" tabindex="-1" role="dialog" aria-labelledby="CreateLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
             <div class="modal-content">
+
                 <div class="modal-header">
                     <h5 class="modal-title" id="CreateItemModalLabel">Create New Label</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
+
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="new-label-name">Label Name<p class="text-danger" style="display: inline; margin: 0;">*</p></label>
@@ -287,10 +319,12 @@
 
                     <p><p class="text-danger" style="display: inline; margin: 0;">*</p> required field</p>
                 </div>
+                
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary text-danger" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary text-success" id="add-label-button">Add Label</button>
                 </div>
+
             </div>
         </div>
     </div>
@@ -298,26 +332,31 @@
 
     <!-- Error Modal -->
     <div class="modal fade" id="errorModel" tabindex="-1" labelledby="error-modal-label" role="dialog" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
             <div class="modal-content">
+
+                <!-- Error warning here -->
                 <div class="modal-header">
                     <h5 class="modal-title text-danger" id="error-modal-label">Error</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
+
                 <div class="modal-body">
                     <h1 id="error-modal-text" class="text-wrap text-danger"></h1>
                 </div>
+
             </div>
         </div>
     </div>
 
     
 
-     <!-- Project Board -->
+     <!-- Project Board  Details-->
      <div class="row text-start justify-content-center">
         <div class="col-md-10 row">
+            <!-- Title, description, creator -->
             <h3 class="col-12" id="board-title">Project Board: {{ board.title }}</h3>
             {% if board.description %}
                 <h4 class="col-12" id="board-description">Description: {{ board.description }}</h4>
@@ -326,6 +365,8 @@
             {% endif %}
             <h4 class="col-12">Created by: {{ board.user }}</h4>
         </div>
+
+        <!-- Board function buttons -->
         <div class="col-md-2 row justify-content-end">
             <button type="button" class="btn btn-primary my-1 col-md-12" data-toggle="modal" data-target="#boardSettings">
                 Board Settings
@@ -337,29 +378,35 @@
                 Save Board
             </button>
         </div>
+
     </div>
 
     <hr>
-    
-    <!-- @Bilge_AKYOL : Labels -->
+
+    <!-- Label Row -->
     <div class="row col-12" id="labelRow">
+        
         <!-- View all notes -->
-        <button type="button" class="btn btn-primary my-1 col-md-1.5" id="ideaBoardView" data-board-id="{{board.id}}"
-        >All Notes</button>
+        <button type="button" class="btn btn-primary my-1" id="show-all-items" data-board-id="{{board.id}}">All Notes</button>
+        
         <!-- opens up create label modal -->
-        <button type="button" class="btn btn-primary my-1" id="create-label" data-toggle="modal" data-target="#createLabel" data-label-nate="{{ label.name }}">Create Label</button>
-        <!-- loop through board's labels -->
+        <button type="button" class="btn btn-primary my-1 ml-1" id="create-label" data-toggle="modal" data-target="#createLabel" data-label-nate="{{ label.name }}">Create Label</button>
+        
+        <!-- Show all labels -->
         {% for label in labels %}
-            <button type="button" class="btn btn-primary my-1 ml-1" id="sort-label-{{ forloop.counter }}" data-label-nate="{{ label.name }}">{{label.label_name}}</button>
+            <button type="button" class="btn btn-primary my-1 ml-1" id="sort-label-{{ forloop.counter }}" data-label="{{ label.label_name }}">{{label.label_name}}</button>
         {% endfor %}
     </div>
     
     <hr>
 
+    <!-- Board Items -->
     <div class='row'>
         <div id='boardItems' class='col-12 row px-0 mx-0'>
+            <!-- Display all items -->
             {% if items %}
                 {% for item in items %}
+                <!-- Card for the item -->
                 <div id="board-item-container-{{ forloop.counter }}" class="col-md-4 px-3 py-3 text-center">
                     <button id="board-item-{{ forloop.counter }}" class="btn btn-outline-primary btn-size">
                         <div class="card card-custom"> 
@@ -367,24 +414,21 @@
 
                                 <!-- Move the row with images to the bottom of the card -->
                                 <div class="row justify-content-end mt-auto">
-                                    {% if item.item_image %}
-                                        <img class="col-3 img-icon px-1 {% if not item.item_sound %}mr-3{% endif %}" src="{% static "images/imageiconwhite.png" %}" alt="img icon"></img>
-                                    {% endif %}
-                
-                                    {% if item.item_sound %}
-                                        <!-- HTML for the custom icon -->
-                                        <img src="{% static "images/audioiconwhite.png" %}" class="audio-icon mr-3 px-1" alt="audio icon">
-                                    {% endif %}
 
+                                <!-- h2 start -->
+                                <!-- contains item model id, image/sound src, label name if model contains one. -->
+                                    <img id="img-icon-{{ forloop.counter }}" class="col-3 img-icon px-1 {% if not item.item_sound %}mr-3{% endif %} {% if not item.item_image %}d-none{% endif %}" src="{% static "images/imageiconwhite.png" %}" alt="img icon"></img>
+                                    <!-- HTML for the custom icon -->
+                                    <img id="audio-icon-{{ forloop.counter }}" class="audio-icon mr-3 px-1 if {% if not item.item_sound %}d-none{% endif %}" src="{% static "images/audioiconwhite.png" %}"  alt="audio icon">
+                                
                                     {% if item.note_label %}
                                         <!-- HTML for the custom icon -->
                                         <img src="{% static "images/label-icon.png" %}" class="label-icon mr-3 px-1" alt="label icon">
                                     {% endif %}
-
                                 </div>
 
                                 <!-- h2 start -->
-                                <!-- contains item model id, image/sound src, label name if model contains one. -->
+                                <!-- contains item model id, image/sound src, and label if model contains one. -->
                                 <h2 id="board-item-{{ forloop.counter }}-title" 
                                     data-id="{{ item.id }}" 
                                     {% if item.item_image %}
@@ -411,6 +455,7 @@
                     </button>
                 </div>                            
                 {% endfor %}
+            <!-- No items found -->
             {% else %}
                 <div class='card mx-auto' id='no-items-found'>
                     <div class='card-body'>
