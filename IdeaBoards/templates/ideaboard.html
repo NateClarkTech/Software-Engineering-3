@@ -8,57 +8,8 @@
     <link rel="stylesheet" href="{% static 'css/ideaboard.css' %}">
 {% endblock %}
 
-<!-- Including Jquery in HTML -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
 
 {% block content %}
-    <!-- Source: https: //getbootstrap.com/docs/5.3/components/modal/ -->
-    <!-- @Bilge_AKYOL : Spotify API Song Reccommendation Request -->
-    <div class="modal fade" id="getRecc" tabindex="-1" role="dialog" aria-labelledby="spotifyAPI" aria-hidden="true">
-        <div class="modal-dialog" role="form">
-            <form method="POST" name="getRecc">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" >Get A Song Recommendation by Genre</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        {% csrf_token %} <!-- CSRF verification, security satisfaction -->
-                        <input type="text" class="form-control" id="genreNameInput" placeholder="Genre Name" required>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button id='get-rec-button' type="submit" class="btn btn-primary">Get Reccommendation</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-    <div class="modal fade" id="displayReccResults" tabindex="-1" role="dialog" aria-labelledby="spotifyAPI" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="reccTitle" > 5 Recommendations</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <h5 class="modal-title" id="reccResult"></h5>
-                </div>
-                {% for i in "01234" %} <!-- dynamic implementation to embed the 5 recommendations with their unique src inputted via javascript-->
-                <div name="result">
-                    <iframe id="iframe-{{i}}" style="border-radius:12px" src="" width="100%" style="margin-left:7px" height="100" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-    <!--  -->
-
     <!-- Make Board Modal -->
     <div class="modal fade" id="createBoard" tabindex="-1" role="dialog" aria-labelledby="CreateBoardModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="form">
@@ -115,10 +66,6 @@
             <div class="col-md-3 row pr-4 justify-content-end mode-radio">
                 <button  type="button" class="btn btn-primary col-12" id="create-new-board" data-toggle="modal" data-target="#createBoard">
                     Create New Project Board
-                </button>
-
-                <button  type="button" class="btn btn-primary col-12" id="get-rec-modal-button" data-toggle="modal" data-target="#getRecc">
-                    Get Song Recommendation
                 </button>
             </div>
         </div>

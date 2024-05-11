@@ -33,6 +33,9 @@ def IdeaBoards_Home(request):
         # @Bilge_AKYOL
         if request.method == "GETRECC":
             genre_name = json.loads(request.body.decode('utf-8'))[0]["genreName"] #parsing the javascript data
+            print("1")
+            print(genre_name)
+            print("2")
             if genre_name:
                 data = get_recc(genre_name) #calling the function from spotify.py
                 response_data = {'message': data}
