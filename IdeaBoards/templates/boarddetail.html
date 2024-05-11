@@ -379,8 +379,8 @@
 
     <!-- Label Row -->
     <div class="row col-12" id="labelRow">
-        <button type="button" class="btn btn-primary my-1 col-md-1.5" id="show-all-items" data-board-id="{{board.id}}">All Notes</button>
-        <button type="button" class="btn btn-primary my-1" id="create-label" data-toggle="modal" data-target="#createLabel" data-label-nate="{{ label.name }}">Create Label</button>
+        <button type="button" class="btn btn-primary my-1" id="show-all-items" data-board-id="{{board.id}}">All Notes</button>
+        <button type="button" class="btn btn-primary my-1 ml-1" id="create-label" data-toggle="modal" data-target="#createLabel" data-label-nate="{{ label.name }}">Create Label</button>
         
         <!-- Show all labels -->
         {% for label in labels %}

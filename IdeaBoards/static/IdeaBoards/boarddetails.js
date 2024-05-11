@@ -1011,7 +1011,7 @@ document.getElementById("add-label-button").addEventListener("click", function()
         // Create the new label button
         let newLabelButton = document.createElement("button");
         newLabelButton.type = "button";
-        newLabelButton.classList.add("btn", "btn-primary", "my-1", "col-md-1.5", "ml-1");
+        newLabelButton.classList.add("btn", "btn-primary", "my-1", "ml-1");
         newLabelButton.textContent = new_label;   
         let labelRow = document.getElementById("labelRow");
         labelRow.appendChild(newLabelButton);

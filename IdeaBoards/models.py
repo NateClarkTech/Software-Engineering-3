@@ -44,7 +44,6 @@ class ItemLabel(models.Model):
 class IdeaBoardItem(models.Model):
     #item details
     title = models.CharField(max_length=64)
-    label = models.TextField(blank=True, default='')
     description = models.TextField(blank=True, default='')
     item_image = models.ImageField(upload_to='item_image/', blank=True, null=True)
     item_sound = models.FileField(upload_to='item_sounds/', blank=True, null=True)
