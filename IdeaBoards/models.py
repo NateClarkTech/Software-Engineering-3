@@ -34,7 +34,7 @@ class ItemLabel(models.Model):
     label_board = models.ForeignKey(IdeaBoard, on_delete=models.CASCADE)
     
     def __str__(self): 
-         return "Board: " + self.label_board.title + " Label:" + self.label_name + "User:" + self.label_board.user.username
+         return self.label_name
 
 
 """
