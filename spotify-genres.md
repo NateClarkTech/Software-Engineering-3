@@ -1,3 +1,4 @@
+source: https://gist.github.com/andytlr/4104c667a62d8145aa3a#file-spotify-genres-md
 Spotify has heaps of genres but there not surfaced in the UI. Here's 1383 (perhaps all) of them.
 
 Search for `genre:"Genre Name"`
