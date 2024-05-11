@@ -9,12 +9,31 @@ from django.http import JsonResponse
 from django.core.files.uploadedfile import TemporaryUploadedFile
 
 """
-IdeaBoards_Home: 
-    This is a view for the databoards.
-    This page will display all the boards a user owns
-    Users can create, delete, edit, and view their boards
-"""
+    views.py
+
+    Handles the views for the IdeaBoards app
+    /boards/ - IdeaBoards_Home
+    /boards/<int:id> - IdeaBoard_Detail
+
+    Author:
+        Nathaniel Clark
+    """
+
 def IdeaBoards_Home(request):
+    """
+    IdeaBoards_Home view
+
+    Shows the user all their boards and allows them to create new boards
+
+    Parameters:
+        request (session): The details of the user's request for the page
+
+    Returns:
+        render: The HTML for the boards page
+
+    Author:
+        Nathaniel Clark
+    """
     #If the user is logged in render the boards page
     if request.user.is_authenticated:
 
@@ -66,6 +85,24 @@ IdeaBoard_Details:
 """
 @login_required
 def IdeaBoard_Detail(request, id):
+    """
+    IdeaBoard_Detail view
+
+    Shows the user a specific board and allows them to edit the board and its items if the user is the owner of the board
+    Otherwise, the user can only view the board if the board is public
+    Also allows the user to add, edit, and delete items on the board
+    Edit and delete the board
+
+    Parameters:
+        request (session): The details of the user's request for the page
+        id (int): The ID of the board to be displayed
+
+    Returns:
+        render: The HTML for the current board
+
+    Author:
+        Nathaniel Clark
+    """
     #make sure the board exists, if not redirect to the boards page
     try:
         board = IdeaBoard.objects.get(id=id)
@@ -313,6 +350,7 @@ def IdeaBoard_Detail(request, id):
         #give the HTML for the board with the board's items
         return render(request, 'boarddetail.html', {'board': board, 'items': items, 'labels': labels})
     
+    #If the board is public give the user the HTML for the board
     elif board.is_public:
         return render(request, 'publicboarddetails.html', {'board': board, 'items': items, 'labels': labels})
     
