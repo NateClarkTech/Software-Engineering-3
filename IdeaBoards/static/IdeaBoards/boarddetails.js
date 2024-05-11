@@ -825,6 +825,7 @@ document.getElementById("edit-item-modal-button").addEventListener("click", func
     //reset the image and sound inputs
     document.getElementById("editItemImage").value = "";
     document.getElementById("editItemSound").value = "";
+    document.getElementById("editItemLabel").value = "";
     
     $('#viewBoardItem').modal('hide');
     $('#editBoardItem').modal('show');

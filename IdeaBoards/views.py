@@ -191,6 +191,7 @@ def IdeaBoard_Detail(request, id, label=None):
                             label = None
                         else:
                             label = ItemLabel.objects.get(label_name=item_label, label_board=board)
+                            editedItem.note_label = label
 
                     # Check if the user has uploaded a new image for the item
                     item_image_files = file_data.getlist(f'{x}_item_image')
