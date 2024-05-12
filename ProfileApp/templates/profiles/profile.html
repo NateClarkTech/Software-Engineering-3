@@ -6,7 +6,7 @@
 <style>
     .profile-container {
         background-color: var(--Section-Color);
-        color: white;
+        color: var(--Text-Color);
         padding: 20px;
         margin-bottom: 20px;
         border-radius: 5px;
@@ -44,7 +44,7 @@
     
       .comment-header {
         background-color: var(--Section-Color); /* Darker header background */
-        color: #ecf0f1; /* Light text for contrast */
+        color: var(--Text-Color);
         padding: 10px;
         border-top-left-radius: 6px; /* Rounded corners for the top */
         border-top-right-radius: 6px;
@@ -63,14 +63,14 @@
       .comment-wrapper {
         margin-bottom: 20px; /* Space between comments */
         border-radius: 6px; /* If the comment-wrapper is used */
-        border: 2px solid #34495e; /* Border color for the comment */
+        border: 2px solid var(--Third-Color); /* Border color for the comment */
       }
       .profile-picture {
         width: 60px;
         height: 60px;
         border-radius: 50%;
         margin-right: 10px;
-        border: 3px solid #ecf0f1; /* Border color for the profile picture */
+        border: 3px solid var(--Third-Color); /* Border color for the profile picture */
         object-fit: cover;
       }
       .comment-details {
@@ -78,17 +78,17 @@
       }
       .comment-author {
         font-size: 1.2rem; /* Larger font size for the author */
-        color: #f1c40f; /* Highlight color for the author's name */
+        color: var(--Username-Color); /* Highlight color for the author's name */
         font-weight: bold;
         margin-right: 5px;
       }
       .comment-metadata {
         font-size: 0.85rem;
-        color: #bdc3c7; /* Subdued color for metadata */
+        color: var(--Subdued-Text-Color); /* Subdued color for metadata */
       }
       .comment-body {
         font-size: 1rem;
-        color: #ecf0f1 !important; /* Light text color for main comment body */
+        color: var(--Text-Color) !important; 
         /* padding-left: 70px; */
       }
       .comment-actions {
@@ -100,21 +100,21 @@
       .comment-action-btn {
         background: none;
         border: none;
-        color: #ecf0f1; /* Same as comment text color */
+        color: var(--Text-Color); /* Same as comment text color */
         cursor: pointer;
       }
       .reply-section {
         margin-top: 10px;
         padding-left: 20px; /* Indent replies */
-        border-left: 3px solid #7f8c8d; /* Vertical line for replies */
-        background: #34495e; /* different background color for replies */
+        border-left: 3px solid var(--Third-Color); /* Vertical line for replies */
+        background: var(--Forum-Reply-Color); /* different background color for replies */
       }
     
       .reply-header {
         display: flex;
         align-items: center;
         font-size: 0.9rem;
-        color: #95a5a6; /* Subtle color for reply header */
+        color: var(--Forum-Reply-Header-Color); /* Subtle color for reply header */
       }
     
       .reply-to {
@@ -135,16 +135,15 @@
     
       .btn-reply:hover {
         color: black;
-        
       }
       .comment-form-wrapper {
-        background-color: #34495e; 
+        background-color: var(--Forum-Reply-Color); 
         padding: 20px;
         border-radius: 8px;
         margin-top: 30px; /* Space from the last comment */
       }
       .comment-form-wrapper h5 {
-        color: #ecf0f1; /* Light color for the form title */
+        color: var(--Text-Color);
         margin-bottom: 15px;
       }
     
@@ -153,13 +152,13 @@
         width: 100%;
         padding: 10px;
         border-radius: 4px;
-        border: 1px solid #7f8c8d; /* Subtle border color */
+        border: 1px solid var(--Third-Color);
         min-height: 100px; /* Larger text area for comments */
         background-color: var(--Third-Color); /* Slightly lighter than form background for contrast */
         color: white; /* Light text color */
       }
       .profile-container {
-        background-color: var(--Section-Color); /* Darker theme for the profile */
+        background-color: var(--Section-Color); 
         color: white;
         padding: 20px;
         margin-bottom: 20px;
@@ -176,7 +175,7 @@
         width: 100px;
         height: 100px;
         border-radius: 50%;
-        border: 3px solid #ecf0f1;
+        border: 3px solid var(--Third-Color);
     }
     .user-details {
         flex-grow: 1;

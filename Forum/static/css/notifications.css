@@ -1,10 +1,10 @@
 /* @W_Farmer */
 .list-group-item {
     background-color: var(--Section-Color);
-    color: white;
+    color:  var(--Text-Color);
     border: none;
 }
 /* make the notification links white */
 .list-group-item a {
-    color: white;
+    color:  var(--Text-Color);
 }

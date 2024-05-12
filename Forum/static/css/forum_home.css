@@ -1,24 +1,24 @@
 /* @W_Farmer */
 .list-group-item {
     background-color: var(--Section-Color);
-    color: white;
+    color:  var(--Text-Color);
     border: none;
 }
 
 .card-body {
     background-color: var(--Section-Color);
-    color: white;
+    color:  var(--Text-Color);
 }.
 
 .card {
-    color: white;
+    color:  var(--Text-Color);
     border: 1px solid var(--Third-Color);
 }
 
 .recent-commenters {
     background-color: var(--Section-Color);
     border: 1px solid var(--Third-Color); 
-    color: white; /* Ensure text is white */
+    color:  var(--Text-Color); /* Ensure text is colored right */
     padding: 15px;
     border-radius: 5px; /* Rounded corners */
     display: flex;
@@ -53,7 +53,7 @@
 
 .recent-commenters li a {
     text-decoration: none;
-    color: white; /* Set text color */
+    color: var(--Text-Color); /* Set text color */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -63,7 +63,7 @@
     width: 80px; /* Optimal size for mobile and desktop */
     height: 80px;
     border-radius: 50%;
-    border: 3px solid #ecf0f1;
+    border: 3px solid var(--Third-Color);
 }
 
 .name {
@@ -76,7 +76,7 @@
     width: 100px;
     height: 100px;
     border-radius: 50%;
-    border: 3px solid #ecf0f1;
+    border: 3px solid var(--Third-Color);
     display: block; /* This centers the img in the li */
     margin: auto; /* This also helps in centering the img in the li */
 }
@@ -95,19 +95,19 @@
 }
 
 .page-link {
-    color: #f0f0f0;
+    color: var(--Text-Color);
     text-decoration: none; /* Remove underline from links */
     font-weight: bold;
 }
 
 .page-link:hover {
     text-decoration: underline; /* Only underline on hover */
-    color: #c0c0f0;
+    color: var(--Text-Hover-Color);
 }
 
 .page-description {
     font-size: 0.95rem;
-    color: #cccccc; /* Lighter text color for description */
+    color: var(--Text-Color); /* Lighter text color for description */
 }
 
 .page-title {
