@@ -186,7 +186,7 @@ CONTRIBUTERS
 
 -Wes: Forum, Profile app, navbar
 -Bilge: Deployment, IdeaBoard-Item-Labels, IdeaBoard-SongRecommendation-Spotify-API, Product-Idea
--Nate: IdeaBoards, Method for sending data to server, Local changes on boards
+-Nate: IdeaBoards, storing changes locally on board till save button is pressed, adding editing deleteing items and boards, modal system to view notes
 
 [UML](SoftwareEngineering3UML.png)
 [System architecture](MediaBookSystemarchitecture.png)
