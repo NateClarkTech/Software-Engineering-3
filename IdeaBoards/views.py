@@ -126,6 +126,8 @@ def IdeaBoard_Detail(request, id):
                 data = get_recc(genre_name) #calling the function from spotify.py
                 response_data = {'message': data}
                 return JsonResponse(response_data) #returning the output to javascript
+            
+            
         if request.method == 'POST':
            handle_database_changes(request, board)
 
