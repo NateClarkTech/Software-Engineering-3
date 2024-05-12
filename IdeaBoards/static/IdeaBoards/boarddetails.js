@@ -177,7 +177,7 @@ function addNewBoardItem() {
     let description = document.getElementById("description").value;
     let item_image = document.getElementById("item_image").files[0];
     let item_sound = document.getElementById("item_sound").files[0];
-    let item_label = document.getElementById("labelSelect").value;
+    let item_label = document.getElementById("editItemLabel").value;
 
     // If the title is valid, add the item to the board
     if (title !== "" && title.length <= 64) {
@@ -245,7 +245,7 @@ function addNewBoardItem() {
         // @Bilge_AKYOL Add the label icon to the card
         let labelIcon = document.createElement("img");
         labelIcon.src = "/static/images/label-icon.png";
-        labelIcon.classList.add("audio-icon", "mr-3", "px-1");
+        labelIcon.classList.add("label-icon", "mr-3", "px-1");
         rowDiv.appendChild(labelIcon);
         labelIcon.setAttribute("id", "label-icon-" + assignBoardId);
         labelIcon.alt = "label icon";
@@ -521,6 +521,27 @@ document.getElementById("edit-item-button").addEventListener("click", function()
             });
             
             //board has unsaved changes
+        
+
+            if (newImage){
+                itemTitle.setAttribute("data-img-src", URL.createObjectURL(newImage));
+            }
+            if (newSound){
+                itemTitle.setAttribute("data-sound-src", URL.createObjectURL(newSound));
+            }
+            if (newLabel){
+                itemTitle.setAttribute("data-label", newLabel);
+            }
+
+            if (removeImage){
+                itemTitle.removeAttribute("data-img-src");
+            }
+            if (removeSound){
+                itemTitle.removeAttribute("data-sound-src");
+            }
+            if (removeLabel){
+                itemTitle.removeAttribute("data-label");
+            }
             boardSaved = false;
         }
 
@@ -719,11 +740,6 @@ document.getElementById("save-board-button").addEventListener("click", function(
             if (change.item_sound === null){
                 formData.append(`${index}_remove_sound`, true);
             }
-
-            if (change.note_label){
-                formData.append(`${index}_item_label`, change.note_label);
-            }
-            // If the label is null, add a flag to remove the label
             if (change.note_label === null){
                 formData.append(`${index}_remove_label`, true);
             }
@@ -853,6 +869,18 @@ while (document.getElementById("board-item-" + i)) {
  * ********************************************************************/
 document.getElementById("edit-item-modal-button").addEventListener("click", function() {
     //get the item's details
+    /*************************************
+            * @Bilge_AKYOL display labels that are not yet saved to the database 
+            * as options in the dropdown  *
+            **************************************/
+     for (item in changesToBoard){
+        if(changesToBoard[item].changeType === "addLabel"){
+            var option = document.createElement("option");
+            option.value = changesToBoard[item].labelName;
+            option.text = changesToBoard[item].labelName;
+            document.getElementById("editItemLabel").appendChild(option);
+        }
+    }
     let itemTitle = document.getElementById("view-item-title");
     let itemDescription = document.getElementById("view-item-description");
     let item_id = itemTitle.getAttribute("data-id");
@@ -879,7 +907,7 @@ document.getElementById("edit-item-modal-button").addEventListener("click", func
     document.getElementById("removeSound").checked = false;
     document.getElementById("removeLabel").checked = false;
 
-    //if there is no image or sound, disable the input fields
+    //if there is no image, sound, or label disable the input fields
     if (document.getElementById("view-item-image").classList.contains("d-none")){
         document.getElementById("modal-item-remove-image").classList.add("d-none");
     }
@@ -893,10 +921,17 @@ document.getElementById("edit-item-modal-button").addEventListener("click", func
     else{
         document.getElementById("modal-item-remove-sound").classList.remove("d-none");
     }
+    if (document.getElementById("view-item-label").classList.contains("d-none")){
+        document.getElementById("modal-item-remove-label").classList.add("d-none");
+    }
+    else{
+        document.getElementById("modal-item-remove-label").classList.remove("d-none");
+    }
 
     //reset the image and sound inputs
     document.getElementById("editItemImage").value = "";
     document.getElementById("editItemSound").value = "";
+    document.getElementById("editItemLabel").value = "";
     
     $('#viewBoardItem').modal('hide');
     $('#editBoardItem').modal('show');
@@ -1011,6 +1046,44 @@ document.getElementById("create-label").addEventListener("click", function() {
  * 
  * @author: Bilge Akyol
  * ********************************************************************/
+/*
+//         Sort Label
+//     @author: Bilge Akyol
+*/
+var labels = document.querySelectorAll('[id^="sort-label-"]');
+
+// Loop through each label element and attach a click event listener
+labels.forEach(function(label) {
+    label.addEventListener('click', function() {
+        var labelText = label.textContent;
+        var labelId = label.getAttribute('data-id');
+        var request = 'POST';
+        
+        // Construct the data to be sent
+        var data = {
+            request: request,
+            id: labelId,
+            label: labelText
+        };
+        
+        // Construct the request
+        var requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrfToken'),
+            },
+            body: JSON.stringify(data)
+        };
+        
+        // Perform any necessary action with the label data here
+        
+        // Redirect to the specified URL
+        window.location.href = labelText;
+    });
+});
+
+ 
 document.getElementById("add-label-button").addEventListener("click", function() {    
 
     new_label = document.getElementById("new-label-name").value;
@@ -1023,6 +1096,10 @@ document.getElementById("add-label-button").addEventListener("click", function()
     }
 
     // Check if the label already exists
+    /*
+        Duplicate Label Check
+        author: @Bilge_AKYOL
+    */
     duplicate_label=false;
     labels.forEach(function(label) {
         if(new_label == label.textContent){
@@ -1095,68 +1172,46 @@ document.getElementById("add-label-button").addEventListener("click", function()
     }
 });
 
-/************************************************************************************************************
- * Add an event listener to each label so that when they are clicked only items with that label are shown   *
- *                                                                                                          *
- * The label will loop through each item and check if the label matches the item's label                    *
- * If the label matches the item's label then the item will be shown                                        *
- * Else the item will be hidden                                                                             *
- *                                                                                                          *
- * Author: Nathaniel Clark                                                                                  *
- ************************************************************************************************************/
-i = 1;
-while (document.getElementById("sort-label-" + i)) {
-    (function (index){
-        // Get the label
-        let label = document.getElementById("sort-label-" + index);
-        let labelName = label.getAttribute("data-label");
+/*
+        Direct back to board detail view with all notes
+    author: @Bilge_AKYOL
+*/ 
+document.getElementById("ideaBoardView").addEventListener("click", function() {
+    var boardId = this.getAttribute("data-board-id");
 
-        // Add an event listener to the label
-        label.addEventListener("click", function() {
-            // Loop through each item
-            // using j < assignBoardId insures that even if items are deleted via other functions the function still works
-            let j = 1;
-            while (j < assignBoardId){
-                // Check an item at the current index exists
-                if (document.getElementById("board-item-container-" + j)){
+    // Construct the URL with the board ID
+    var url = "/boards/" + boardId + "/"; // Replace "/boards/" with the actual URL pattern
 
-                    // Get the item and its label
-                    let itemContainer = document.getElementById("board-item-container-" + j);
-                    let item = document.getElementById("board-item-" + j + "-title");
-                    let itemLabel = item.getAttribute("data-label");
+    // Redirect to the URL
+    window.location.href = url;
+});
 
-                    // If the labels match show the item
-                    if (itemLabel === labelName){
-                        itemContainer.classList.remove("d-none");
-                    }
-                    // else hide the item
-                    else{
-                        itemContainer.classList.add("d-none");
-                    }
-                }
-                j = j + 1;
-            }
-        });
-    })(i);
-    i = i + 1;
-    assignBoardId = assignBoardId + 1;
-}
+/* 
+****** @Bilge_AKYOL : Spotify Song Reccommendation ********
+*/
 
-/****************************************************************
- * Add an event listener to the show all items button           *
- *                                                              *
- * The function loops through each item and unhides all items   *
- *                                                              *
- * Author: Nathaniel Clark                                      *
- ***************************************************************/
-document.getElementById("show-all-items").addEventListener("click", function() {
-    let index = 0;
-    //loop though each item and unhide them, assignBoardId insures that 
-    //even if items are deleted via other functions the function still unhides all items
-    while(index < assignBoardId){
-        if (document.getElementById("board-item-container-" + index)){
-            document.getElementById("board-item-container-" + index).classList.remove("d-none");
+// JavaScript to handle form submission and displaying result
+document.getElementById('get-rec-button').addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent default form submission
+      
+    // Get input value
+    var genreName = document.getElementById("genreNameInput").value;
+    console.log(genreName)
+    fetch(window.location.pathname, {
+        method: "GETRECC",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie("csrftoken")  // Include the CSRF token in the headers
+        },
+        body: JSON.stringify([{genreName: genreName}]),
+    }).then(response => response.json())
+    .then(data => {
+        for (let i = 0; i < 5; i++) {
+            console.log(data['message'][i]);
+            url = 'https://open.spotify.com/embed/track/' + data['message'][i];
+            document.getElementById("iframe-"+i).setAttribute("src", url)
         }
-        index = index + 1;
-    }
+        $('#getRecc').modal('hide');
+        $('#displayReccResults').modal('show');
+    });
 });

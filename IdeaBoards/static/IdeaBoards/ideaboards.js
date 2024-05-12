@@ -55,34 +55,3 @@ while (document.getElementById("board-" + i)) {
     })(i);
     i = i + 1;
 }
-
-
-/* 
-****** Spotify Song Reccommendation ********
-*/
-// JavaScript to handle form submission and displaying result
-document.getElementById('getRecc').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent default form submission
-      
-    // Get input value
-    var genreName = document.getElementById('genreNameInput').value;
-    console.log(genreName)
-    fetch(window.location.pathname, {
-        method: "GETRECC",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": getCookie("csrftoken")  // Include the CSRF token in the headers
-        },
-        body: JSON.stringify([{genreName: genreName}]),
-    }).then(response => response.json())
-    .then(data => {
-        for (let i = 0; i < 5; i++) {
-            console.log(data['message'][i]);
-            url = 'https://open.spotify.com/embed/track/' + data['message'][i];
-            document.getElementById("iframe-"+i).setAttribute("src", url)
-        }
-        $('#getRecc').modal('hide');
-        $('#displayReccResults').modal('show');
-    })
-    
-});
