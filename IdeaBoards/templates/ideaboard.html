@@ -7,7 +7,8 @@
 {% block stylesheets %}
     <link rel="stylesheet" href="{% static 'css/ideaboard.css' %}">
 {% endblock %}
-
+<!-- Including Jquery in HTML -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 {% block content %}
     <!-- Source: https: //getbootstrap.com/docs/5.3/components/modal/ -->
     <!-- @Bilge_AKYOL : Spotify API Song Reccommendation Request -->
@@ -182,9 +183,6 @@
 
 {% block scripts %}
     <script src="{% static 'IdeaBoards/ideaboards.js' %}"></script>
-    
-    <!-- Including Jquery in HTML -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <!-- Displaying Error Message Modal -->
     {% if error_message %}
