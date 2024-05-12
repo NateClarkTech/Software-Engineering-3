@@ -738,7 +738,7 @@ document.getElementById("save-board-button").addEventListener("click", function(
             if (change.item_sound === null){
                 formData.append(`${index}_remove_sound`, true);
             }
-            
+
             // If the label is null, add a flag to remove the label
             if (change.note_label === null){
                 formData.append(`${index}_remove_label`, true);
