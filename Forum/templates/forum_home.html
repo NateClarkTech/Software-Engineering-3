@@ -57,7 +57,7 @@
                 {% for thread in latest_threads %}
                 <li class="list-group-item custom-border-wes">
                     <a href="{% url 'thread_detail' thread.id %}">{{ thread.title }}</a>
-                    <small class="float-right text-muted">
+                    <small class="float-right">
                         <!-- Display the most recent comments for the thread-->
                         {% if thread.latest_comment_username != "No comments" %}
                             {{ thread.latest_comment_username }} - updated {{ thread.latest_comment_time|timesince }} ago

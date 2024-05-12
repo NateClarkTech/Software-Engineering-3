@@ -1,20 +1,17 @@
-/* Color variables to be used throughout the site*/
+/* Color variables to be used throughout the site */
 :root {
-    --Background-Color: #0F1035;
-    --Text-Color: #fff;
-    --Section-Color: #211951;
-    --Third-Color: #365486;
-    --Border-Color: #333;
-    --Text-Hover-Color: #c0c0f0;
-    --Username-Color: #f1c40f;
+    --Background-Color: #212121;
+    --Section-Color: #515adf;
+    --Third-Color: #203144;
+    --Text-Color: #FFFFFF;
+    --Border-Color: #9E9E9E;
+    --Text-Hover-Color: #fa98ce;
+    --Username-Color: #ffffff;
     --Subdued-Text-Color: #bdc3c7;
     --Forum-Reply-Color: #34495e;
     --Forum-Reply-Header-Color: #95a5a6;
-
-    
+    --Link-Color: #faf6bc;
 }
-
-
 
 /* Notification badges */
 .notification-badge {
@@ -36,14 +33,13 @@
     font-size: 12px;
 }
 
-
-/* colors for the whole site */
+/* Colors for the whole site */
 body {
     background-color: var(--Background-Color);
     color: var(--Text-Color);
 }
 
-/* navbar */
+/* Navbar */
 .navbar {
     background-color: var(--Section-Color) !important;
 }
@@ -52,43 +48,75 @@ body {
     border: 1px solid var(--Third-Color);
 }
 
-/* remove the arrow on the notificaiton icon */
+/* Remove the arrow on the notification icon */
 .dropdown-toggle::after {
     display: none;
 }
 
-/* pagination styles mostly made by GPT */
+/* Pagination styles mostly made by GPT */
 .pagination {
     display: flex;
     justify-content: center;
     padding: 1rem 0;
-  }
-  
-  .page-link {
-    color: #ecf0f1; 
-    background-color: var(--Section-Color);
-    border: 1px solid var(--Third-Color); 
+}
 
-  }
-  
-  .page-link:hover, .page-item.active .page-link {
+.page-link {
+    color: #ecf0f1;
+    background-color: var(--Section-Color);
+    border: 1px solid var(--Third-Color);
+}
+
+.page-link:hover,
+.page-item.active .page-link {
     color: #ecf0f1;
     background-color: #4e6d8c; /* Lighter blue for hover/active states */
     border-color: #3b5998; /* A different blue for border */
-  }
-  
-  .page-item.active .page-link {
+}
+
+.page-item.active .page-link {
     font-weight: bold; /* Make the active page number bold */
     z-index: 1;
-  }
+}
 
-  .btn {
+.btn {
     background-color: var(--Section-Color);
     color: #fff;
     border: 1px solid var(--Third-Color);
-  }
+}
 
-  .card-body {
+.card-body {
     background-color: var(--Section-Color);
     color: white;
+}
+
+a {
+    color: var(--Link-Color);
+    
+}
+
+a:hover {
+    color: var(--Text-Hover-Color);
+}
+
+/* Style for the 'Post Comment' form */
+.comment-form-wrapper {
+    background-color: #34495E;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 30px; /* Space from the last comment */
+}
+
+.comment-form-wrapper h5 {
+    color: var(--Text-Color); /* Light color for the form title */
+    margin-bottom: 15px;
+}
+
+.comment-form-textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid var(--Third-Color); /* Subtle border color */
+    min-height: 100px; /* Larger text area for comments */
+    background-color: var(--Third-Color); /* Slightly lighter than form background for contrast */
+    color: var(--Text-Color); /* Light text color */
 }
