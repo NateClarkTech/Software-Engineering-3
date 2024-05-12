@@ -139,11 +139,10 @@
                             <label for="item_sound">Add Sound File<p style="display: inline; margin: 0;"></p></label>
                             <input type="file" class="form-control" id="item_sound" name="item_image" accept="audio/*">
                         </div>
-
                         <!-- @Bilge_AKYOL Label selection for the new item -->
                         <div id="LabelSelect" class="label-selection">
                             <select id="labelSelect" class="label-dropdown" >
-                                <option value="null" disabled selected hidden>Choose Label</option>
+                                <option value="" disabled selected hidden>Choose Label</option>
                                 {% for label in labels %}
                                     <option value="{{label}}">{{ label.label_name }}</option>
                                 {% endfor %}
@@ -170,7 +169,7 @@
 
                 <div class="modal-header">
                     <!-- placing the label name at the top of the item view modal -->
-                    <p class="mt-1 col-md-2" id="view-item-label" data-id='none' data-index="none" style="justify-content:left"></p>
+                    <p class="mt-1 col-md-2" id="view-item-label" data-id='none' data-index="none" style="justify-content:left"><img src="{% static "images/label-icon.png" %}" class="label-icon mr-3 px-1" alt="label icon"></p>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -246,7 +245,7 @@
                     <p>(Leave blank to keep current label)</p>
                     <div id="editItemLabelDiv" class="form-control">
                         <select id="editItemLabel" class="label-dropdown" >
-                            <option value="null" disabled selected hidden>Choose Label</option>
+                            <option value="" disabled selected hidden>Choose Label</option>
                             {% for label in labels %}
                                 <option value="{{label}}">{{ label.label_name }}</option>
                             {% endfor %}
@@ -387,8 +386,8 @@
     <div class="row col-12" id="labelRow">
         
         <!-- View all notes -->
-        <button type="button" class="btn btn-primary my-1" id="show-all-items" data-board-id="{{board.id}}">All Notes</button>
-        
+        <button type="button" class="btn btn-primary my-1 col-md-1.5" id="show-all-items" data-board-id="{{board.id}}"
+        >All Notes</button>
         <!-- opens up create label modal -->
         <button type="button" class="btn btn-primary my-1 ml-1" id="create-label" data-toggle="modal" data-target="#createLabel" data-label-nate="{{ label.name }}">Create Label</button>
         

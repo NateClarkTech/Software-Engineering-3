@@ -56,7 +56,6 @@ while (document.getElementById("board-" + i)) {
     i = i + 1;
 }
 
-
 /* 
 ****** Spotify Song Reccommendation ********
 */
