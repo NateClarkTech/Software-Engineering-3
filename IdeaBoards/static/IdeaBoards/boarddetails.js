@@ -150,7 +150,7 @@ function addFormItem() {
     let description = document.getElementById("description").value;
     let item_image = document.getElementById("item_image").files[0];
     let item_sound = document.getElementById("item_sound").files[0];
-    let item_label = document.getElementById("labelSelect").value;
+    let item_label = document.getElementById("editItemLabel").value;
 
     if (title !== "" && title.length <= 64) {
         boardSaved = false;
@@ -181,36 +181,48 @@ function addFormItem() {
         let cardBody = document.createElement("div");
         cardBody.classList.add("card-body");
 
-        //If there is an image/sound/label file, add the icon to show it
-        if (item_image || item_sound || item_label) {
-            let rowDiv = document.createElement("div");
-            rowDiv.classList.add("row", "justify-content-end", "mt-auto");
+        //Icon div for image, sound, and label
+        let rowDiv = document.createElement("div");
+        rowDiv.classList.add("row", "justify-content-end", "mt-auto");
 
-            if (item_image) {
-                let imgIcon = document.createElement("img");
-                imgIcon.setAttribute("id", "board-item-" + assignBoardId + "-img-icon");
-                imgIcon.classList.add("col-3", "img-icon", "px-1", "mr-3");
-                if (item_sound){
-                    imgIcon.classList.remove("mr-3");
-                }
-                imgIcon.src = "/static/images/imageiconwhite.png";
-                imgIcon.alt = "img icon";
-                rowDiv.appendChild(imgIcon);
-            }
-
-            if (item_sound) {
-                let audioIcon = document.createElement("img");
-                audioIcon.src = "/static/images/audioiconwhite.png";
-                audioIcon.classList.add("audio-icon", "mr-3", "px-1");
-                rowDiv.appendChild(audioIcon);
-            }
-            if (item_label) {
-                    let label = document.createElement("p");
-                    label.textContent = item_label;
-                    rowDiv.appendChild(label);
-                }
-            cardBody.appendChild(rowDiv);
+        // Add the image icon to the card
+        let imgIcon = document.createElement("img");
+        imgIcon.setAttribute("id", "img-icon-" + assignBoardId);
+        imgIcon.classList.add("col-3", "img-icon", "px-1", "mr-3");
+        if (item_sound){
+            imgIcon.classList.remove("mr-3");
         }
+        imgIcon.src = "/static/images/imageiconwhite.png";
+        imgIcon.alt = "img icon";
+        if (!item_image){
+            imgIcon.classList.add("d-none");
+        }
+
+        rowDiv.appendChild(imgIcon);
+
+
+        // Add the sound icon to the card
+        let audioIcon = document.createElement("img");
+        audioIcon.src = "/static/images/audioiconwhite.png";
+        audioIcon.classList.add("audio-icon", "mr-3", "px-1");
+        rowDiv.appendChild(audioIcon);
+        audioIcon.setAttribute("id", "audio-icon-" + assignBoardId);
+        audioIcon.alt = "audio icon";
+        if (!item_sound){
+            audioIcon.classList.add("d-none");
+        }
+            
+        // @Bilge_AKYOL Add the label icon to the card
+        let labelIcon = document.createElement("img");
+        labelIcon.src = "/static/images/label-icon.png";
+        labelIcon.classList.add("label-icon", "mr-3", "px-1");
+        rowDiv.appendChild(labelIcon);
+        labelIcon.setAttribute("id", "label-icon-" + assignBoardId);
+        labelIcon.alt = "label icon";
+        if (!item_label){
+            labelIcon.classList.add("d-none");
+        }
+        cardBody.appendChild(rowDiv);
         
         // Add the title to the card
         let cardTitle = document.createElement("h2");
