@@ -704,6 +704,7 @@ document.getElementById("save-board-button").addEventListener("click", function(
             formData.append(`${index}_description`, change.description);
             formData.append(`${index}_item_index`, change.item_index);
             formData.append(`${index}_item_label`, change.note_label);
+            
             if (change.item_image){
                 formData.append(`${index}_item_image`, change.item_image);
             }
@@ -719,10 +720,7 @@ document.getElementById("save-board-button").addEventListener("click", function(
             if (change.item_sound === null){
                 formData.append(`${index}_remove_sound`, true);
             }
-
-            if (change.note_label){
-                formData.append(`${index}_item_label`, change.note_label);
-            }
+            
             // If the label is null, add a flag to remove the label
             if (change.note_label === null){
                 formData.append(`${index}_remove_label`, true);

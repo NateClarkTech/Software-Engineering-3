@@ -37,8 +37,8 @@ def IdeaBoards_Home(request):
     #If the user is logged in render the boards page
     if request.user.is_authenticated:
 
-        #print(request.POST, request.method)
-        #print(request.body.decode('utf-8'))
+        print(request.POST, request.method)
+        print(request.body.decode('utf-8'))
 
         #If the request is a POST request
         if request.method == 'POST':
@@ -173,8 +173,8 @@ def handle_database_changes(request, board):
     # Get file data
     file_data = request.FILES
 
-    #print(form_data)
-    #print(file_data)
+    print(form_data)
+    print(file_data)
 
     number_of_changes = form_data.get('numChanges')
     #print(number_of_changes)
@@ -354,9 +354,9 @@ def edit_item_on_board(request, form_data, file_data, board, index):
     editedItem.description = form_data.get(f'{index}_description')
     
     remove_label = form_data.get(f'{index}_remove_label')
-    if (remove_label == None or remove_label == "true"):
+    if (remove_label == "true"):
         editedItem.note_label = None
-    else:
+    elif form_data.get(f'{index}_item_label'):
         editedItem.note_label = ItemLabel.objects.get(label_name=form_data.get(f'{index}_item_label'), label_board=board)
 
     # Check if the user has uploaded a new image for the item
@@ -411,6 +411,8 @@ def edit_item_on_board(request, form_data, file_data, board, index):
     remove_audio = form_data.get(f'{index}_remove_sound')
     if (remove_audio == "true"):
         editedItem.item_sound = None # type: ignore
+
+
 
     # Save the edited item
     editedItem.save()

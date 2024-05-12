@@ -421,10 +421,7 @@
                                     <!-- HTML for the custom icon -->
                                     <img id="audio-icon-{{ forloop.counter }}" class="audio-icon mr-3 px-1 if {% if not item.item_sound %}d-none{% endif %}" src="{% static "images/audioiconwhite.png" %}"  alt="audio icon">
                                 
-                                    {% if item.note_label %}
-                                        <!-- HTML for the custom icon -->
-                                        <img src="{% static "images/label-icon.png" %}" class="label-icon mr-3 px-1" alt="label icon">
-                                    {% endif %}
+                                    <img id="label-icon-{{ forloop.counter }}" class="label-icon mr-3 px-1 {% if not item.note_label %}d-none{% endif %}" src="{% static "images/label-icon.png" %}" alt="label icon">
                                 </div>
 
                                 <!-- h2 start -->
