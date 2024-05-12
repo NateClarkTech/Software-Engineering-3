@@ -3,7 +3,7 @@ Introduction to the app: MediaBook is a platform to organize ideas for multimedi
 
 
 
-IdeaBoards App:
+IdeaBoards App: -Bilge -Nate
 	The IdeaBoards app exists to allow users to create idea or project boards to organize notes and ideas. Users can create boards for a desired topic and store notes on the boards.
 The notes can contain image and sound files, text, and be labeled for sorting purposes. Users are also able to edit and delete items allowing for full user control on the content of a board.  Users can set a privacy setting for the board allowing others to see their project board.
 
@@ -33,20 +33,20 @@ add_label_to_database: adds a new label on a given board to the database based o
 	the details given by the user
 
 Models
-IdeaBoard
+IdeaBoard -Bilge -Nate
 Title: title of the board (max 64 char)
 description: description text for the board (max 128 characters)
 is_public: privacy setting of the board (True = public, False = private)
 created_at: time board was created
 updated_at: time board was last edited
 user: points to the user who owns the board
-ItemLabel
+ItemLabel -Bilge
 label_name: name of a label (max 15 characters)
 label_board: board the label is on
 IdeaBoardItem
 title: title of the item (max 64 characters) 
 description: description of the item (optional)
-item_image: attached image file of the item (optional)
+item_image: attached image file of the item (optional) 
 image_sound: attached sound file of the item (optional)
 note_label: attached label of the item (optional)
 created_at: time item was created
@@ -58,11 +58,11 @@ NewIdeaBoardForm: Create new idea boards
 NewIdeaBoardItemForm: Create new items for the board
 NewItemLabelForm: Create new labels
 
-API/Spotify 
+API/Spotify -Bilge
 Gets song recommendations
 
 
-Forum app:
+Forum app: -Wes
 
 	The forum app exists in order to allow users of our program to interact with one another in a forum like environment. In it, users are able to create threads, post comments, subscribe to threads, receive notifications, and more. 
 
@@ -143,7 +143,7 @@ Notifications: This context processor will add the global notifications to the c
 
 
 
-Profile App:
+Profile App: -Wes, -Nate
 	This app provides a user functionality for the web app. It is tightly integrated with the forum app so as to display the users recent comments, threads they have started, and allow other users to post comments on their profile. 
 
 
@@ -178,4 +178,15 @@ newUser: This signal will activate when a new user is registered, and will creat
 
 _______________________________
 [SOURCES](Installation_and_deployment_guide.pdf)
+
+
+
+CONTRIBUTERS
+
+-Wes: Forum, Profile app, navbar
+-Bilge: Deployment, IdeaBoard-Item-Labels, IdeaBoard-SongRecommendation-Spotify-API, Product-Idea
+-Nate: IdeaBoards, Method for sending data to server, Local changes on boards
+
+[UML](SoftwareEngineering 3 UML.png)
+[System architecture](MediaBook System architecture.png)
 
