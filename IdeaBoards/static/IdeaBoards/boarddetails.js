@@ -174,7 +174,7 @@ function addNewBoardItem() {
     let description = document.getElementById("description").value;
     let item_image = document.getElementById("item_image").files[0];
     let item_sound = document.getElementById("item_sound").files[0];
-    let item_label = document.getElementById("editItemLabel").value;
+    let item_label = document.getElementById("labelSelect").value;
 
     // If the title is valid, add the item to the board
     if (title !== "" && title.length <= 64) {
