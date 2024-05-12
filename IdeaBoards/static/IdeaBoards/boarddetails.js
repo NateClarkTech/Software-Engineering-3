@@ -1051,6 +1051,33 @@ document.getElementById("add-label-button").addEventListener("click", function()
         let labelRow = document.getElementById("labelRow");
         labelRow.appendChild(newLabelButton);
 
+        // Add an event listener to the new label button
+        newLabelButton.addEventListener("click", function() {{
+            // Loop through each item
+            // using j < assignBoardId insures that even if items are deleted via other functions the function still works
+            let j = 1;
+            while (j < assignBoardId){
+                // Check an item at the current index exists
+                if (document.getElementById("board-item-container-" + j)){
+
+                    // Get the item and its label
+                    let itemContainer = document.getElementById("board-item-container-" + j);
+                    let item = document.getElementById("board-item-" + j + "-title");
+                    let itemLabel = item.getAttribute("data-label");
+
+                    // If the labels match show the item
+                    if (itemLabel === labelName){
+                        itemContainer.classList.remove("d-none");
+                    }
+                    // else hide the item
+                    else{
+                        itemContainer.classList.add("d-none");
+                    }
+                }
+                j = j + 1;
+            }
+        }
+
         $('#createLabel').modal('hide');
     }
 });
