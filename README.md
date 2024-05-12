@@ -143,7 +143,9 @@ Notifications: This context processor will add the global notifications to the c
 
 
 
-Profile App
+Profile App:
+	This app provides a user functionality for the web app. It is tightly integrated with the forum app so as to display the users recent comments, threads they have started, and allow other users to post comments on their profile. 
+
 
 Important Views:
 Profile: This view will return a profile page corresponding either to the currently logged in user, or to an imputed username should a profile with that username exist.
@@ -174,7 +176,6 @@ Signals:
 newUser: This signal will activate when a new user is registered, and will create a profile for that user. 
 
 
-SOURCES
 _______________________________
-[a relative link](Installation_and_deployment_guide.pdf)
+[SOURCES](Installation_and_deployment_guide.pdf)
 
