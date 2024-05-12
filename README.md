@@ -144,6 +144,7 @@ Notifications: This context processor will add the global notifications to the c
 
 
 Profile App: -Wes, -Nate
+
 	This app provides a user functionality for the web app. It is tightly integrated with the forum app so as to display the users recent comments, threads they have started, and allow other users to post comments on their profile. 
 
 
@@ -187,6 +188,6 @@ CONTRIBUTERS
 -Bilge: Deployment, IdeaBoard-Item-Labels, IdeaBoard-SongRecommendation-Spotify-API, Product-Idea
 -Nate: IdeaBoards, Method for sending data to server, Local changes on boards
 
-[UML](SoftwareEngineering 3 UML.png)
+[UML](SoftwareEngineering3UML.png)
 [System architecture](MediaBook System architecture.png)
 
