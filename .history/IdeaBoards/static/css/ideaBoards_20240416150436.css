@@ -1,7 +1,0 @@
-/* Custom CSS for setting width and height on medium screens */
-@media (min-width: 768px){
-    .card-custom {
-        width: 300px; /* Set the desired width */
-        height: 100px; /* Set the desired height */
-    }
-}

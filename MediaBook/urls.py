@@ -35,8 +35,6 @@ urlpatterns = [
     path('forum/', include('Forum.urls'), name='Forum'), #@W_Farmer Forum url
     path('boards/', include('IdeaBoards.urls')),
     path('profile/', include('ProfileApp.urls')),
-    path('visual/' , include('Visual.urls')),
-    path('sound/' , include('Sound.urls')),
     path('notifications/mark_as_read/<int:notification_id>/', forum.mark_notification_as_read, name='mark_notification_as_read'), #@W_Farmer, Global notification mark as read
 
     path('' , views.home, name='home'),

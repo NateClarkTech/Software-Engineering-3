@@ -43,8 +43,6 @@ INSTALLED_APPS = [
     'Forum',
     'IdeaBoards',
     'ProfileApp',
-    'Visual',
-    'Sound',
 ]
 
 MIDDLEWARE = [

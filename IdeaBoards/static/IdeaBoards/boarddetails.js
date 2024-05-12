@@ -16,6 +16,7 @@ let labels = document.querySelectorAll('[id^="sort-label-"]');
 
 //Used for assigning a unique id to each board item
 let assignBoardId = 1;
+let assignLabelId = 1;
 
 // Variable to keep track of the number of board items
 let numberOfBoardItems = 0;
@@ -1048,8 +1049,43 @@ document.getElementById("add-label-button").addEventListener("click", function()
         newLabelButton.type = "button";
         newLabelButton.classList.add("btn", "btn-primary", "my-1", "ml-1");
         newLabelButton.textContent = new_label;   
+        newLabelButton.id = "sort-label-" + assignBoardId;
+        newLabelButton.setAttribute("data-label", new_label);
         let labelRow = document.getElementById("labelRow");
         labelRow.appendChild(newLabelButton);
+
+        (function (index){
+            // Get the label
+            let label = document.getElementById("sort-label-" + index);
+            let labelName = label.getAttribute("data-label");
+    
+            // Add an event listener to the label
+            label.addEventListener("click", function() {
+                // Loop through each item
+                // using j < assignBoardId insures that even if items are deleted via other functions the function still works
+                let j = 1;
+                while (j < assignBoardId){
+                    // Check an item at the current index exists
+                    if (document.getElementById("board-item-container-" + j)){
+    
+                        // Get the item and its label
+                        let itemContainer = document.getElementById("board-item-container-" + j);
+                        let item = document.getElementById("board-item-" + j + "-title");
+                        let itemLabel = item.getAttribute("data-label");
+    
+                        // If the labels match show the item
+                        if (itemLabel === labelName){
+                            itemContainer.classList.remove("d-none");
+                        }
+                        // else hide the item
+                        else{
+                            itemContainer.classList.add("d-none");
+                        }
+                    }
+                    j = j + 1;
+                }
+            });
+        })(assignBoardId);
 
         $('#createLabel').modal('hide');
     }
@@ -1099,6 +1135,7 @@ while (document.getElementById("sort-label-" + i)) {
         });
     })(i);
     i = i + 1;
+    assignBoardId = assignBoardId + 1;
 }
 
 /****************************************************************
