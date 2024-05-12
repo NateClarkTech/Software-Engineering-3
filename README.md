@@ -189,5 +189,5 @@ CONTRIBUTERS
 -Nate: IdeaBoards, Method for sending data to server, Local changes on boards
 
 [UML](SoftwareEngineering3UML.png)
-[System architecture](MediaBook System architecture.png)
+[System architecture](MediaBookSystemarchitecture.png)
 
