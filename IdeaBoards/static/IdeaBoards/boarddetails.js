@@ -242,12 +242,16 @@ function addNewBoardItem() {
             audioIcon.classList.add("d-none");
         }
             
-        // Add the label icon to the card
-        if (item_label) {
-                let label = document.createElement("p");
-                label.textContent = item_label;
-                rowDiv.appendChild(label);
-            }
+        // @Bilge_AKYOL Add the label icon to the card
+        let labelIcon = document.createElement("img");
+        labelIcon.src = "/static/images/label-icon.png";
+        labelIcon.classList.add("audio-icon", "mr-3", "px-1");
+        rowDiv.appendChild(labelIcon);
+        labelIcon.setAttribute("id", "label-icon-" + assignBoardId);
+        labelIcon.alt = "label icon";
+        if (!item_label){
+            labelIcon.classList.add("d-none");
+        }
         cardBody.appendChild(rowDiv);
         
         // Add the title to the card
