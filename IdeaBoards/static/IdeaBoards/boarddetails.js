@@ -11,9 +11,6 @@ console.log('script loaded');
 //saves changes to be done to board
 let changesToBoard = [];
 
-// stores each label in the board
-let labels = document.querySelectorAll('[id^="sort-label-"]');
-
 //Used for assigning a unique id to each board item
 let assignBoardId = 1;
 let assignLabelId = 1;
@@ -1052,39 +1049,12 @@ document.getElementById("create-label").addEventListener("click", function() {
 */
 var labels = document.querySelectorAll('[id^="sort-label-"]');
 
-// Loop through each label element and attach a click event listener
-labels.forEach(function(label) {
-    label.addEventListener('click', function() {
-        var labelText = label.textContent;
-        var labelId = label.getAttribute('data-id');
-        var request = 'POST';
-        
-        // Construct the data to be sent
-        var data = {
-            request: request,
-            id: labelId,
-            label: labelText
-        };
-        
-        // Construct the request
-        var requestOptions = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': getCookie('csrfToken'),
-            },
-            body: JSON.stringify(data)
-        };
-        
-        // Perform any necessary action with the label data here
-        
-        // Redirect to the specified URL
-        window.location.href = labelText;
-    });
-});
-
- 
-document.getElementById("add-label-button").addEventListener("click", function() {    
+/**********************************************************************
+ * Create a new label and add it to the board
+ * 
+ * @author: Bilge Akyol
+ * ********************************************************************/
+ document.getElementById("add-label-button").addEventListener("click", function() {    
 
     new_label = document.getElementById("new-label-name").value;
 
@@ -1096,10 +1066,6 @@ document.getElementById("add-label-button").addEventListener("click", function()
     }
 
     // Check if the label already exists
-    /*
-        Duplicate Label Check
-        author: @Bilge_AKYOL
-    */
     duplicate_label=false;
     labels.forEach(function(label) {
         if(new_label == label.textContent){
@@ -1172,46 +1138,69 @@ document.getElementById("add-label-button").addEventListener("click", function()
     }
 });
 
-/*
-        Direct back to board detail view with all notes
-    author: @Bilge_AKYOL
-*/ 
-document.getElementById("ideaBoardView").addEventListener("click", function() {
-    var boardId = this.getAttribute("data-board-id");
+/************************************************************************************************************
+ * Add an event listener to each label so that when they are clicked only items with that label are shown   *
+ *                                                                                                          *
+ * The label will loop through each item and check if the label matches the item's label                    *
+ * If the label matches the item's label then the item will be shown                                        *
+ * Else the item will be hidden                                                                             *
+ *                                                                                                          *
+ * Author: Nathaniel Clark                                                                                  *
+ ************************************************************************************************************/
+i = 1;
+while (document.getElementById("sort-label-" + i)) {
+    (function (index){
+        // Get the label
+        let label = document.getElementById("sort-label-" + index);
+        let labelName = label.getAttribute("data-label");
 
-    // Construct the URL with the board ID
-    var url = "/boards/" + boardId + "/"; // Replace "/boards/" with the actual URL pattern
+        // Add an event listener to the label
+        label.addEventListener("click", function() {
+            // Loop through each item
+            // using j < assignBoardId insures that even if items are deleted via other functions the function still works
+            let j = 1;
+            while (j < assignBoardId){
+                // Check an item at the current index exists
+                if (document.getElementById("board-item-container-" + j)){
 
-    // Redirect to the URL
-    window.location.href = url;
-});
+                    // Get the item and its label
+                    let itemContainer = document.getElementById("board-item-container-" + j);
+                    let item = document.getElementById("board-item-" + j + "-title");
+                    let itemLabel = item.getAttribute("data-label");
 
-/* 
-****** @Bilge_AKYOL : Spotify Song Reccommendation ********
-*/
+                    // If the labels match show the item
+                    if (itemLabel === labelName){
+                        itemContainer.classList.remove("d-none");
+                    }
+                    // else hide the item
+                    else{
+                        itemContainer.classList.add("d-none");
+                    }
+                }
+                j = j + 1;
+            }
+        });
+    })(i);
+    i = i + 1;
+    assignBoardId = assignBoardId + 1;
+}
 
-// JavaScript to handle form submission and displaying result
-document.getElementById('get-rec-button').addEventListener('click', function(event) {
-    event.preventDefault(); // Prevent default form submission
-      
-    // Get input value
-    var genreName = document.getElementById("genreNameInput").value;
-    console.log(genreName)
-    fetch(window.location.pathname, {
-        method: "GETRECC",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": getCookie("csrftoken")  // Include the CSRF token in the headers
-        },
-        body: JSON.stringify([{genreName: genreName}]),
-    }).then(response => response.json())
-    .then(data => {
-        for (let i = 0; i < 5; i++) {
-            console.log(data['message'][i]);
-            url = 'https://open.spotify.com/embed/track/' + data['message'][i];
-            document.getElementById("iframe-"+i).setAttribute("src", url)
+/****************************************************************
+ * Add an event listener to the show all items button           *
+ *                                                              *
+ * The function loops through each item and unhides all items   *
+ *                                                              *
+ * Author: Nathaniel Clark                                      *
+ ***************************************************************/
+document.getElementById("show-all-items").addEventListener("click", function() {
+    let index = 0;
+    //loop though each item and unhide them, assignBoardId insures that 
+    //even if items are deleted via other functions the function still unhides all items
+    while(index < assignBoardId){
+        if (document.getElementById("board-item-container-" + index)){
+            document.getElementById("board-item-container-" + index).classList.remove("d-none");
         }
-        $('#getRecc').modal('hide');
-        $('#displayReccResults').modal('show');
-    });
+        index = index + 1;
+    }
 });
+
