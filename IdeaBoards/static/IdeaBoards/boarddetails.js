@@ -11,9 +11,6 @@ console.log('script loaded');
 //saves changes to be done to board
 let changesToBoard = [];
 
-// stores each label in the board
-let labels = document.querySelectorAll('[id^="sort-label-"]');
-
 //Used for assigning a unique id to each board item
 let assignBoardId = 1;
 let assignLabelId = 1;
@@ -177,7 +174,7 @@ function addNewBoardItem() {
     let description = document.getElementById("description").value;
     let item_image = document.getElementById("item_image").files[0];
     let item_sound = document.getElementById("item_sound").files[0];
-    let item_label = document.getElementById("labelSelect").value;
+    let item_label = document.getElementById("editItemLabel").value;
 
     // If the title is valid, add the item to the board
     if (title !== "" && title.length <= 64) {
@@ -245,7 +242,7 @@ function addNewBoardItem() {
         // @Bilge_AKYOL Add the label icon to the card
         let labelIcon = document.createElement("img");
         labelIcon.src = "/static/images/label-icon.png";
-        labelIcon.classList.add("audio-icon", "mr-3", "px-1");
+        labelIcon.classList.add("label-icon", "mr-3", "px-1");
         rowDiv.appendChild(labelIcon);
         labelIcon.setAttribute("id", "label-icon-" + assignBoardId);
         labelIcon.alt = "label icon";
@@ -521,6 +518,27 @@ document.getElementById("edit-item-button").addEventListener("click", function()
             });
             
             //board has unsaved changes
+        
+
+            if (newImage){
+                itemTitle.setAttribute("data-img-src", URL.createObjectURL(newImage));
+            }
+            if (newSound){
+                itemTitle.setAttribute("data-sound-src", URL.createObjectURL(newSound));
+            }
+            if (newLabel){
+                itemTitle.setAttribute("data-label", newLabel);
+            }
+
+            if (removeImage){
+                itemTitle.removeAttribute("data-img-src");
+            }
+            if (removeSound){
+                itemTitle.removeAttribute("data-sound-src");
+            }
+            if (removeLabel){
+                itemTitle.removeAttribute("data-label");
+            }
             boardSaved = false;
         }
 
@@ -851,6 +869,18 @@ while (document.getElementById("board-item-" + i)) {
  * ********************************************************************/
 document.getElementById("edit-item-modal-button").addEventListener("click", function() {
     //get the item's details
+    /*************************************
+            * @Bilge_AKYOL display labels that are not yet saved to the database 
+            * as options in the dropdown  *
+            **************************************/
+     for (item in changesToBoard){
+        if(changesToBoard[item].changeType === "addLabel"){
+            var option = document.createElement("option");
+            option.value = changesToBoard[item].labelName;
+            option.text = changesToBoard[item].labelName;
+            document.getElementById("editItemLabel").appendChild(option);
+        }
+    }
     let itemTitle = document.getElementById("view-item-title");
     let itemDescription = document.getElementById("view-item-description");
     let item_id = itemTitle.getAttribute("data-id");
@@ -877,7 +907,7 @@ document.getElementById("edit-item-modal-button").addEventListener("click", func
     document.getElementById("removeSound").checked = false;
     document.getElementById("removeLabel").checked = false;
 
-    //if there is no image or sound, disable the input fields
+    //if there is no image, sound, or label disable the input fields
     if (document.getElementById("view-item-image").classList.contains("d-none")){
         document.getElementById("modal-item-remove-image").classList.add("d-none");
     }
@@ -891,10 +921,17 @@ document.getElementById("edit-item-modal-button").addEventListener("click", func
     else{
         document.getElementById("modal-item-remove-sound").classList.remove("d-none");
     }
+    if (document.getElementById("view-item-label").classList.contains("d-none")){
+        document.getElementById("modal-item-remove-label").classList.add("d-none");
+    }
+    else{
+        document.getElementById("modal-item-remove-label").classList.remove("d-none");
+    }
 
     //reset the image and sound inputs
     document.getElementById("editItemImage").value = "";
     document.getElementById("editItemSound").value = "";
+    document.getElementById("editItemLabel").value = "";
     
     $('#viewBoardItem').modal('hide');
     $('#editBoardItem').modal('show');
@@ -1009,7 +1046,18 @@ document.getElementById("create-label").addEventListener("click", function() {
  * 
  * @author: Bilge Akyol
  * ********************************************************************/
-document.getElementById("add-label-button").addEventListener("click", function() {    
+/*
+//         Sort Label
+//     @author: Bilge Akyol
+*/
+var labels = document.querySelectorAll('[id^="sort-label-"]');
+
+/**********************************************************************
+ * Create a new label and add it to the board
+ * 
+ * @author: Bilge Akyol
+ * ********************************************************************/
+ document.getElementById("add-label-button").addEventListener("click", function() {    
 
     new_label = document.getElementById("new-label-name").value;
 
@@ -1158,3 +1206,4 @@ document.getElementById("show-all-items").addEventListener("click", function() {
         index = index + 1;
     }
 });
+

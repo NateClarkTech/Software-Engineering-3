@@ -119,6 +119,15 @@ def IdeaBoard_Detail(request, id):
         """**************************************************************************************
         *  POST REQUEST:  Go through changes to the board and make the changes to the database  *
         **************************************************************************************"""
+        # @Bilge_AKYOL
+        if request.method == "GETRECC":
+            genre_name = json.loads(request.body.decode('utf-8'))[0]["genreName"] #parsing the javascript data
+            if genre_name:
+                data = get_recc(genre_name) #calling the function from spotify.py
+                response_data = {'message': data}
+                return JsonResponse(response_data) #returning the output to javascript
+            
+            
         if request.method == 'POST':
            handle_database_changes(request, board)
 
