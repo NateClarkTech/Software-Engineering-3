@@ -1,0 +1,75 @@
+Nate:
+Favicon source
+https://pixabay.com/illustrations/icon-a-book-electronic-finger-1691282/
+Stringify and send data via post request
+https://chatgpt.com/share/0fc07b86-282c-466c-a871-86b0fde0fa83?oai-dm=1
+Chat log I used to help try to format the post request properly
+https://chatgpt.com/share/274e26c2-df74-4548-926b-cde8ff1216b0?oai-dm=1
+Initial conversation to learn how to send form-data request
+https://chat.openai.com/share/b02ac5b8-4386-49d5-a27c-ee4c4c8269d5
+How to format form-data request
+https://chat.openai.com/share/c6d3fdd7-13fe-4a3e-b292-c30ac6492149
+
+
+Bilge:
+Adding images to database:
+https://medium.com/@tech-learner/upload-images-in-database-using-django-dc652941122b
+ForeignKey:
+https://docs.djangoproject.com/en/5.0/topics/db/examples/many_to_one/
+ForeignKey Integrity error troubleshooting:
+https://stackoverflow.com/questions/6619984/how-to-make-the-foreign-key-field-optional-in-django-model
+Adding Image:
+https://www.w3schools.com/django/django_add_image.php
+Image Input:
+https://www.w3schools.com/tags/att_input_type_image.asp
+Border CSS:
+https://www.w3schools.com/cssref/css3_pr_border-radius.php
+Module Not Found Error Fix for dotenv:
+https://github.com/theskumar/python-dotenv/issues/273
+Spotify API auth tutorial:
+https://developer.spotify.com/documentation/web-api/tutorials/code-flow
+Spotify Set-up Youtube Tutorial
+https://www.youtube.com/watch?v=WAmEZBEeNmg&ab_channel=AkamaiDeveloper
+Spotify API get recommendation tutorial
+https://developer.spotify.com/documentation/web-api/reference/get-recommendations
+Deployment with .env files
+https://dev.to/brian101co/in-depth-guide-to-deploying-a-django-project-to-pythonanywhere-2od6
+
+
+Wes:
+GPT links
+Primary chat, used for many purposes in this project. Most recently getting ideas for the local hosting guide. 
+https://chat.openai.com/share/4ca6c23b-3d9b-46be-b367-94d646894abc
+
+Reorganizing the profile page to add last minute changes
+https://chat.openai.com/share/94b301b6-64a0-44ef-956d-6c1740b66f52
+
+Unused but still referenced link for handling board sharing over the forum
+https://chat.openai.com/share/4be3f7c2-5ce5-4d1f-a345-e7f5c45ee85a
+
+Get latest comment by page
+https://chat.openai.com/share/b9eec9ed-0fb8-4c16-8ccc-41fdb2a74874
+
+Generate unit tests
+https://chat.openai.com/share/10520a5b-d439-45b6-bcfd-a757bcee2e16
+
+Adding last minute most recent commenters
+https://chat.openai.com/share/6f2aa428-5ed1-4569-ab7b-e334fb92f5ae
+
+Change the placeholder text color of a textarea
+https://stackoverflow.com/questions/43793639/change-placeholder-text-color-of-textarea
+
+Django documentation about pagination
+https://docs.djangoproject.com/en/5.0/topics/pagination/
+
+Initial inspiration relating to the forum layout and design. 
+https://github.com/sn0218/Django-React-Discussion-Forum
+
+Understanding the use of bleach for html sanitation
+https://pythonhosted.org/bleach/clean.html#:~:text=bleach.,and%20(some)%20misnested%20tags.
+
+Setting up bootstrap, 
+https://getbootstrap.com/docs/4.0/getting-started/introduction/
+
+Links in the README
+https://github.blog/2013-01-31-relative-links-in-markup-files/
