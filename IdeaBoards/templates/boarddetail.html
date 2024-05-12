@@ -132,7 +132,7 @@
                         <!-- @Bilge_AKYOL Label selection for the new item -->
                         <div id="LabelSelect" class="label-selection">
                             <select id="labelSelect" class="label-dropdown" >
-                                <option value="null" disabled selected hidden>Choose Label</option>
+                                <option value="" disabled selected hidden>Choose Label</option>
                                 {% for label in labels %}
                                     <option value="{{label}}">{{ label.label_name }}</option>
                                 {% endfor %}
@@ -218,7 +218,7 @@
                     <p>(Leave blank to keep current label)</p>
                     <div id="editItemLabelDiv" class="form-control">
                         <select id="editItemLabel" class="label-dropdown" >
-                            <option value="null" disabled selected hidden>Choose Label</option>
+                            <option value="" disabled selected hidden>Choose Label</option>
                             {% for label in labels %}
                                 <option value="{{label}}">{{ label.label_name }}</option>
                             {% endfor %}

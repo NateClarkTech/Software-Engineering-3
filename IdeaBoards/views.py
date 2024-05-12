@@ -107,7 +107,7 @@ def IdeaBoard_Detail(request, id, label=None):
                 if change_type == 'add':
                     item_label = form_data.get(f'{x}_item_label')
                     # checking the two cases of label values to avoid bugs
-                    if item_label == 'null':
+                    if item_label == '':
                         label = None
                     else:
                         label = ItemLabel.objects.get(label_name=item_label, label_board=board)
@@ -187,7 +187,7 @@ def IdeaBoard_Detail(request, id, label=None):
                     else:
                         item_label = form_data.get(f'{x}_item_label')
                         # checking the two cases of label values to avoid bugs
-                        if item_label == 'null':
+                        if item_label == "":
                             label = None
                         else:
                             label = ItemLabel.objects.get(label_name=item_label, label_board=board)
