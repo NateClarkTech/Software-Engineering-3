@@ -36,7 +36,6 @@ def IdeaBoards_Home(request):
     """
     #If the user is logged in render the boards page
     if request.user.is_authenticated:
-
         print(request.POST, request.method)
         print(request.body.decode('utf-8'))
 

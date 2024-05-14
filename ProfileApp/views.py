@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout
 from django.core.paginator import Paginator
-
+from IdeaBoards.models import IdeaBoard
 
 
 from django.shortcuts import render, redirect, get_object_or_404
@@ -68,7 +68,7 @@ def profile(request, username=None): #@W_Farmer
             content=comment_form.cleaned_data['content']
         )
         return redirect('ProfileApp:public_profile', username=user.username)
-
+    public_boards = IdeaBoard.objects.filter(user=user, is_public=True).order_by('-created_at')
     context = {
         'user_profile': user,
         'profile': profile,
@@ -78,6 +78,7 @@ def profile(request, username=None): #@W_Farmer
         'comment_form': comment_form,
         'thread_count': thread_count,
         'comment_count': comment_count,
+        'public_boards': public_boards,
     }
     return render(request, 'profiles/profile.html', context)
 

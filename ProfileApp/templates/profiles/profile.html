@@ -298,6 +298,9 @@
             <li class="nav-item">
                 <a class="nav-link" id="user-comments-tab" data-toggle="tab" href="#user-comments" role="tab" aria-controls="user-comments" aria-selected="false">Comments</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" id="user-public-boards-tab" data-toggle="tab" href="#user-public-boards" role="tab" aria-controls="user-public-boards" aria-selected="false">Public Boards</a>
+          </li>
         </ul>
 
         <!-- Tab panes -->
@@ -347,10 +350,10 @@
                         {% autoescape off %}
                           <pre>{{ comment.content }}</pre>
                         {% endautoescape %}
+                      </div>
                     
                     
                     </div>
-                </div>
 
                 {% endfor %}
       
@@ -393,7 +396,7 @@
             <!-- A list of comments the user has made-->
             <div class="tab-pane fade" id="user-comments" role="tabpanel" aria-labelledby="user-comments-tab">
                 <ul class="list-group">
-                    {% for comment in user_comments %}
+                  {% for comment in user_comments %}
                     <div class="comment-wrapper">
                       <div class="comment-header">
                         <!-- Profile Picture -->
@@ -437,12 +440,10 @@
                         {% autoescape off %}
                           <pre>{{ comment.content }}</pre>
                         {% endautoescape %}
-              
+                      </div>
 
                     </div>
-              
-                    </div>
-                    {% endfor %}
+                  {% endfor %}
                 </ul>
                 <div class="pagination">
                     {% if user_comments.has_previous %}
@@ -456,6 +457,18 @@
                     {% endif %}
                 </div>
                 
+            </div>
+            <!-- A list of comments the user has made-->
+            <div class="tab-pane fade" id="user-public-boards" role="tabpanel" aria-labelledby="user-public-boards-tab">
+              <ul class="list-group">
+                {% for board in public_boards %}
+                  <li class="list-group-item" >
+                      <h2>public board placeholder</h2>
+                  </li>
+                  {% empty %}
+                  <li class="list-group-item">No threads found.</li>
+                {% endfor %}
+              </ul>
             </div>
         </div>
 
