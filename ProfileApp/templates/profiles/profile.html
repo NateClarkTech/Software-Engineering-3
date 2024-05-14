@@ -462,9 +462,12 @@
             <div class="tab-pane fade" id="user-public-boards" role="tabpanel" aria-labelledby="user-public-boards-tab">
               <ul class="list-group">
                 {% for board in public_boards %}
-                  <li class="list-group-item" >
-                      <h2>public board placeholder</h2>
-                  </li>
+                  <a href="{% url 'IdeaBoard_Detail' board.id %}" class="btn btn-primary">
+                    <li class="list-group-item" >
+                      <h2>{{board.title}}</h2>
+                      <h2>{{board.description}}</h2>
+                    </li>
+                  </a>
                   {% empty %}
                   <li class="list-group-item">No threads found.</li>
                 {% endfor %}
