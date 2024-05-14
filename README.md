@@ -178,7 +178,10 @@ Signals:<br>
 newUser: This signal will activate when a new user is registered, and will create a profile for that user.<br>
 
 _______________________________
-[SOURCES](Installation_and_deployment_guide.pdf)
+[SOURCES](Sources.txt)
+
+[INSTALLATION AND DEPLOYMENT GUIDE](Installation_and_deployment_guide.pdf)
+
 
 <br>
 
