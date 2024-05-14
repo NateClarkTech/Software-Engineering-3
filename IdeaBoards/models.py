@@ -63,3 +63,30 @@ class IdeaBoardItem(models.Model):
 
     def __str__(self):
         return "Board:" + self.ideaboard.title +' user: ' + self.owner.username + ' Item: ' + self.title
+
+'''
+    The model that will represent a comment in the forum
+    @thread: the thread the comment is on
+    @user: the user who created the comment
+    @content: the content of the comment
+    @created_at: the time the comment was created
+    @last_edited: the time the comment was last edited
+    @likes: a list of users who have liked the comment
+    @like_count: a property that returns the number of likes the comment has
+    Author: Bilge Akyol
+'''
+class ItemComment(models.Model):
+    thread = models.ForeignKey(IdeaBoardItem, on_delete=models.CASCADE, related_name='itemComment')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    # likes
+    likes = models.ManyToManyField(User, related_name='liked_item_comments', blank=True)
+    
+    # Parent comment, if there is one. For the reply system. 
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    
+    # count the number of likes
+    @property
+    def like_count(self):
+        return self.likes.count()
