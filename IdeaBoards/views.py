@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import *
 from django.contrib.auth.decorators import login_required
 import json
@@ -157,6 +157,47 @@ def IdeaBoard_Detail(request, id):
         request.session['error_messages'] = error_messages
         return redirect('IdeaBoards_Home')
 
+#@W_Farmer, adapted by Bilge_AKYOL
+# This view will allow the user to create a new comment on the forum. 
+@login_required
+def create_comment(request, id):
+    board = get_object_or_404(IdeaBoard, id=id)
+    form = CommentForm(request.POST)
+    if form.is_valid():
+        comment_content = form.cleaned_data['content']
+        # Convert YouTube links to embeds
+
+        # Convert links to embeds and sanitize
+        #comment_content = convert_media_links_to_embed(comment_content)
+        #comment_content = clean_html(comment_content)  # Clean the HTML
+
+        # Create the comment object
+        comment = form.save(commit=False)
+        comment.content = comment_content  # Set the processed content with YouTube embeds
+        # Associate the comment with the thread and the logged-in user
+        comment.user = request.user
+        comment.board = board
+        comment.save()
+
+        # Remove the comment author to prevent them from receiving their own notification
+        #recipients.discard(request.user)
+
+        # Create notifications for each unique recipient
+        '''
+        for recipient in recipients:
+            Notification.objects.create(
+                notification_type=Notification.COMMENT,
+                to_user=recipient,
+                from_user=request.user,
+                thread=thread,
+                comment=comment
+            )
+        '''
+        return redirect(reverse('b', args=[board.id, comment.id]))
+    else:
+        # Handle errors or redirect
+        #FIX NEEDED
+        return render(request, 'publicboarddetails', {'form': form, 'ideaboard': board})
 
 
 def handle_database_changes(request, board):

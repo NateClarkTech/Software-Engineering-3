@@ -72,6 +72,20 @@
     <hr>
 
     <div class="row justify-content-center" name="board_comments">
+        <!-- If the user is authenticated allow them to make a new comment-->
+        {% if user.is_authenticated %}
+            <div class="comment-form-wrapper">
+                <h5>Leave a Comment</h5>
+                <form method="post" action="{% url 'create_board_comment' board.id %}">
+                {% csrf_token %}
+                <textarea name="content" class="comment-form-textarea" placeholder="Write your comment here..."></textarea>
+                <button type="submit" class="btn">Post Comment</button>
+                </form>
+            </div>
+        {% else %}
+            <p class="mt-4">Please <a href="{% url 'login' %}">log in</a> to post a comment.</p>
+        {% endif %}
+
         {% for comment in board_comments %}
         <div class="comment-wrapper">
             <div class="comment-header">
