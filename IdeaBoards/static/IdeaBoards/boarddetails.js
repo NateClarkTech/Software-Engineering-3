@@ -1230,7 +1230,7 @@ document.addEventListener('DOMContentLoaded', function() {
     ****** Spotify Song Reccommendation ********
     */
     // JavaScript to handle form submission and displaying result
-    document.getElementById('getRecc').addEventListener('submit', function(event) {
+    document.getElementById('get-rec-button').addEventListener('click', function(event) {
         event.preventDefault(); // Prevent default form submission
         
         // Get input value
@@ -1250,8 +1250,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 url = 'https://open.spotify.com/embed/track/' + data['message'][i];
                 document.getElementById("iframe-"+i).setAttribute("src", url)
             }
-            $('#getRecc').modal('hide');
-            $('#displayReccResults').modal('show');
+            document.getElementById('getRecc').style.display = 'none';
+            document.getElementById('displayReccResults').style.display = 'block';
         })
     });
 });
+
+// Add event listeners to each checkbox to close the modal when clicked
+for (let i = 0; i < 5; i++) {
+    document.getElementById('addReccToNote-${i}').addEventListener('click', function() {
+        iframe = document.getElementById('iframe-${i}').getAttribute("src").value();
+        
+        document.getElementById('displayReccResults').style.display = 'none';
+    });
+}

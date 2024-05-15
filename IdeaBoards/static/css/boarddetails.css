@@ -104,6 +104,10 @@
     background-color: var(--Background-Color); 
     border-color: var(--Border-Color); 
 }
+.modal-body {
+    max-height: 80vh;
+    overflow-y: auto;
+}
 
 .modal-header {
     border-bottom: 1px solid var(--Third-Color); 
