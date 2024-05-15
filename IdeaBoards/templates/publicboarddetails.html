@@ -150,7 +150,7 @@
                 {% endif %}
                 <!-- If the comment user is the current user, OR the current user is a superuser, allow them to edit and delete the comment-->
                 {% if comment.user == user or user.is_superuser %}
-                <a href="{% url 'edit_comment' comment.id %}" class="comment-action-btn">Edit</a>
+                <a href="{% url 'edit_board_comment' comment.id %}" class="comment-action-btn">Edit</a>
                 <a href="{% url 'delete_board_comment' comment.id %}" class="comment-action-btn">Delete</a>
                 {% endif %}
                 <button class="comment-action-btn btn-reply" data-commentid="{{ comment.id }}">Reply</button>

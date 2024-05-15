@@ -1,0 +1,13 @@
+<!-- @W_Farmer -->
+{% extends 'base.html' %}
+{% block content %}
+<div class="col-md-6 offset-md-3 center">
+    <h2>Edit Comment</h2>
+    <!-- Form to edit the content of a post -->
+    <form method="post">
+        {% csrf_token %}
+        <textarea name="content" class="comment-form-textarea" placeholder="Write your comment here..."></textarea>
+        <button type="submit" class="btn">Edit Comment</button>
+      </form>
+</div>
+{% endblock %}

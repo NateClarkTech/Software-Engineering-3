@@ -215,6 +215,25 @@ def delete_comment(request, comment_id):
     comment.delete()
     return redirect('IdeaBoard_Detail', id=comment.board.id)
 
+#@W_Farmer, adapted by @Bilge_AKYOL
+# Here we want to be able to edit a comment, either by deleating it, or by changing the content, and the user HAS to be the one logged in, or a superuser
+@login_required
+def edit_comment(request, comment_id):
+    comment = get_object_or_404(BoardComment, id=comment_id)
+    # Check if the user is the author of the comment or a superuser
+    if request.user != comment.user and not request.user.is_superuser:
+        # Throw an error, they are not authorized to do this
+        return HttpResponseForbidden("You are not authorized to edit this comment.")
+    if request.method == 'POST':
+        form = CommentForm(request.POST, instance=comment)
+        if form.is_valid():
+            form.save()
+            return redirect('IdeaBoard_Detail', id=comment.board.id)
+    else:
+        form = CommentForm(instance=comment)
+    return render(request, 'edit_board_comment.html', {'form': form, 'comment': comment})
+
+
 def handle_database_changes(request, board):
     """
     handle_database_changes view
