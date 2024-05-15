@@ -149,3 +149,15 @@ hr  {
     border-top: 1px solid var(--Third-Color);
 }
 
+.recc-content {
+    background-color: var(--Background-Color); /* Change this to your desired background color */
+    border-color: var(--Border-Color); /* Change this to your desired border color */
+}
+
+.recc-header{
+    border-bottom: 1px solid var(--Third-Color); /* Change this to your desired border color */
+}
+
+.recc-footer {
+    border-top: 1px solid var(--Third-Color); /* Change this to your desired border color */
+}
