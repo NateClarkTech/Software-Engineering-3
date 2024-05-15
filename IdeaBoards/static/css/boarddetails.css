@@ -154,14 +154,18 @@ hr  {
 }
 
 .recc-content {
-    background-color: var(--Background-Color); /* Change this to your desired background color */
-    border-color: var(--Border-Color); /* Change this to your desired border color */
+    background-color: var(--Background-Color); 
+    border-color: var(--Border-Color); 
+}
+.recc-body {
+    max-height: 80vh;
+    overflow-y: auto;
 }
 
-.recc-header{
-    border-bottom: 1px solid var(--Third-Color); /* Change this to your desired border color */
+.recc-header {
+    border-bottom: 1px solid var(--Third-Color); 
 }
 
 .recc-footer {
-    border-top: 1px solid var(--Third-Color); /* Change this to your desired border color */
+    border-top: 1px solid var(--Third-Color); 
 }

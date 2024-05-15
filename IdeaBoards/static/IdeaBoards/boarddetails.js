@@ -147,14 +147,17 @@ document.getElementById("delete-board-button").addEventListener("click", functio
  * 
  * Author: Nathaniel Clark
  * ********************************************************************/
-document.getElementById("addItemForm").addEventListener("submit", function(event) {
-    event.preventDefault(); // Prevent the default form submission
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById("addItemFormButton").addEventListener("submit", function(event) {
+        console.log('Add Item button clicked');
+        event.preventDefault(); // Prevent the default form submission
 
-    // Call the addFormItem function
-    addNewBoardItem();
-    console.log('Add Item button clicked');
-    // Reset the form
-    document.getElementById("addItemForm").reset();
+        // Call the addFormItem function
+        addNewBoardItem();
+        console.log('Add Item button clicked');
+        // Reset the form
+        document.getElementById("addItemForm").reset();
+    });
 });
 
 /**********************************************************************
