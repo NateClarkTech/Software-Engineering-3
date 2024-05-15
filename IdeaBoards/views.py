@@ -3,7 +3,7 @@ from .forms import *
 from django.contrib.auth.decorators import login_required
 import json
 from django.urls import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseForbidden
 from IdeaBoards.spotify import *
 from django.http import JsonResponse
 from django.core.files.uploadedfile import TemporaryUploadedFile
@@ -197,9 +197,23 @@ def create_comment(request, id, comment_id=None):
         return redirect(reverse('IdeaBoard_Detail', args=[board.id]))
     else:
         # Handle errors or redirect
-        #FIX NEEDED
         return render(request, 'IdeaBoard_Detail.html', {'form': form, 'ideaboard': board})
 
+#@W_Farmer, adapted by @Bilge_AKYOL
+# This is a view to allow the user to delete a comment, they have to be the author of the comment, or a superuser
+def delete_comment(request, comment_id):
+    # Add a check to see uf the user is authentacated at all
+    if not request.user.is_authenticated:
+        return HttpResponseForbidden("You are not authorized to delete this comment.")
+    
+    comment = get_object_or_404(BoardComment, id=comment_id)
+    
+    # Check if the user is the author of the comment or a superuser
+    if request.user != comment.user and not request.user.is_superuser:
+        # Throw an error, they are not authorized to do this
+        return HttpResponseForbidden("You are not authorized to delete this comment.")
+    comment.delete()
+    return redirect('IdeaBoard_Detail', id=comment.board.id)
 
 def handle_database_changes(request, board):
     """
