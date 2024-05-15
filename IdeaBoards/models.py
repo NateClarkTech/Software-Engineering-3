@@ -75,13 +75,13 @@ class IdeaBoardItem(models.Model):
     @like_count: a property that returns the number of likes the comment has
     Author: Bilge Akyol
 '''
-class ItemComment(models.Model):
-    thread = models.ForeignKey(IdeaBoardItem, on_delete=models.CASCADE, related_name='itemComment')
+class BoardComment(models.Model):
+    board = models.ForeignKey(IdeaBoard, on_delete=models.CASCADE, related_name='boardComment')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     # likes
-    likes = models.ManyToManyField(User, related_name='liked_item_comments', blank=True)
+    likes = models.ManyToManyField(User, related_name='liked_board_comments', blank=True)
     
     # Parent comment, if there is one. For the reply system. 
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)

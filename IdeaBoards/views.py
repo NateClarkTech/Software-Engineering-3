@@ -144,7 +144,8 @@ def IdeaBoard_Detail(request, id):
     
     #If the board is public give the user the HTML for the board
     elif board.is_public:
-        return render(request, 'publicboarddetails.html', {'board': board, 'items': items, 'labels': labels})
+        comments = BoardComment.objects.all()
+        return render(request, 'publicboarddetails.html', {'board': board, 'items': items, 'labels': labels, 'board_comments': comments})
     
     #If the user is not the owner of the board redirect to them to their boards
     else:

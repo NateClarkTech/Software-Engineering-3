@@ -6,6 +6,7 @@
 
 {% block stylesheets %}
 <link rel="stylesheet" href="{% static 'css/boarddetails.css' %}">
+<link rel="stylesheet" href="{% static 'css/publicboarddetails.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -66,6 +67,84 @@
             <h4 class="col-12 d-none" id="board-description">Description: none</h4>
         {% endif %}
         <h4 class="col-12">Created by: {{ board.user }}</h4>
+    </div>
+
+    <hr>
+
+    <div class="row justify-content-center" name="board_comments">
+        {% for comment in board_comments %}
+        <div class="comment-wrapper">
+            <div class="comment-header">
+              <!-- Profile Picture -->
+              {% if comment.user.profile.profile_picture %}
+                <a href="{% url 'ProfileApp:public_profile' comment.user.username %}">
+                  <img src="{{ comment.user.profile.profile_picture.url }}" alt="{{ comment.user.username }}'s profile picture" class="profile-picture">
+                </a>
+              {% else %}
+              {% load static %}
+                <a href="{% url 'ProfileApp:public_profile' comment.user.username %}">
+                  <img src="{% static 'default-profile-picture.png' %}" alt="Default profile picture" class="profile-picture">
+                </a>
+              {% endif %}
+              <!-- Comment Details -->
+              <div class="comment-details">
+                <a href="{% url 'ProfileApp:public_profile' comment.user.username %}">
+                  <span class="comment-author">{{ comment.user.username }}</span>
+                </a>
+                <!-- Comment MetaData-->
+                <div class="comment-metadata">
+                  <span>{{ comment.created_at|date:"M d, Y H:i" }}</span> 
+                </div>
+              </div>
+            </div>
+            <!-- Comment Body -->
+            <div class="comment-body">
+                <!-- If it's a reply to another comment, show a short part of the origional comment -->
+                {% if comment.parent %}
+                <div class="reply-section">
+                <div class="reply-wrapper">
+                    <div class="reply-header">
+                    <span class="text-muted">{{comment.parent.user }} wrote on {{ comment.parent.created_at|date:"F j, Y, g:i a" }}</span>
+                    </div>
+                    <!-- Reply Content -->
+                    <div class="comment-content">
+                    "{{ comment.parent.content|truncatewords:20 }}"
+                    </div>
+                </div>
+                </div>
+                {% endif %}
+    
+                <!-- Print the comment, and allow for the iframes to apply -->
+                {% autoescape off %}
+                <pre>{{ comment.content }}</pre>
+                {% endautoescape %}
+    
+                <!-- Comment Actions -->
+                <div class="comment-actions">
+                <!-- Making it a little compleicated to fix the styling issues, but the likes text should be aligned to the left, and if logged in there should be a button for liking-->
+                {% if user.is_authenticated %}
+                {% if user.is_authenticated and comment.user != user %}
+                    {% if user in comment.likes.all %}
+                    <span class="text-muted likes">Likes: {{ comment.likes.count }}</span>
+                    <a href="{% url 'like_comment' comment.id %}" class="comment-action-btn likes-btn">Unlike</a>
+                    {% else %}
+                    <span class="text-muted likes">Likes: {{ comment.likes.count }}</span>
+                    <a href="{% url 'like_comment' comment.id %}" class="comment-action-btn likes-btn">Like</a>
+                    {% endif %}
+                {% else %}
+                    <span class="text-muted likes likes-btn">Likes: {{ comment.likes.count }}</span>
+                {% endif %}
+                <!-- If the comment user is the current user, OR the current user is a superuser, allow them to edit and delete the comment-->
+                {% if comment.user == user or user.is_superuser %}
+                <a href="{% url 'edit_comment' comment.id %}" class="comment-action-btn">Edit</a>
+                <a href="{% url 'delete_comment' comment.id %}" class="comment-action-btn">Delete</a>
+                {% endif %}
+                <button class="comment-action-btn btn-reply" data-commentid="{{ comment.id }}">Reply</button>
+    
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
     </div>
 
     <hr>
