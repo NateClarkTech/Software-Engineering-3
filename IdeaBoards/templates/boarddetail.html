@@ -140,18 +140,18 @@
                             <input type="file" class="form-control" id="item_sound" name="item_sound" accept="audio/*">
                         </div>
                         <!-- Get Song Recommendation Button -->
-                        <button  type="button" class="btn btn-primary col-md-12 mx-auto" id="get-rec-modal-button" data-toggle="modal" data-target="#getRecc">
+                        <button  type="button" class="btn btn-primary col-md-12 mx-auto" id="get-rec-modal-button">
                             Get Song Recommendation
                         </button>
                         <!-- @Bilge_AKYOL : Spotify API Song Reccommendation Request -->
-                        <div class="modal fade" id="getRecc" tabindex="-1" role="dialog" aria-labelledby="spotifyAPI" aria-hidden="true">
+                        <div id="getRecc" tabindex="-1" role="dialog" aria-labelledby="spotifyAPI" aria-hidden="true" data-backdrop="false" style="display: none;">
                             <div class="modal-dialog modal-lg" role="form">
-                                <form method="POST" name="getRecc">
+                                <form name="getRecc">
                                     <div class="modal-content">
                                         
                                         <div class="modal-header">
                                             <h5 class="modal-title" >Get A Song Recommendation by Genre</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <button type="button" class="close" aria-label="Close" id="close-getRecc">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
@@ -162,7 +162,6 @@
                                         </div>
 
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                             <button id='get-rec-button' type="submit" class="btn btn-primary">Get Reccommendation</button>
                                         </div>
 
@@ -170,13 +169,12 @@
                                 </form>
                             </div>
                         </div>
-                        <div class="modal fade" id="displayReccResults" tabindex="-1" role="dialog" aria-labelledby="spotifyAPI" aria-hidden="true">
+                        <div id="displayReccResults" tabindex="-1" role="dialog" aria-labelledby="spotifyAPI" aria-hidden="true" data-backdrop="false" style="display: none;">
                             <div class="modal-dialog modal-lg">
                                 <div class="modal-content">
-
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="reccTitle" > 5 Recommendations</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <button type="button" class="close" aria-label="Close" id='close-displayReccResults'>
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>

@@ -1207,32 +1207,51 @@ document.getElementById("show-all-items").addEventListener("click", function() {
     }
 });
 
-/* 
-****** Spotify Song Reccommendation ********
-*/
-// JavaScript to handle form submission and displaying result
-document.getElementById('getRecc').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent default form submission
-      
-    // Get input value
-    var genreName = document.getElementById('genreNameInput').value;
-    console.log(genreName)
-    fetch(window.location.pathname, {
-        method: "GETRECC",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": getCookie("csrftoken")  // Include the CSRF token in the headers
-        },
-        body: JSON.stringify([{genreName: genreName}]),
-    }).then(response => response.json())
-    .then(data => {
-        for (let i = 0; i < 5; i++) {
-            console.log(data['message'][i]);
-            url = 'https://open.spotify.com/embed/track/' + data['message'][i];
-            document.getElementById("iframe-"+i).setAttribute("src", url)
+document.addEventListener('DOMContentLoaded', function() {
+    // blocking the modal closure of the recommendation close buttons
+    document.getElementById('get-rec-modal-button').addEventListener('click', function() {
+        if(document.getElementById('getRecc').style.display === 'none'){
+            document.getElementById('getRecc').style.display = 'block';
         }
-        $('#getRecc').modal('hide');
-        $('#displayReccResults').modal('show');
-    })
-    
+        else{
+            document.getElementById('getRecc').style.display = 'none';
+        }
+    });
+
+    document.getElementById('close-getRecc').addEventListener('click', function() {
+        document.getElementById('getRecc').style.display = 'none';
+    });
+
+    document.getElementById('close-displayReccResults').addEventListener('click', function() {
+        document.getElementById('displayReccResults').style.display = 'none';
+    });
+
+    /* 
+    ****** Spotify Song Reccommendation ********
+    */
+    // JavaScript to handle form submission and displaying result
+    document.getElementById('getRecc').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent default form submission
+        
+        // Get input value
+        var genreName = document.getElementById('genreNameInput').value;
+        console.log(genreName)
+        fetch(window.location.pathname, {
+            method: "GETRECC",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": getCookie("csrftoken")  // Include the CSRF token in the headers
+            },
+            body: JSON.stringify([{genreName: genreName}]),
+        }).then(response => response.json())
+        .then(data => {
+            for (let i = 0; i < 5; i++) {
+                console.log(data['message'][i]);
+                url = 'https://open.spotify.com/embed/track/' + data['message'][i];
+                document.getElementById("iframe-"+i).setAttribute("src", url)
+            }
+            $('#getRecc').modal('hide');
+            $('#displayReccResults').modal('show');
+        })
+    });
 });
