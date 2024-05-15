@@ -248,6 +248,21 @@ def like_comment(request, comment_id):
         comment.likes.add(request.user)
     return redirect('IdeaBoard_Detail', id=comment.board.id)
 
+#@W_Farmer, @Bilge_AKYOL
+# This is a seperate view to handle the creation of a reply to a comment, it will take in a thread_id, and a parent_comment_id, and will create a reply to that comment
+def reply_to_comment(request, board_id, parent_comment_id):
+    board = get_object_or_404(Board, id=board_id)
+    parent_comment = get_object_or_404(BoardComment, id=parent_comment_id, board=board)
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.board = board
+            comment.user = request.user
+            comment.parent = parent_comment  # Set the parent comment
+            comment.save()
+    return render(request, 'reply_to_board_comment.html', {'form': form, 'board': board, 'parent_comment': parent_comment})
+
 def handle_database_changes(request, board):
     """
     handle_database_changes view

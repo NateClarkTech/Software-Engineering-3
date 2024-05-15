@@ -142,5 +142,3 @@ document.getElementById("show-all-items").addEventListener("click", function() {
         index = index + 1;
     }
 });
-
-
