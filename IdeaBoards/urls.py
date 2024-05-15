@@ -11,6 +11,7 @@ urlpatterns = [
     path('<int:id>/comment/', views.create_comment, name='create_board_comment'),
     path('boards/<int:comment_id>/delete_board_comment/', views.delete_comment, name='delete_board_comment'),
     path('boards/<int:comment_id>/edit_comment/', views.edit_comment, name='edit_board_comment'),
+    path('boards/<int:comment_id>/like_board_comment/', views.like_comment, name='like_board_comment'),
     #path('<int:id>/<int:comment_id>/', views.IdeaBoard_Detail, name='board_detail_comment'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     

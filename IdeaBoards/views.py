@@ -233,6 +233,20 @@ def edit_comment(request, comment_id):
         form = CommentForm(instance=comment)
     return render(request, 'edit_board_comment.html', {'form': form, 'comment': comment})
 
+#@W_Farmer, adapted by @Bilge_AKYOL
+# This is a view that will allow a user to like a comment, or unlike said comment
+def like_comment(request, comment_id):
+    # Some checks to make sure that the user cannot like their comment, even by messing with the urls
+
+    comment = get_object_or_404(BoardComment, id=comment_id)
+    if request.user == comment.user and not request.user.is_superuser:
+        # Throw an error, they are not authorized to do this
+        return HttpResponseForbidden("You shouldn't be seeing this. bad. no liking this comment.")
+    if request.user in comment.likes.all():
+        comment.likes.remove(request.user)
+    else:
+        comment.likes.add(request.user)
+    return redirect('IdeaBoard_Detail', id=comment.board.id)
 
 def handle_database_changes(request, board):
     """

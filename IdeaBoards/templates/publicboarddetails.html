@@ -140,10 +140,10 @@
                 {% if user.is_authenticated and comment.user != user %}
                     {% if user in comment.likes.all %}
                     <span class="text-muted likes">Likes: {{ comment.likes.count }}</span>
-                    <a href="{% url 'like_comment' comment.id %}" class="comment-action-btn likes-btn">Unlike</a>
+                    <a href="{% url 'like_board_comment' comment.id %}" class="comment-action-btn likes-btn">Unlike</a>
                     {% else %}
                     <span class="text-muted likes">Likes: {{ comment.likes.count }}</span>
-                    <a href="{% url 'like_comment' comment.id %}" class="comment-action-btn likes-btn">Like</a>
+                    <a href="{% url 'like_board_comment' comment.id %}" class="comment-action-btn likes-btn">Like</a>
                     {% endif %}
                 {% else %}
                     <span class="text-muted likes likes-btn">Likes: {{ comment.likes.count }}</span>
