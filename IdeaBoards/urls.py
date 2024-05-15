@@ -8,7 +8,8 @@ from . import views
 urlpatterns = [
     path('', views.IdeaBoards_Home, name='IdeaBoards_Home'),
     path('<int:id>/', views.IdeaBoard_Detail, name='IdeaBoard_Detail'),
-    path('<int:id>/comment/', views.create_comment, name='create_comment'),
+    path('<int:id>/comment/', views.create_comment, name='create_board_comment'),
+    #path('<int:id>/<int:comment_id>/', views.IdeaBoard_Detail, name='board_detail_comment'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     
 

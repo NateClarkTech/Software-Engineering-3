@@ -160,9 +160,10 @@ def IdeaBoard_Detail(request, id):
 #@W_Farmer, adapted by Bilge_AKYOL
 # This view will allow the user to create a new comment on the forum. 
 @login_required
-def create_comment(request, id):
+def create_comment(request, id, comment_id=None):
     board = get_object_or_404(IdeaBoard, id=id)
     form = CommentForm(request.POST)
+    
     if form.is_valid():
         comment_content = form.cleaned_data['content']
         # Convert YouTube links to embeds
@@ -193,11 +194,11 @@ def create_comment(request, id):
                 comment=comment
             )
         '''
-        return redirect(reverse('b', args=[board.id, comment.id]))
+        return redirect(reverse('IdeaBoard_Detail', args=[board.id]))
     else:
         # Handle errors or redirect
         #FIX NEEDED
-        return render(request, 'publicboarddetails', {'form': form, 'ideaboard': board})
+        return render(request, 'IdeaBoard_Detail.html', {'form': form, 'ideaboard': board})
 
 
 def handle_database_changes(request, board):
