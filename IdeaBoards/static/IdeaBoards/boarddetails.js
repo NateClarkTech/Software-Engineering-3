@@ -152,7 +152,7 @@ document.getElementById("addItemForm").addEventListener("submit", function(event
 
     // Call the addFormItem function
     addNewBoardItem();
-
+    console.log('Add Item button clicked');
     // Reset the form
     document.getElementById("addItemForm").reset();
 });
@@ -169,12 +169,14 @@ document.getElementById("addItemForm").addEventListener("submit", function(event
  * Author: Nathaniel Clark
  * ********************************************************************/
 function addNewBoardItem() {
+    console.log('function running');
     // Get title, description, and uploaded files from the form
     let title = document.getElementById("title").value;
     let description = document.getElementById("description").value;
     let item_image = document.getElementById("item_image").files[0];
     let item_sound = document.getElementById("item_sound").files[0];
     let item_label = document.getElementById("labelSelect").value;
+    let item_iframe = document.getElementById("item-iframe").getAttribute("src");
 
     // If the title is valid, add the item to the board
     if (title !== "" && title.length <= 64) {
@@ -251,6 +253,7 @@ function addNewBoardItem() {
         }
         cardBody.appendChild(rowDiv);
         
+        
         // Add the title to the card
         let cardTitle = document.createElement("h2");
         cardTitle.id = "board-item-" + assignBoardId + "-title";
@@ -265,6 +268,9 @@ function addNewBoardItem() {
         }
         if (item_label){
             cardTitle.setAttribute("data-label", item_label);
+        }
+        if (item_iframe){
+            cardTitle.setAttribute("data-iframe", item_iframe);
         }
         
         // Add the description to the card
@@ -1254,13 +1260,16 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('displayReccResults').style.display = 'block';
         })
     });
-});
 
-// Add event listeners to each checkbox to close the modal when clicked
-for (let i = 0; i < 5; i++) {
-    document.getElementById('addReccToNote-${i}').addEventListener('click', function() {
-        iframe = document.getElementById('iframe-${i}').getAttribute("src").value();
-        
-        document.getElementById('displayReccResults').style.display = 'none';
-    });
-}
+    for (let i = 0; i < 5; i++) {
+        let checkbox = document.getElementById(`addReccToNote-${i}`);
+        if (checkbox) {
+            checkbox.addEventListener('click', function() {
+                let iframeSrc = document.getElementById(`iframe-${i}`).getAttribute("src");
+                console.log(iframeSrc);
+
+                document.getElementById('displayReccResults').style.display = 'none';
+            });
+        }
+    }
+});
