@@ -197,7 +197,7 @@ def create_comment(request, id, comment_id=None):
         return redirect(reverse('IdeaBoard_Detail', args=[board.id]))
     else:
         # Handle errors or redirect
-        return render(request, 'IdeaBoard_Detail.html', {'form': form, 'ideaboard': board})
+        return redirect('IdeaBoard_Detail', board.id)
 
 #@W_Farmer, adapted by @Bilge_AKYOL
 # This is a view to allow the user to delete a comment, they have to be the author of the comment, or a superuser
