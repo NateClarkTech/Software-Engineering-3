@@ -148,7 +148,7 @@ document.getElementById("delete-board-button").addEventListener("click", functio
  * Author: Nathaniel Clark
  * ********************************************************************/
 document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById("addItemFormButton").addEventListener("submit", function(event) {
+    document.getElementById("addItemForm").addEventListener("submit", function(event) {
         console.log('Add Item button clicked');
         event.preventDefault(); // Prevent the default form submission
 
@@ -1270,7 +1270,7 @@ document.addEventListener('DOMContentLoaded', function() {
             checkbox.addEventListener('click', function() {
                 let iframeSrc = document.getElementById(`iframe-${i}`).getAttribute("src");
                 console.log(iframeSrc);
-
+                document.getElementById("item-iframe").setAttribute("src", iframeSrc);
                 document.getElementById('displayReccResults').style.display = 'none';
             });
         }

@@ -113,7 +113,6 @@
         <div class="modal-dialog modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <form id="addItemForm" >
-                    {% csrf_token %}
                     <div class="modal-header">
                         <h5 class="modal-title" id="CreateItemModalLabel">Create New Item</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -144,9 +143,8 @@
                             Get Song Recommendation
                         </button>
                         <!-- @Bilge_AKYOL : Spotify API Song Reccommendation Request -->
-                        <div class="form-group" id="getRecc" tabindex="-1" role="dialog" aria-labelledby="spotifyAPI" aria-hidden="true" data-backdrop="false" style="display: none;">
+                        <div id="getRecc" tabindex="-1" role="dialog" aria-labelledby="spotifyAPI" aria-hidden="true" data-backdrop="false" style="display: none;">
                             <div class="modal-dialog modal-lg">
-                                <form name="getRecc">
                                     <div class="modal-content">
                                         
                                         <div class="modal-header">
@@ -155,10 +153,8 @@
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
-
                                         <div class="modal-body">
-                                            {% csrf_token %} <!-- CSRF verification, security satisfaction -->
-                                            <input type="text" class="form-control" id="genreNameInput" placeholder="Genre Name" required>
+                                            <input type="text" id="genreNameInput" placeholder="Genre Name">
                                         </div>
 
                                         <div class="modal-footer">
@@ -166,10 +162,9 @@
                                         </div>
 
                                     </div>
-                                </form>
                             </div>
                         </div>
-                        <div class="form-group" id="displayReccResults" tabindex="-1" role="dialog" aria-labelledby="spotifyAPI" aria-hidden="true" data-backdrop="false" style="display: none;">
+                        <div id="displayReccResults" tabindex="-1" role="dialog" aria-labelledby="spotifyAPI" aria-hidden="true" data-backdrop="false" style="display: none;">
                             <div class="modal-dialog modal-lg">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -181,7 +176,6 @@
 
                                     <div class="modal-body">
                                         <h5 class="modal-title" id="reccResult"></h5>
-
                                         <!-- Loop 5 times -->
                                         {% for i in "01234" %} <!-- dynamic implementation to embed the 5 recommendations with their unique src inputted via javascript-->
                                         <div name="result">
@@ -216,7 +210,6 @@
                         <button type="button" class="btn btn-secondary text-danger" data-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary text-success" id="addItemFormButton">Add Item</button>
                     </div>
-
                 </form>
             </div>
         </div>
